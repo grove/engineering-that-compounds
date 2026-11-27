@@ -6,6 +6,8 @@ Two teams can deliver the same feature and finish with quite different prospects
 
 This collection follows [Software that improves with age](https://grove.github.io/software-that-improves-with-age/). It looks beyond the condition of a codebase to the knowledge, judgment and habits that make engineering possible. If AI reduces the cost of some implementation work, where should we spend the time and attention it frees? And how would we tell whether that investment had helped?
 
+How far could we take this? A team that wanted to become ten times as effective would have to look beyond faster implementation, at the work it could remove, automate or safely hand off. [Automating the work of engineering](./essays/automating-the-work-of-engineering.md) explores that ambition through a recurring job most engineers recognize.
+
 The word *compounds* makes a claim that needs testing. More documentation, tests or automation can just as easily create more upkeep. These essays ask when earlier work makes later work more effective, what gets lost along the way, and when an investment should be abandoned.
 
 For something to try on your next ticket, start with [Engineering that compounds](./essays/engineering-that-compounds.md). It follows a small integration change through planning, review, retaining a useful lesson and handing the work to someone who was not there. The companion [Patterns of compounding engineering](https://grove.github.io/patterns-of-compounding-engineering/) supplies the field guide: concrete techniques, runnable examples and ways to check whether the effort helped.
@@ -14,7 +16,7 @@ Want to test the argument? The [second-capability pilot](./research/second-capab
 
 ## Reading order
 
-Eleven essays in four parts. Read them in order, or start with the question closest to your work. Audio editions are temporarily not included in the published site.
+Twelve essays in four parts. Read them in order, or start with the question closest to your work. Audio editions are temporarily not included in the published site.
 
 1. **[Engineering capital](./essays/engineering-capital.md)** — What remains useful after the immediate task is finished, and when those benefits begin to reinforce one another.
 2. **[What software should remember](./essays/what-software-should-remember.md)** — Keeping the reasons for a decision available, without turning yesterday's assumptions into permanent rules.
@@ -28,6 +30,7 @@ Eleven essays in four parts. Read them in order, or start with the question clos
 
 10. **[The ability to delegate](./essays/the-ability-to-delegate.md)** — Use recurring interruptions to discover which capabilities would make a particular kind of work easier to hand off.
 11. **[Architecture for parallel work](./essays/architecture-for-parallel-work.md)** — Find out which decisions can happen independently and what it costs to put the results together.
+12. **[Automating the work of engineering](./essays/automating-the-work-of-engineering.md)** — What it takes for routine work to happen without somebody starting and supervising it each time.
 
 ## Website and audio
 
