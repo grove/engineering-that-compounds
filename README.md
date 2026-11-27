@@ -32,7 +32,7 @@ Build a text-only preview with Python 3.10 or later; no packages are needed:
 python3 site/build.py
 ```
 
-For the full site, generate the narration with the Python 3.12 instructions in the publishing guide, then run:
+To check narration after regenerating it, follow the Python 3.12 instructions in the publishing guide, then run:
 
 ```sh
 python3 site/build.py --check
@@ -40,7 +40,7 @@ python3 site/build.py --check
 
 The output is `_site/`. Open it through a local static server, for example `python3 -m http.server --directory _site 8000`.
 
-The [publishing guide](./CONTRIBUTING.md) explains GitHub Pages, local checks and regenerating narration. GitHub Actions generates and caches the MP3 files before publishing the site; readers do not need an API key or a speech service. Narration uses Kokoro's `bf_emma` British English voice, as in the original collection.
+The [publishing guide](./CONTRIBUTING.md) explains GitHub Pages, local checks and the optional narration workflow. GitHub Actions currently builds and publishes the text-only site; TTS generation and narration publishing are deferred. Narration uses Kokoro's `bf_emma` British English voice, as in the original collection.
 
 ## Credits and license
 

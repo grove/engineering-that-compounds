@@ -21,31 +21,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Restore generated narration
-        id: narration-cache
-        uses: actions/cache@v4
-        with:
-          path: site/audio
-          key: narration-v1-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('essays/*.md', 'site/narration.py', 'site/tts.py', 'site/requirements-tts.txt') }}
-      - name: Cache Kokoro models
-        if: steps.narration-cache.outputs.cache-hit != 'true'
-        uses: actions/cache@v4
-        with:
-          path: .cache/kokoro
-          key: kokoro-models-v1-${{ hashFiles('site/tts.py') }}
-      - name: Install narration dependencies
-        if: steps.narration-cache.outputs.cache-hit != 'true'
-        run: python3 -m pip install -r site/requirements-tts.txt
-      - name: Generate narration
-        if: steps.narration-cache.outputs.cache-hit != 'true'
-        run: python3 site/tts.py --workers 2 --threads 2
-      - name: Check essays, links and narration; build site
-        run: python3 site/build.py --check
-      - name: Decode every narration file
-        run: |
-          for audio in site/audio/*.mp3; do
-            ffmpeg -v error -xerror -i "$audio" -f null -
-          done
+      - name: Build site
+        run: python3 site/build.py
       - name: Save reviewable site
         if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
