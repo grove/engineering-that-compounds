@@ -22,6 +22,20 @@ AI might help investigate an unfamiliar path, prepare competing implementations 
 
 ## Follow the constraint through the work
 
+The [Theory of Constraints](https://www.goldrattresearchlabs.com/introduction-to-toc/), developed by Eliyahu Goldratt, gives us a way to choose what to improve. A constraint is the condition that limits a system's ability to achieve its goal. It is not necessarily the slowest task, the busiest person or the part engineers find most irritating. It only makes sense relative to a result we want and the system responsible for it.
+
+Imagine, for illustration, a team with demand for twelve comparable billing changes a week. It can prepare ten, settle the policy and verify four, and release eight. Assume every change needs all three stages, the rates are sustainable and there is no other limit. The team can finish at most four a week. Doubling patch preparation would not raise that limit; admitting all the extra patches would mostly create a queue. If verification capacity rose to six, useful delivery could rise to six. If it rose to ten, release capacity would become the limit at eight. Real changes vary in size and have dependencies, so these numbers are an illustration, not a throughput forecast.
+
+Goldratt's five focusing steps suggest a useful sequence for software work:
+
+1. **Identify the constraint.** Follow a few valuable changes from need to verified outcome. Look at queues, blocked work, repeated escalations and scarce decisions. State a hypothesis: if this condition were relieved, more of the desired result could be achieved. Ask what evidence would contradict it.
+2. **Exploit it.** Make better use of the capacity already available. Give the scarce billing expert prepared questions and independently checked examples instead of asking them to reconstruct each account. Remove avoidable rework, not necessary scrutiny; do not ask people to work longer hours.
+3. **Subordinate other work.** Let the constraint and customer need determine how much work enters the system. Finish blocked changes before starting more; have spare implementation capacity prepare evidence or help unblock the work. An idle agent is preferable to an expanding queue of patches nobody can safely accept.
+4. **Elevate the constraint.** If it still limits the outcome, invest in changing it: clarify ownership, build a scenario builder, train another maintainer, separate a calculation from its side effects, or remove an unnecessary procedure. Choose the smallest adequate experiment and include its upkeep and opportunity cost.
+5. **Repeat.** Check whether the useful result improved without shifting unacceptable cost or risk elsewhere. If the constraint moved, redirect the next investment and revisit rules that served the old one. If the result did not improve, revisit the hypothesis rather than declare victory from a faster local step.
+
+In discovery work the limiting condition may change from one question to the next, or several constraints may be close together. We do not need to force a whole organization into one permanent bottleneck. Pick a meaningful scope and a time horizon, and treat the diagnosis as provisional. A lack of worthwhile demand can be the limit too. Safety, security, contractual obligations and sustainable working hours remain requirements, not obstacles to be bypassed; some investments protect against future harm even when they do not raise current throughput.
+
 Return to the cancellation. The team agrees on the policy with the people responsible for billing. For this example, they decide to leave the issued invoice unchanged and create a separate credit for the unused part of the new period. Repeated notifications of the same cancellation must not create additional credits. They work through accounts on either side of the renewal date, and someone checks the expected amounts against the policy before those expectations become tests.
 
 An agent can help find cases the team has overlooked and turn the reviewed examples into a runnable check. It can also expose a disagreement. If the policy is still unsettled, generating more tests will only give the disagreement more places to hide.
@@ -44,7 +58,9 @@ Consider a later effort to recover safely from an interrupted credit operation. 
 
 Now there is a specific connection to investigate. How much of the recovery check came from the earlier work? How much new work remained? Did adapting the old scenario help, or did its assumptions make the investigation harder? [Engineering capital](./engineering-capital.md) gives this connection a name; [Measuring the capacity for change](./measuring-the-capacity-for-change.md) asks how we could test it.
 
-This is also a reason to spend some recovered time on the next obstacle. If every saving is immediately filled with more feature requests, the team may never get round to the verification work that would make a larger change possible. The appropriate investment may be small: one diagnostic command or the removal of an unnecessary handoff. A distant ambition does not require a large improvement programme.
+This is where the Theory of Constraints and engineering capital meet. The focusing steps help us decide *where* to spend effort; the capital we retain can make the next focusing step cheaper. Removing one obstacle is useful on its own. Compounding is a further possibility: the earlier investment helps us build a capability that matters to a later constraint. A capability can compound locally without helping the team deliver more value, so look for both connections rather than infer one from the other.
+
+Make a conscious decision about the capacity recovered. If every saving is immediately filled with more feature requests, the team may never get round to the verification work that would make a larger change possible. Use the next constraint to decide whether to spend the capacity on customer work, invest some of it, or keep it available for uncertain work and interruptions. The appropriate investment may be small: one diagnostic command or the removal of an unnecessary handoff. A distant ambition does not require a large improvement programme.
 
 ## Count what the improvement costs
 
@@ -60,6 +76,6 @@ There is no single number that will settle all of this. We can be ambitious abou
 
 ## Choose the next attempt
 
-The [tenfold exercise in the field guide](https://grove.github.io/patterns-of-compounding-engineering/guide.html#use-the-tenfold-ambition-to-choose-the-next-investment) starts with a recent change and follows the effort from the original need to a useful result. It asks where more implementation capacity would have helped, what actually held the work up, and which small investment might change that.
+The [tenfold exercise in the field guide](https://grove.github.io/patterns-of-compounding-engineering/guide.html#use-the-tenfold-ambition-to-choose-the-next-investment) adapts the five focusing steps to a recent change. It asks what result matters, what currently limits it, how to use existing capacity better, and which investment to try if that is not enough. It also asks what would make us reconsider the choice.
 
 For our billing team, the first attempt is straightforward. Settle the cancellation rule, retain a few reviewed cases, and let another engineer try them on the next relevant change. See whether the repeated investigation goes away and what becomes difficult instead. That will tell them more about where to invest next than a plan to automate the entire billing backlog.

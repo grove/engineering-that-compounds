@@ -68,6 +68,8 @@ Suppose the migration check now lets billing review an ordinary schema change wi
 
 Then make the next choice explicit. The team might use that capacity to ship a customer request, rehearse a difficult recovery, or help a second engineer understand the migration path. Each can be worthwhile. Reinvestment becomes a compounding hypothesis when the earlier check makes the next improvement cheaper or more effective; simply giving the team another deadline does not establish that connection.
 
+Use the [focusing steps](./what-would-ten-times-look-like.md#follow-the-constraint-through-the-work) to revisit which condition now limits the work. If the next migration waits for a customer decision rather than a specialist, more migration tooling may be the wrong reinvestment. Make the allocation explicit: capacity might go toward the new constraint, customer outcomes or protective slack. Do not claim the same recovered hour as both a delivery gain and a reinvestment.
+
 Use the existing planning conversation to name the next job, who owns it and who will maintain the shared check. If billing saves time while orders absorbs all the support, the funding decision belongs with someone responsible for both teams. There is no useful universal percentage to reserve: choose against the work in front of you, and revisit the choice if upkeep consumes the expected return.
 
 ## Shared tools acquire landlords

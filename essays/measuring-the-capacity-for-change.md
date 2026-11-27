@@ -51,7 +51,15 @@ AI tools bring their own off-ledger bills: reviewing plausible-looking diffs, fi
 
 Note opportunity cost too, even roughly: write down which feature slid for that month and why the trade looked sensible at the time. Sometimes an investment is worth doing before it pays back in hours, such as cutting single-person dependency before a key maintainer rotates off. Label it deliberate risk reduction instead of pretending it's a proven speed gain.
 
-The [tenfold ambition](./what-would-ten-times-look-like.md) helps choose what to investigate. To claim an improvement, name the outcome, the comparison and the period measured. Do not multiply speedups from different activities into a team-wide figure: they may overlap, cover a small share of the work or leave the limiting constraint untouched.
+The [tenfold ambition](./what-would-ten-times-look-like.md) uses the Theory of Constraints to help choose what to investigate. To claim an improvement, name the outcome, the comparison and the period measured. Do not multiply speedups from different activities into a team-wide figure: they may overlap, cover a small share of the work or leave the limiting constraint untouched.
+
+## Did the constraint move?
+
+Before an investment, name the system boundary, its desired outcome and the suspected constraint. In the permissions example, the notes say two days were spent waiting for legal wording. That suggests a question, not a diagnosis: would settling the rule earlier allow more permissions changes to reach customers, or would they simply wait for release approval instead? Review other comparable changes and ask the people on either side of the queue.
+
+Keep three levels of evidence separate. A local saving is less time or effort at one step. A system-level improvement is better delivery of the chosen outcome, such as more comparable changes accepted within the same budget, shorter end-to-end lead time or work that previously could not be finished, with the same or stronger quality safeguards. A compounding effect is evidence that the earlier capability made a later capability cheaper or more effective to build. None of these establishes the other automatically.
+
+Alongside active and waiting time, note unfinished work, downstream queues, demand and any change in verification quality, rework or maintenance. If legal decisions become timely but release approval is now holding things up, revisit where to invest. If the original constraint was not limiting throughput, the saving may still be useful (for instance, to reduce cost or risk); do not extrapolate it into a delivery gain. For work where reducing risk is the purpose, measure the relevant guarantee or exposure rather than forcing it into a throughput count.
 
 ## When the work runs without you
 
@@ -63,7 +71,7 @@ If an existing automation supplies the fixtures, environment or verification for
 
 ## A twelve-week field check
 
-On a working team, run a grounded twelve-week check on one high-frequency class of change (skip subsystems touched twice a year; you won't get a signal). Write down the investment, its upkeep cap, and the specific later work it is meant to help. Log a handful of baseline changes, awkward ones included, and record ordinary tickets as they arrive instead of cherry-picking flattering ones. At week twelve, read the individual notes before computing averages; one painful migration usually explains more than a mean. Accept upfront that twelve weeks in production has weak causal control (people learn while the product shifts) and use it to decide whether to keep, shrink, or scrap the investment.
+On a working team, run a grounded twelve-week check on one high-frequency class of change (skip subsystems touched twice a year; you won't get a signal). Write down the investment, its upkeep cap, the specific later work it is meant to help, and the outcome and limiting condition it is intended to change. Log a handful of baseline changes, awkward ones included, and record ordinary tickets as they arrive instead of cherry-picking flattering ones. At week twelve, read the individual notes before computing averages; one painful migration usually explains more than a mean. Accept upfront that twelve weeks in production has weak causal control (people learn while the product shifts) and use it to decide whether to keep, shrink, or scrap the investment.
 
 Record a second connection if it occurs: which earlier capability helped build a later one, what was reused, and what adaptation cost. A replay that catches another bug has earned a return. A replay that reduces the work of building a recovery drill is a candidate for compounding. Reuse alone does not establish the saving; distinguish what you observed from what you estimate would have happened without it.
 
