@@ -13,13 +13,12 @@ from pathlib import Path
 from html.parser import HTMLParser
 from urllib.parse import unquote, urlsplit
 
-from narration import read_manifest, validate_audio
+from narration import validate_audio
 
 ROOT = Path(__file__).resolve().parent.parent
 ESSAYS_DIR = ROOT / "essays"
 README_PATH = ROOT / "README.md"
 STYLE_PATH = Path(__file__).resolve().parent / "style.css"
-AUDIO_DIR = Path(__file__).resolve().parent / "audio"
 OUT_DIR = ROOT / "_site"
 REPO_URL = "https://github.com/grove/engineering-that-compounds"
 SITE_URL = "https://grove.github.io/engineering-that-compounds/"
@@ -268,7 +267,6 @@ def html_shell(*, title: str, description: str, css_href: str, body: str, path: 
   <meta property="og:url" content="{SITE_URL}{path}">
   <link rel="icon" href="{FAVICON_DATA}">
   <link rel="stylesheet" href="{css_href}">
-  <script src="{'../' if path else ''}audio.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -290,8 +288,6 @@ def html_shell(*, title: str, description: str, css_href: str, body: str, path: 
 def build(out_dir: Path = OUT_DIR) -> list[Path]:
     readme_md = README_PATH.read_text(encoding="utf-8")
     site_title, site_subtitle, intro_md, reading_note, listed = parse_readme(readme_md)
-    audio_manifest = read_manifest()
-
     # Ensure every essay in essays/ is included even if not yet added to README.md.
     by_slug = {e["slug"]: e for e in listed}
     ordered = list(listed)
@@ -304,13 +300,6 @@ def build(out_dir: Path = OUT_DIR) -> list[Path]:
         shutil.rmtree(out_dir)
     (out_dir / "essays").mkdir(parents=True, exist_ok=True)
     shutil.copy2(STYLE_PATH, out_dir / "style.css")
-    shutil.copy2(ROOT / "site" / "audio.js", out_dir / "audio.js")
-    if AUDIO_DIR.exists():
-        mp3s = list(AUDIO_DIR.glob("*.mp3"))
-        if mp3s:
-            (out_dir / "audio").mkdir(parents=True, exist_ok=True)
-            for mp3 in mp3s:
-                shutil.copy2(mp3, out_dir / "audio" / mp3.name)
     (out_dir / ".nojekyll").write_text("", encoding="utf-8")
 
     internal_links: list[tuple[Path, str]] = []
@@ -364,25 +353,6 @@ def build(out_dir: Path = OUT_DIR) -> list[Path]:
             )
 
         subtitle_html = f'\n      <p class="subtitle">{html.escape(subtitle)}</p>' if subtitle else ""
-        audio_file = AUDIO_DIR / f"{entry['slug']}.mp3"
-        audio_record = audio_manifest.get(entry["slug"], {})
-        duration = math.ceil(audio_record.get("duration_seconds", 0) / 60)
-        duration_label = f" · {duration} min" if duration else ""
-        audio_html = (
-            f'\n      <figure class="audio-player">'
-            f'<figcaption id="audio-label">Listen to this essay{duration_label}</figcaption>'
-            f'<audio controls preload="none" aria-labelledby="audio-label" src="../audio/{entry["slug"]}.mp3">'
-            f'<a href="../audio/{entry["slug"]}.mp3">Download the narration</a></audio>'
-            f'<div class="audio-actions"><span>Synthetic narration</span>'
-            f'<label class="speed-control" hidden>Speed <select aria-label="Playback speed">'
-            f'<option value="0.75">0.75×</option><option value="1" selected>1×</option>'
-            f'<option value="1.25">1.25×</option><option value="1.5">1.5×</option>'
-            f'<option value="2">2×</option></select></label>'
-            f'<a href="../audio/{entry["slug"]}.mp3" download>Download MP3</a></div>'
-            f"</figure>"
-            if audio_file.exists()
-            else ""
-        )
         page_body = f"""    <nav class="top-nav" aria-label="Breadcrumb">
       <a class="back-link" href="../">All essays</a>
       <span class="top-meta">{idx + 1:02d} / {total:02d} &middot; {entry["minutes"]} min read</span>
@@ -391,7 +361,7 @@ def build(out_dir: Path = OUT_DIR) -> list[Path]:
       <article>
         <header>
           <h1>{html.escape(entry["title"])}</h1>{subtitle_html}
-        </header>{audio_html}
+        </header>
         {body_html}
       </article>
       <nav class="pager" aria-label="Essay navigation">
@@ -516,8 +486,8 @@ def check_generated_pages(pages: list[Path]) -> None:
         inventory.feed(page.read_text(encoding="utf-8"))
         if inventory.h1_count != 1:
             raise RuntimeError(f"Expected one page title: {page}")
-        if page.parent.name == "essays" and inventory.audio_count != 1:
-            raise RuntimeError(f"Expected one narration player: {page}")
+        if page.parent.name == "essays" and inventory.audio_count:
+            raise RuntimeError(f"Unexpected narration player: {page}")
         inventories[page.resolve()] = inventory
     for page, inventory in inventories.items():
         for href in inventory.links:

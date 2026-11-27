@@ -11,13 +11,13 @@ python3 site/build.py --check
 python3 -m http.server --directory _site 8000
 ```
 
-The check builds all pages and checks the reading order, essay titles, local links, page anchors, audio presence and narration fingerprints. It fails if an essay's audio no longer matches its text or the narration pipeline. Generated `_site/` files are not committed.
+The check builds all pages and checks the reading order, essay titles, local links, page anchors and narration fingerprints. Audio is temporarily omitted from the generated site; the check still fails if an essay's audio no longer matches its text or the narration pipeline. Generated `_site/` files are not committed.
 
 For an editorial preview before regenerating audio, `python3 site/build.py` builds without the narration freshness gate. Do not publish that preview until `--check` passes.
 
 ## Narration
 
-The MP3s are generated locally with [Kokoro ONNX](https://github.com/thewh1teagle/kokoro-onnx). The default voice is `bf_emma` (British English), at speed `0.95`, matching the original collection. Audio is mono, 24 kHz, 64 kbps. Readers see a synthetic-narration label and can download each file or change playback speed.
+The MP3s are generated locally with [Kokoro ONNX](https://github.com/thewh1teagle/kokoro-onnx). The default voice is `bf_emma` (British English), at speed `0.95`, matching the original collection. Audio is mono, 24 kHz, 64 kbps. MP3s remain committed under `site/audio/`, but are not currently copied into the published site.
 
 Use Python 3.12 for the pinned narration dependencies:
 

@@ -10,7 +10,7 @@ The word *compounds* makes a claim that needs testing. More documentation, tests
 
 ## Reading order
 
-Nine essays in three parts. Read them in order, or start with the question closest to your work. Each essay has an audio edition.
+Nine essays in three parts. Read them in order, or start with the question closest to your work. Audio editions are temporarily not included in the published site.
 
 1. **[Engineering capital](./essays/engineering-capital.md)** — What remains useful after the immediate task is finished, and when those benefits begin to reinforce one another.
 2. **[What software should remember](./essays/what-software-should-remember.md)** — Keeping the reasons for a decision available, without turning yesterday's assumptions into permanent rules.
@@ -34,7 +34,7 @@ python3 site/build.py --check
 
 The output is `_site/`. Open it through a local static server, for example `python3 -m http.server --directory _site 8000`.
 
-The [publishing guide](./CONTRIBUTING.md) explains GitHub Pages, local checks and regenerating narration. MP3 files are committed alongside the essays; readers do not need an API key or a speech service. Narration uses Kokoro's `bf_emma` British English voice, as in the original collection.
+The [publishing guide](./CONTRIBUTING.md) explains GitHub Pages, local checks and regenerating narration. MP3 files remain committed alongside the essays, though they are not currently published with the site. Narration uses Kokoro's `bf_emma` British English voice, as in the original collection.
 
 ## Credits and license
 
