@@ -431,10 +431,11 @@ def build(out_dir: Path = OUT_DIR) -> list[Path]:
 {chr(10).join(list_items)}
         </div>
       </section>
-      <aside class="companion-note">
-        <p>Begin with the software.</p>
-        <a href="{ORIGINAL_URL}">Software that improves with age</a>
-        <p class="companion-description">The first collection explores discovery, verification, operations and the daily work of tending a codebase.</p>
+      <aside class="companion-note" aria-labelledby="companion-collection">
+        <h2 id="companion-collection" class="section-heading">Companion collection</h2>
+        <p class="companion-title"><a href="{ORIGINAL_URL}">Software that improves with age</a></p>
+        <p class="companion-description"><em>Software that improves with age</em> is the earlier collection this series builds on. It looks at what happens inside a codebase when AI makes writing code cheaper: how discovery, module boundaries, independent verification, production operations and deliberate removal affect whether a system becomes easier or harder to change over time.</p>
+        <p class="companion-description">That codebase-level foundation explains why the questions here arise. Several essays in this collection pick up directly where the first series leaves off, moving from how delegating implementation weakens a team's mental model to how engineers develop judgment in the first place, what rationale and tools a team should keep, and how to tell whether earlier work actually helps the next change.</p>
       </aside>
     </main>"""
 
