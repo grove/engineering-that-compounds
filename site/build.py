@@ -7,6 +7,7 @@ import hashlib
 import html
 import json
 import math
+import os
 import re
 import shutil
 import sys
@@ -18,6 +19,7 @@ from narration import validate_audio
 
 ROOT = Path(__file__).resolve().parent.parent
 ESSAYS_DIR = ROOT / "essays"
+RESEARCH_DIR = ROOT / "research"
 README_PATH = ROOT / "README.md"
 STYLE_PATH = Path(__file__).resolve().parent / "style.css"
 OUT_DIR = ROOT / "_site"
@@ -25,6 +27,12 @@ REPO_URL = "https://github.com/grove/engineering-that-compounds"
 SITE_URL = "https://grove.github.io/engineering-that-compounds/"
 ORIGINAL_URL = "https://grove.github.io/software-that-improves-with-age/"
 PARTS = ("What we accumulate", "How capabilities develop", "Engineering as an institution", "Engineering the work")
+LEGACY_ANCHORS = {
+    "measuring-the-capacity-for-change": {
+        "a-twelve-week-field-check": "a-twelve-week-field-check-and-how-to-test-compounding",
+        "what-would-make-us-change-our-minds": "what-would-prove-this-framework-wrong",
+    },
+}
 
 FOREST_SVG = ('<svg class="forest-mark" width="36" height="36" viewBox="0 0 40 40" '
               'fill="none" aria-hidden="true"><path d="M10 33C9 15 21 7 33 7c0 15-7 27-23 26Z" '
@@ -319,20 +327,27 @@ def build(out_dir: Path = OUT_DIR) -> list[Path]:
     internal_links: list[tuple[Path, str]] = []
     written: list[Path] = []
 
-    def make_resolver(page_path: Path, in_essays: bool):
+    def make_resolver(page_path: Path):
         def resolve(href: str) -> str:
             if href == "./LICENSE":
                 return f"{REPO_URL}/blob/main/LICENSE"
             if href.startswith(("http://", "https://", "mailto:", "#")):
                 return href
-            if in_essays and href.startswith("./") and href.endswith(".md"):
-                target = href[2:-3] + ".html"
-                internal_links.append((page_path, target))
-                return target
-            if not in_essays and href.startswith("./essays/") and href.endswith(".md"):
-                target = "essays/" + href[9:-3] + ".html"
-                internal_links.append((page_path, target))
-                return target
+            parsed = urlsplit(href)
+            if parsed.path.endswith(".md"):
+                source_dir = ROOT / page_path.relative_to(out_dir).parent
+                source = (source_dir / unquote(parsed.path)).resolve()
+                if source.parent in (ESSAYS_DIR, RESEARCH_DIR):
+                    if not source.is_file():
+                        raise RuntimeError(f"Missing Markdown source: {href}")
+                    destination = out_dir / source.relative_to(ROOT).with_suffix(".html")
+                    target = Path(os.path.relpath(destination, page_path.parent)).as_posix()
+                    internal_links.append((page_path, target))
+                    if parsed.query:
+                        target += "?" + parsed.query
+                    if parsed.fragment:
+                        target += "#" + parsed.fragment
+                    return target
             return href
 
         return resolve
@@ -346,8 +361,13 @@ def build(out_dir: Path = OUT_DIR) -> list[Path]:
         entry["minutes"] = str(reading_minutes(raw_md))
 
         out_path = out_dir / "essays" / f"{entry['slug']}.html"
-        resolve = make_resolver(out_path, in_essays=True)
+        resolve = make_resolver(out_path)
         body_html = render_markdown(body_md, resolve)
+        for current, previous in LEGACY_ANCHORS.get(entry["slug"], {}).items():
+            heading = f'<h2 id="{current}">'
+            if heading not in body_html:
+                raise RuntimeError(f"Missing heading for legacy anchor: {current}")
+            body_html = body_html.replace(heading, f'<span id="{previous}"></span>\n{heading}', 1)
 
         prev_link = ""
         if idx > 0:
@@ -397,9 +417,34 @@ def build(out_dir: Path = OUT_DIR) -> list[Path]:
         )
         written.append(out_path)
 
+    # Research protocols are supporting material, outside the essay reading order.
+    for md_path in sorted(RESEARCH_DIR.glob("*.md")):
+        title, subtitle, body_md = split_header(md_path.read_text(encoding="utf-8"))
+        out_path = out_dir / "research" / f"{md_path.stem}.html"
+        out_path.parent.mkdir(exist_ok=True)
+        subtitle_html = f'<p class="subtitle">{html.escape(subtitle)}</p>' if subtitle else ""
+        body_html = render_markdown(body_md, make_resolver(out_path))
+        page_body = f"""    <nav class="top-nav" aria-label="Breadcrumb">
+      <a class="back-link" href="../essays/measuring-the-capacity-for-change.html">Measuring the capacity for change</a>
+      <span class="top-meta">Research protocol</span>
+    </nav>
+    <main id="main">
+      <article>
+        <header><h1>{html.escape(title)}</h1>{subtitle_html}</header>
+        {body_html}
+      </article>
+    </main>"""
+        out_path.write_text(html_shell(
+            title=f"{title} — {site_title}",
+            description=subtitle or first_paragraph_text(body_md),
+            css_href="../style.css", body=page_body,
+            path=f"research/{md_path.stem}.html",
+        ), encoding="utf-8")
+        written.append(out_path)
+
     # Index page
     index_path = out_dir / "index.html"
-    intro_html = render_markdown(intro_md, make_resolver(index_path, in_essays=False))
+    intro_html = render_markdown(intro_md, make_resolver(index_path))
     list_items: list[str] = []
     for idx, entry in enumerate(ordered, start=1):
         if (idx - 1) % 3 == 0:
@@ -411,7 +456,7 @@ def build(out_dir: Path = OUT_DIR) -> list[Path]:
                               f'<h3 class="part-heading" id="part-{part}">{html.escape(part_title)}</h3>'
                               f'<ol class="essay-list" role="list" start="{idx}">')
         summary_html = (
-            f'<p class="essay-summary">{render_inline(entry["summary"], make_resolver(index_path, False))}</p>'
+            f'<p class="essay-summary">{render_inline(entry["summary"], make_resolver(index_path))}</p>'
             if entry["summary"]
             else ""
         )
@@ -543,7 +588,7 @@ def self_check(*, include_audio: bool = True) -> None:
         validate_audio(essays)
     # Build and verify all essays rendered
     pages = build()
-    expected = len(list(ESSAYS_DIR.glob("*.md"))) + 1
+    expected = len(list(ESSAYS_DIR.glob("*.md"))) + len(list(RESEARCH_DIR.glob("*.md"))) + 1
     assert len(pages) == expected, f"Expected {expected} pages, built {len(pages)}"
     check_generated_pages(pages)
 

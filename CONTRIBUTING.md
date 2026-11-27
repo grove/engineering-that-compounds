@@ -4,6 +4,8 @@
 
 Each essay lives in `essays/` as Markdown. The opening heading is its title; an optional italic paragraph supplies its subtitle. `README.md` sets the reading order and the descriptions on the home page. Keep titles in both places identical.
 
+Research protocols live in `research/` and render as supporting pages outside the essay reading order. Link them from the relevant essay; state whether each is proposed, underway or completed and keep results separate from plans. Relative Markdown links between essays and research pages become checked HTML links.
+
 The site generator uses Python's standard library. It supports headings, paragraphs, flat lists, blockquotes, fenced code blocks and inline links/emphasis/code. It deliberately has no package installation or JavaScript build step. The CSS follows the reader's light or dark preference; native audio works without JavaScript.
 
 ```sh

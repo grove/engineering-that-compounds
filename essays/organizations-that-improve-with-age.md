@@ -62,6 +62,14 @@ What if management doesn't? In plenty of companies, quarterly targets stay rigid
 
 None of that substitutes for aligned leadership, and some orgs really will stay trapped in repeat outages until the business hurts enough to change incentives. Still, small self-serving assets have a much better survival rate than grand knowledge-management initiatives.
 
+## Decide what the recovered capacity is for
+
+Suppose the migration check now lets billing review an ordinary schema change without asking the orders team's specialist for help. First establish that the interruption has actually disappeared; a successful rehearsal is not a week's worth of recovered time.
+
+Then make the next choice explicit. The team might use that capacity to ship a customer request, rehearse a difficult recovery, or help a second engineer understand the migration path. Each can be worthwhile. Reinvestment becomes a compounding hypothesis when the earlier check makes the next improvement cheaper or more effective; simply giving the team another deadline does not establish that connection.
+
+Use the existing planning conversation to name the next job, who owns it and who will maintain the shared check. If billing saves time while orders absorbs all the support, the funding decision belongs with someone responsible for both teams. There is no useful universal percentage to reserve: choose against the work in front of you, and revisit the choice if upkeep consumes the expected return.
+
 ## Shared tools acquire landlords
 
 After three teams hit migration locks, someone inevitably proposes a central migration gatekeeper: a service that runs every DDL change against a staging clone, checks lock modes, and blocks unsafe deploys.
