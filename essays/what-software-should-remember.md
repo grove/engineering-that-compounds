@@ -86,7 +86,7 @@ Use the project's agent instructions as a short route to the relevant knowledge.
 
 Then test the route with an ordinary task. Give a fresh session a request to change the exporter, with its usual repository access but no hint about the timer note. Check whether it finds the current rationale, distinguishes the partner's promise from observations in logs, and notices the unanswered question about downstream consumers. Ask it to point to evidence for its proposed change. Saying it has read the documentation is not enough.
 
-If it misses something, inspect the miss before adding another instruction. The note may be poorly named, disconnected from the relevant code or contradicted by an obsolete summary. Repair that fault and try again. A successful rehearsal shows that this route worked for this task; later changes will reveal whether the record remains useful. The final essay, [Engineering that compounds](./engineering-that-compounds.md), follows this habit through a complete change.
+If it misses something, inspect the miss before adding another instruction. The note may be poorly named, disconnected from the relevant code or contradicted by an obsolete summary. Repair that fault and try again. A successful rehearsal shows that this route worked for this task; later changes will reveal whether the record remains useful. The essay [Engineering that compounds](./engineering-that-compounds.md), follows this habit through a complete change.
 
 ## Memory goes stale, and silent rewrites make it worse
 

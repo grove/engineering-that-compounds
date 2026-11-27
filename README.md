@@ -12,7 +12,7 @@ For something to try on your next ticket, start with [Engineering that compounds
 
 ## Reading order
 
-Nine essays in three parts. Read them in order, or start with the question closest to your work. Audio editions are temporarily not included in the published site.
+Eleven essays in four parts. Read them in order, or start with the question closest to your work. Audio editions are temporarily not included in the published site.
 
 1. **[Engineering capital](./essays/engineering-capital.md)** — What remains useful after the immediate task is finished, and when those benefits begin to reinforce one another.
 2. **[What software should remember](./essays/what-software-should-remember.md)** — Keeping the reasons for a decision available, without turning yesterday's assumptions into permanent rules.
@@ -24,6 +24,9 @@ Nine essays in three parts. Read them in order, or start with the question close
 8. **[Measuring the capacity for change](./essays/measuring-the-capacity-for-change.md)** — Looking for evidence of improvement across successive changes, including the costs that a productivity chart can hide.
 9. **[Engineering that compounds](./essays/engineering-that-compounds.md)** — Follow an integration change from the first awkward question to the next engineer's attempt, and try the habit on your own work.
 
+10. **[The ability to delegate](./essays/the-ability-to-delegate.md)** — Use recurring interruptions to discover which capabilities would make a particular kind of work easier to hand off.
+11. **[Architecture for parallel work](./essays/architecture-for-parallel-work.md)** — Find out which decisions can happen independently and what it costs to put the results together.
+
 ## Website and audio
 
 GitHub Pages address: [grove.github.io/engineering-that-compounds](https://grove.github.io/engineering-that-compounds/).
@@ -31,7 +34,7 @@ GitHub Pages address: [grove.github.io/engineering-that-compounds](https://grove
 Build a text-only preview with Python 3.10 or later; no packages are needed:
 
 ```sh
-python3 site/build.py
+python3 site/build.py --check-text
 ```
 
 To check narration after regenerating it, follow the Python 3.12 instructions in the publishing guide, then run:

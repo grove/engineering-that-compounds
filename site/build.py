@@ -23,7 +23,7 @@ OUT_DIR = ROOT / "_site"
 REPO_URL = "https://github.com/grove/engineering-that-compounds"
 SITE_URL = "https://grove.github.io/engineering-that-compounds/"
 ORIGINAL_URL = "https://grove.github.io/software-that-improves-with-age/"
-PARTS = ("What we accumulate", "How capabilities develop", "Engineering as an institution")
+PARTS = ("What we accumulate", "How capabilities develop", "Engineering as an institution", "Engineering the work")
 
 FOREST_SVG = ('<svg class="forest-mark" width="36" height="36" viewBox="0 0 40 40" '
               'fill="none" aria-hidden="true"><path d="M10 33C9 15 21 7 33 7c0 15-7 27-23 26Z" '
@@ -504,7 +504,7 @@ def check_generated_pages(pages: list[Path]) -> None:
                 raise RuntimeError(f"Missing link target in {page.name}: {href}")
 
 
-def self_check() -> None:
+def self_check(*, include_audio: bool = True) -> None:
     id_res = lambda u: u
     # Balanced parentheses in URLs (e.g., DOI link in implementation-and-understanding.md)
     doi = render_inline("[Paper](https://doi.org/10.1016/0165-6074(85)90032-8)", id_res)
@@ -525,7 +525,8 @@ def self_check() -> None:
         title = split_header(path.read_text())[0]
         if title != entry["title"]:
             raise RuntimeError(f"README title differs from essay title: {path.name}")
-    validate_audio(essays)
+    if include_audio:
+        validate_audio(essays)
     # Build and verify all essays rendered
     pages = build()
     expected = len(list(ESSAYS_DIR.glob("*.md"))) + 1
@@ -534,8 +535,8 @@ def self_check() -> None:
 
 
 if __name__ == "__main__":
-    if "--check" in sys.argv:
-        self_check()
+    if "--check" in sys.argv or "--check-text" in sys.argv:
+        self_check(include_audio="--check" in sys.argv)
         print("OK: self-check and build passed.")
     else:
         built = build()

@@ -7,13 +7,13 @@ Each essay lives in `essays/` as Markdown. The opening heading is its title; an 
 The site generator uses Python's standard library. It supports headings, paragraphs, flat lists, blockquotes, fenced code blocks and inline links/emphasis/code. It deliberately has no package installation or JavaScript build step. The CSS follows the reader's light or dark preference; native audio works without JavaScript.
 
 ```sh
-python3 site/build.py
+python3 site/build.py --check-text
 python3 -m http.server --directory _site 8000
 ```
 
 After generating narration as described below, run `python3 site/build.py --check`. The check builds all pages and checks the reading order, essay titles, local links, page anchors, audio presence and narration fingerprints. It fails if an essay's audio no longer matches its text or the narration pipeline. Generated `_site/` files are not committed.
 
-For a text-only preview, run `python3 site/build.py`. The Pages workflow uses this build and currently does not generate or publish narration.
+For a text-only preview, run `python3 site/build.py --check-text`. This checks the reading order, titles, rendered pages and links without requiring audio. The Pages workflow uses this check and currently does not generate or publish narration.
 
 ## Narration
 
@@ -65,6 +65,8 @@ You can also run the workflow manually on `main`. The `github-pages` environment
 Use a specific engineering problem to carry an argument. Describe hypothetical examples as such. Link factual claims to primary sources, explain the limits of the evidence, and distinguish a proposed practice from an established result. Avoid invented quotations, personal anecdotes attributed to the author, and unqualified claims that AI saves time.
 
 Each essay should add something the others need. Remove repeated slogans and summaries; give counterexamples enough space to affect the conclusion. A failed investment belongs in the collection as much as a successful one.
+
+For substantial changes, try the [editorial review skill](./skills/editorial-review/SKILL.md). It is a short, reusable reading procedure for people or compatible coding agents; the maintainer still decides which findings to act on.
 
 ## Attribution
 
