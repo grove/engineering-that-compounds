@@ -68,6 +68,14 @@ Name a person or team responsible for the retained tool, and name the event that
 
 Skipping an investment can be the right decision at the start, too. A one-off migration still needs careful verification; it may need no reusable framework. A service being retired next month is a poor home for a new testing platform. An urgent restoration can finish before its reusable lesson is ready, with a small follow-up only if somebody expects to use it. “Nothing worth retaining” is an acceptable result of the pause.
 
+## What if the next change needed no ticket?
+
+The team has made an integration change easier to understand and verify. Now look at the work that still needs a person. Suppose every missed completion notification opens a support ticket. Somebody finds the affected file, establishes whether it is complete, and decides whether to retry. If that procedure becomes well understood, the team can try running the recovery check when the notification is overdue. It still needs a sound way to distinguish a completed file from a partially written one; where that evidence is missing, the case belongs with an engineer.
+
+There is a much larger ambition behind the habit of improving one ticket. Take a recurring outcome and ask what would need to be true for it to require a tenth of the effort. That will often point outside the code change itself. Could the failure be prevented? Could the evidence be gathered automatically? Would a simpler contract remove the manual recovery procedure altogether? If most of the effort lies in agreeing with a partner about what complete means, another agent writing retry code will not help much.
+
+Try to establish the current cost before making the investment, and include the people who do the work after the code ships. Work on the part that accounts for the most avoidable effort. As it improves, look for the next constraint. The [automation essay](./automating-the-work-of-engineering.md) follows that idea through dependency maintenance, including a hypothetical tenfold reduction in effort for a narrowly defined class of work.
+
 ## What a repository cannot carry for us
 
 The export example works because several kinds of effort support one another. The old rationale preserves a question. Someone with domain knowledge answers it. A test makes part of the answer executable. A colleague learns enough to challenge it later.

@@ -51,6 +51,14 @@ AI tools bring their own off-ledger bills: reviewing plausible-looking diffs, fi
 
 Note opportunity cost too, even roughly: write down which feature slid for that month and why the trade looked sensible at the time. Sometimes an investment is worth doing before it pays back in hours, such as cutting single-person dependency before a key maintainer rotates off. Label it deliberate risk reduction instead of pretending it's a proven speed gain.
 
+## When the work runs without you
+
+An automated procedure changes what needs sampling. Use all eligible events as the denominator, not just the ones for which the job reports success. Keep counts of unattended completions, escalations, failed or missed attempts and changes later found to be wrong. Inspect a sample of the unattended outcomes against the original acceptance criteria. A quiet job might be excellent, or it might have stopped looking for work.
+
+For a defined class of comparable outcomes, record total human time from discovery to acceptance and follow-up, including setup, exception handling, oversight, recovery and the allocated cost of building and maintaining the machinery. Record elapsed time and non-human costs separately; a thousand expensive retries may save attention without making the arrangement worthwhile. Compare against the same scope and quality bar before automation. Report the share of the team's original work the class accounted for before extrapolating from it.
+
+If an existing automation supplies the fixtures, environment or verification for a second workflow, record what was reused and what had to be adapted. A reduction in supervision is valuable; evidence that the second capability costs less to build is a different claim. See [Automating the work of engineering](./automating-the-work-of-engineering.md) for the distinction in a dependency-maintenance example.
+
 ## A twelve-week field check
 
 On a working team, run a grounded twelve-week check on one high-frequency class of change (skip subsystems touched twice a year; you won't get a signal). Write down the investment, its upkeep cap, and the specific later work it is meant to help. Log a handful of baseline changes, awkward ones included, and record ordinary tickets as they arrive instead of cherry-picking flattering ones. At week twelve, read the individual notes before computing averages; one painful migration usually explains more than a mean. Accept upfront that twelve weeks in production has weak causal control (people learn while the product shifts) and use it to decide whether to keep, shrink, or scrap the investment.

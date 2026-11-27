@@ -55,3 +55,5 @@ The payoff from an experiment like this might be a simpler way to start a local 
 Over time, improvements to verification, boundaries and the development environment can reinforce each other. A reliable local setup makes it cheap to explore a boundary. The new boundary makes it practical to write a focused integration check. That check enables a later change to proceed independently. This is a plausible path to compounding, not a guarantee that parallel development will pay off.
 
 The [ability to delegate](./the-ability-to-delegate.md) belongs to a particular class of work. So does the ability to run it concurrently. A mature engineering organization knows which decisions it can separate, which must be made together, and how to tell the difference before the merge queue fills up.
+
+The next essay, [Automating the work of engineering](./automating-the-work-of-engineering.md), asks which of those independent tasks need someone to start them in the first place.
