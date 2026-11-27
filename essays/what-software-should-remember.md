@@ -78,6 +78,16 @@ The second problem is trickier, and documentation frameworks rarely mention it: 
 
 Plenty of crucial knowledge still lives outside code. No test suite can tell you whether a partner's commercial promise is credible, or whether a twenty-minute delay is starting to cost deals. Turning a judgment into a constant only hides it unless the reasoning, and who owns revisiting it, stay within reach. The same holds for [abandoned experiments](./the-value-of-forgotten-alternatives.md).
 
+## Give the next session a way in
+
+A long debugging conversation can leave an agent unusually well informed about an integration. The next session does not inherit that understanding merely because the team merged its patch. The repository needs an entry point that survives the conversation.
+
+Use the project's agent instructions as a short route to the relevant knowledge. For the export service, point to the decision record, the partner evidence it relies on and the test that exercises partial uploads. Another paragraph saying “be careful with partner files” gives the next session little to act on. Keep the detailed explanation in the record. Repeating it in `AGENTS.md`, a service README and a prompt creates three versions to maintain.
+
+Then test the route with an ordinary task. Give a fresh session a request to change the exporter, with its usual repository access but no hint about the timer note. Check whether it finds the current rationale, distinguishes the partner's promise from observations in logs, and notices the unanswered question about downstream consumers. Ask it to point to evidence for its proposed change. Saying it has read the documentation is not enough.
+
+If it misses something, inspect the miss before adding another instruction. The note may be poorly named, disconnected from the relevant code or contradicted by an obsolete summary. Repair that fault and try again. A successful rehearsal shows that this route worked for this task; later changes will reveal whether the record remains useful. The final essay, [Engineering that compounds](./engineering-that-compounds.md), follows this habit through a complete change.
+
 ## Memory goes stale, and silent rewrites make it worse
 
 Automation can check the mechanical parts of memory: that a linked file still exists, a reproduction still runs, or a documented schema still matches production.

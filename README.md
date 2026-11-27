@@ -8,6 +8,8 @@ This collection follows [Software that improves with age](https://grove.github.i
 
 The word *compounds* makes a claim that needs testing. More documentation, tests or automation can just as easily create more upkeep. These essays ask when earlier work makes later work more effective, what gets lost along the way, and when an investment should be abandoned.
 
+For something to try on your next ticket, start with [Engineering that compounds](./essays/engineering-that-compounds.md). It follows a small integration change through planning, review, retaining a useful lesson and handing the work to someone who was not there. The companion [Patterns of compounding engineering](https://grove.github.io/patterns-of-compounding-engineering/) supplies the field guide: concrete techniques, runnable examples and ways to check whether the effort helped.
+
 ## Reading order
 
 Nine essays in three parts. Read them in order, or start with the question closest to your work. Audio editions are temporarily not included in the published site.
@@ -20,7 +22,7 @@ Nine essays in three parts. Read them in order, or start with the question close
 6. **[When software forgets the world](./essays/when-software-forgets-the-world.md)** — Finding out when a well-tested system has stopped matching the work people need to do.
 7. **[Organizations that improve with age](./essays/organizations-that-improve-with-age.md)** — How a lesson learned by one team becomes useful to another.
 8. **[Measuring the capacity for change](./essays/measuring-the-capacity-for-change.md)** — Looking for evidence of improvement across successive changes, including the costs that a productivity chart can hide.
-9. **[Engineering that compounds](./essays/engineering-that-compounds.md)** — Putting the argument to work, with room for investments that fail and knowledge that wears out.
+9. **[Engineering that compounds](./essays/engineering-that-compounds.md)** — Follow an integration change from the first awkward question to the next engineer's attempt, and try the habit on your own work.
 
 ## Website and audio
 
