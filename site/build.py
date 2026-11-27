@@ -418,7 +418,7 @@ def build(out_dir: Path = OUT_DIR) -> list[Path]:
     subtitle_html = f'\n      <p class="subtitle">{html.escape(site_subtitle)}</p>' if site_subtitle else ""
     note_html = f'\n      <p class="reading-note">{html.escape(reading_note)}</p>' if reading_note else ""
     index_body = f"""    <header class="site-header">
-      <div class="collection-mark">{FOREST_SVG}<span>A companion collection</span></div>
+      <div class="collection-mark">{FOREST_SVG}</div>
       <h1>{html.escape(site_title)}</h1>{subtitle_html}
     </header>
     <main id="main">
