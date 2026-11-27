@@ -70,7 +70,9 @@ Writing code by hand used to bundle learning with delivery: you figured out how 
 
 Almost any pet refactoring can be sold as an investment in the future. A team gets annoyed with four reproduction scripts, invents a generic experimentation framework with its own config language, and signs up for a permanent maintenance bill to serve scripts that run four times a year. Before building a framework, watch a colleague who didn't write one of those scripts try to run it. Half the time the right investment is a lockfile and three lines in a README.
 
-The [tenfold ambition](./what-would-ten-times-look-like.md) asks us to choose investments by what holds the team back. In billing, a shared definition of a closed period may remove more repeated investigation than a faster way to prepare patches. Recent changes should tell us where to look.
+The [tenfold ambition](./what-would-ten-times-look-like.md) uses the Theory of Constraints to choose investments by what limits worthwhile outcomes. In billing, if changes wait for a shared definition of a closed period, a faster way to prepare patches may only lengthen the queue. First settle the rule and make better use of existing capacity. Invest in a retained check or boundary when it helps remove that constraint, protects a necessary guarantee or prepares for a credible future limit.
+
+A capability may produce a real recurring return or make another capability cheaper to build without changing what the team can deliver. Those are different claims. Ask where the released capacity can actually be used, who will maintain the investment, and whether a smaller intervention elsewhere would matter more. Revisit the choice as the constraint moves.
 
 Just as important: an engineering group exists to create value with its capital, not to hoard it.
 
