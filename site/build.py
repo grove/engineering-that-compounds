@@ -26,7 +26,13 @@ OUT_DIR = ROOT / "_site"
 REPO_URL = "https://github.com/grove/engineering-that-compounds"
 SITE_URL = "https://grove.github.io/engineering-that-compounds/"
 ORIGINAL_URL = "https://grove.github.io/software-that-improves-with-age/"
-PARTS = ("What we accumulate", "How capabilities develop", "Engineering as an institution", "Engineering the work")
+PARTS = {
+    "what-would-ten-times-look-like": ("ambition", "The ambition"),
+    "engineering-capital": ("0", "What we accumulate"),
+    "designing-for-decisions-we-havent-made-yet": ("1", "How capabilities develop"),
+    "organizations-that-improve-with-age": ("2", "Engineering as an institution"),
+    "the-ability-to-delegate": ("3", "Engineering the work"),
+}
 LEGACY_ANCHORS = {
     "measuring-the-capacity-for-change": {
         "a-twelve-week-field-check": "a-twelve-week-field-check-and-how-to-test-compounding",
@@ -447,11 +453,10 @@ def build(out_dir: Path = OUT_DIR) -> list[Path]:
     intro_html = render_markdown(intro_md, make_resolver(index_path))
     list_items: list[str] = []
     for idx, entry in enumerate(ordered, start=1):
-        if (idx - 1) % 3 == 0:
-            part = (idx - 1) // 3
-            if part:
+        if entry["slug"] in PARTS:
+            part, part_title = PARTS[entry["slug"]]
+            if idx > 1:
                 list_items.append("</ol></section>")
-            part_title = PARTS[part] if part < len(PARTS) else "More essays"
             list_items.append(f'<section class="reading-part" aria-labelledby="part-{part}">'
                               f'<h3 class="part-heading" id="part-{part}">{html.escape(part_title)}</h3>'
                               f'<ol class="essay-list" role="list" start="{idx}">')

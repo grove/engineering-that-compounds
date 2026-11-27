@@ -40,7 +40,7 @@ And every candidate needs to meet again on a common base. Run the relevant check
 
 ## Follow the waiting
 
-Consider a team that can launch ten independent investigations in a minute but can review only two carefully in an afternoon. Adding an eleventh investigator is unlikely to help. It creates another result waiting for attention.
+Consider a team that can launch ten independent investigations in a minute but can review only two carefully in an afternoon. Adding an eleventh investigator is unlikely to help. It creates another result waiting for attention. For this team, the [tenfold ambition](./what-would-ten-times-look-like.md) points to the cost of review.
 
 Parallel work has costs: comparing answers, resolving disagreements, maintaining isolated environments and integrating changes. Those costs may be small or may be the most expensive part of the task. Count elapsed time to an accepted result, reviewer attention, failed integrations and rework. The number of agents launched is not a measure of useful work.
 

@@ -32,7 +32,7 @@ AI can make small, awkward tools economical to build where they previously were 
 
 ## What would a tenth of the effort look like?
 
-An order-of-magnitude improvement is an interesting design question. If a hundred comparable outcomes require a thousand hours of engineering time today, what would have to change for them to require a hundred? Saving half the time spent writing code will not be enough if implementation accounts for only a fifth of the total effort. Even removing implementation effort entirely leaves eight hundred hours.
+The [tenfold ambition](./what-would-ten-times-look-like.md) becomes a concrete design question when we apply it to one class of work. If a hundred comparable outcomes require a thousand hours of engineering time today, what would have to change for them to require a hundred? Saving half the time spent writing code will not be enough if implementation accounts for only a fifth of the total effort. Even removing implementation effort entirely leaves eight hundred hours.
 
 In the dependency example, imagine that over a quarter one hundred eligible updates consume a hundred hours in discovery, preparation, review and follow-up. A possible budget for the same work is four hours for exceptions and rework, two for routine oversight, two for maintenance and two for a share of the initial investment. That is ten hours. These are target numbers, not results. They give the team something to investigate: can most updates actually meet the acceptance standard without review, and can the job be built and maintained within that budget? Include unsuccessful attempts and any work displaced onto other people in the time budget; count compute costs separately. Count the updates that should have happened but did not, too.
 
