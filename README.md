@@ -26,7 +26,13 @@ Nine essays in three parts. Read them in order, or start with the question close
 
 GitHub Pages address: [grove.github.io/engineering-that-compounds](https://grove.github.io/engineering-that-compounds/).
 
-Build the site with Python 3.10 or later; no packages are needed:
+Build a text-only preview with Python 3.10 or later; no packages are needed:
+
+```sh
+python3 site/build.py
+```
+
+For the full site, generate the narration with the Python 3.12 instructions in the publishing guide, then run:
 
 ```sh
 python3 site/build.py --check
@@ -34,7 +40,7 @@ python3 site/build.py --check
 
 The output is `_site/`. Open it through a local static server, for example `python3 -m http.server --directory _site 8000`.
 
-The [publishing guide](./CONTRIBUTING.md) explains GitHub Pages, local checks and regenerating narration. MP3 files remain committed alongside the essays, though they are not currently published with the site. Narration uses Kokoro's `bf_emma` British English voice, as in the original collection.
+The [publishing guide](./CONTRIBUTING.md) explains GitHub Pages, local checks and regenerating narration. GitHub Actions generates and caches the MP3 files before publishing the site; readers do not need an API key or a speech service. Narration uses Kokoro's `bf_emma` British English voice, as in the original collection.
 
 ## Credits and license
 
