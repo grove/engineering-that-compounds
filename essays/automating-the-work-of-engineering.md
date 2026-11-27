@@ -24,19 +24,19 @@ Notice where AI is useful here. An agent could investigate an unfamiliar test fa
 
 ## Look for the work around the work
 
-The important change is not the time it takes to edit a lockfile. It is that twenty ordinary updates no longer require twenty people to remember, start and coordinate the procedure. An engineer can attend to the two updates that reveal a real compatibility question.
+The important change is not the time it takes to edit a lockfile. Suppose a week brings twenty routine updates and two that fail for unfamiliar reasons. Instead of starting and coordinating twenty-two procedures, an engineer could spend her time on the two that reveal a compatibility question.
 
 This is worth looking for elsewhere. A recurring request to investigate a failed import might lead to a diagnostic command that runs when an import fails. A check that people run before every merge probably belongs in CI. A report that nobody uses might be cheaper to stop producing. Do not automate a handoff whose only purpose is to compensate for a bad interface.
 
 AI can make small, awkward tools economical to build where they previously were not. That depends on whether someone can establish that they do the right thing and keep them useful. Code that was cheap to generate can be expensive to own. Start with the work that occurs often enough to justify the experiment, and see how much of the surrounding effort the tool actually removes.
 
-## Work backward from ten times
+## What would a tenth of the effort look like?
 
 An order-of-magnitude improvement is an interesting design question. If a hundred comparable outcomes require a thousand hours of engineering time today, what would have to change for them to require a hundred? Saving half the time spent writing code will not be enough if implementation accounts for only a fifth of the total effort. Even removing implementation effort entirely leaves eight hundred hours.
 
-In the dependency example, imagine that over a quarter one hundred eligible updates consume a hundred hours in discovery, preparation, review and follow-up. A possible budget for the same work is four hours for exceptions, two for routine oversight, two for maintenance and two for a share of the initial investment. That is ten hours. These are target numbers, not results. They give the team something to investigate: can most updates actually meet the acceptance standard without review, and can the job be built and maintained within that budget? Include unsuccessful attempts, compute costs and any additional work displaced onto other people. Count the updates that should have happened but did not, too.
+In the dependency example, imagine that over a quarter one hundred eligible updates consume a hundred hours in discovery, preparation, review and follow-up. A possible budget for the same work is four hours for exceptions and rework, two for routine oversight, two for maintenance and two for a share of the initial investment. That is ten hours. These are target numbers, not results. They give the team something to investigate: can most updates actually meet the acceptance standard without review, and can the job be built and maintained within that budget? Include unsuccessful attempts and any work displaced onto other people in the time budget; count compute costs separately. Count the updates that should have happened but did not, too.
 
-If the job achieves that target and updates were only five percent of the team's work, the team has recovered just over four percent of its time. A large improvement in a small activity is still worth having, but it says little about the team's overall capacity. Look again at where its time goes. It may be waiting for product decisions, chasing down failures or coordinating changes across services. Work on the constraint that actually matters, rather than finding more jobs for the dependency agent.
+If the job achieves that target and updates were only five percent of the team's work, the team has recovered 4.5 percent of its original time. A large improvement in a small activity is still worth having, but it says little about the team's overall capacity. Look again at where its time goes. It may be waiting for product decisions, chasing down failures or coordinating changes across services. Work on the constraint that actually matters, rather than finding more jobs for the dependency agent.
 
 ## Let the exceptions improve the job
 
@@ -48,4 +48,4 @@ An agent could prepare such improvements from recorded failures, on a separate b
 
 This is one practical way to pursue the argument in [Engineering capital](./engineering-capital.md). Give the time recovered by automation somewhere useful to go. Use part of it to investigate the next expensive problem, and find out whether the tools already in place make the new investment easier. [Measuring the capacity for change](./measuring-the-capacity-for-change.md) describes how to distinguish that claim from ordinary reuse.
 
-Pick one procedure you have done several times recently. Before building anything, write down what it takes to finish, including the work you do after the apparently successful result. Ask what a program would need to know to start it on its own, what evidence would let it finish, and which decision would bring it back to you. Try that on one safe class of work. The ambition is considerable; the first experiment can be quite small.
+Pick one procedure you have done several times recently. Before building anything, write down what it takes to finish, including the work you do after the apparently successful result. Ask what a program would need to know to start it on its own, what evidence would let it finish, and which decision would bring it back to you. Try that on one safe class of work. The next time the job comes round, see whether it really needs you.
