@@ -7,11 +7,11 @@ Each essay lives in `essays/` as Markdown. The opening heading is its title; an 
 The site generator uses Python's standard library. It supports headings, paragraphs, flat lists, blockquotes, fenced code blocks and inline links/emphasis/code. It deliberately has no package installation or JavaScript build step. The CSS follows the reader's light or dark preference; native audio works without JavaScript.
 
 ```sh
-python3 site/build.py --check
+python3 site/build.py
 python3 -m http.server --directory _site 8000
 ```
 
-The check builds all pages and checks the reading order, essay titles, local links, page anchors, audio presence and narration fingerprints. It fails if an essay's audio no longer matches its text or the narration pipeline. Generated `_site/` files are not committed.
+After generating narration as described below, run `python3 site/build.py --check`. The check builds all pages and checks the reading order, essay titles, local links, page anchors, audio presence and narration fingerprints. It fails if an essay's audio no longer matches its text or the narration pipeline. Generated `_site/` files are not committed.
 
 For an editorial preview before regenerating audio, `python3 site/build.py` builds without the narration freshness gate. Do not publish that preview until `--check` passes.
 
@@ -39,7 +39,7 @@ To generate several essays concurrently, use `--workers 3 --threads 2`; reduce t
 
 Narration reads the title, subtitle, headings and prose. Linked text is spoken without URLs; fenced code and any closing Sources, References or Further reading section are omitted. Long paragraphs are divided into bounded chunks, with pauses at section and paragraph boundaries.
 
-Commit the changed Markdown, its MP3 and `site/audio/manifest.json` together. The manifest records source and audio checksums, engine, voice, speed and duration. Changes to the narration code invalidate the narration fingerprints so that a fresh build cannot silently mix two pipelines. Audio is written through temporary files and the manifest is saved after each completed essay, allowing an interrupted run to resume.
+Commit the changed Markdown and any narration pipeline changes. GitHub Actions generates and caches the MP3 files and `site/audio/manifest.json`; generated narration need not be committed. The manifest records source and audio checksums, engine, voice, speed and duration. Changes to the narration code invalidate the narration fingerprints so that a fresh build cannot silently mix two pipelines. Audio is written through temporary files and the manifest is saved after each completed essay, allowing an interrupted run to resume.
 
 Before committing, run the build check and decode any changed audio:
 
@@ -58,7 +58,7 @@ The workflow in `.github/workflows/pages.yml` validates pull requests and saves 
 
 https://grove.github.io/engineering-that-compounds/
 
-You can also run the workflow manually on `main`. The `github-pages` environment supplies the deployment URL. If that environment has an approval or branch rule, the repository administrator's rule still applies. Audio generation is separate from deployment; Pages serves the committed MP3s and does not need model downloads or a narration secret.
+You can also run the workflow manually on `main`. The `github-pages` environment supplies the deployment URL. If that environment has an approval or branch rule, the repository administrator's rule still applies. Before validating and building, the workflow restores narration cached for the exact essay and pipeline inputs, or installs the pinned dependencies and generates the narration with Kokoro. Model files are cached separately. The full narration fingerprint, checksum and MP3 decoding checks run even on cache hits. Pages serves the resulting static MP3s and does not need a narration secret.
 
 ## Editorial approach
 
