@@ -51,6 +51,8 @@ AI tools bring their own off-ledger bills: reviewing plausible-looking diffs, fi
 
 Note opportunity cost too, even roughly: write down which feature slid for that month and why the trade looked sensible at the time. Sometimes an investment is worth doing before it pays back in hours, such as cutting single-person dependency before a key maintainer rotates off. Label it deliberate risk reduction instead of pretending it's a proven speed gain.
 
+The [tenfold ambition](./what-would-ten-times-look-like.md) helps choose what to investigate. To claim an improvement, name the outcome, the comparison and the period measured. Do not multiply speedups from different activities into a team-wide figure: they may overlap, cover a small share of the work or leave the limiting constraint untouched.
+
 ## When the work runs without you
 
 An automated procedure changes what needs sampling. Use all eligible events as the denominator, not just the ones for which the job reports success. Keep counts of unattended completions, escalations, failed or missed attempts and changes later found to be wrong. Inspect a sample of the unattended outcomes against the original acceptance criteria. A quiet job might be excellent, or it might have stopped looking for work.

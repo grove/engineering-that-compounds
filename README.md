@@ -6,7 +6,7 @@ Two teams can deliver the same feature and finish with quite different prospects
 
 This collection follows [Software that improves with age](https://grove.github.io/software-that-improves-with-age/). It looks beyond the condition of a codebase to the knowledge, judgment and habits that make engineering possible. If AI reduces the cost of some implementation work, where should we spend the time and attention it frees? And how would we tell whether that investment had helped?
 
-How far could we take this? A team that wanted to become ten times as effective would have to look beyond faster implementation, at the work it could remove, automate or safely hand off. [Automating the work of engineering](./essays/automating-the-work-of-engineering.md) explores that ambition through a recurring job most engineers recognize.
+Our distant aim is to become ten times as effective as a software team with AI, within sustainable working hours and with at least the same care for the people using the software. [What would ten times look like?](./essays/what-would-ten-times-look-like.md) uses that ambition to ask where useful work gets stuck and which investment might help. Tenfold improvement remains a hypothesis; the next change gives us something concrete to investigate.
 
 The word *compounds* makes a claim that needs testing. More documentation, tests or automation can just as easily create more upkeep. These essays ask when earlier work makes later work more effective, what gets lost along the way, and when an investment should be abandoned.
 
@@ -16,21 +16,21 @@ Want to test the argument? The [second-capability pilot](./research/second-capab
 
 ## Reading order
 
-Twelve essays in four parts. Read them in order, or start with the question closest to your work. Audio editions are temporarily not included in the published site.
+Thirteen essays in five parts. The opening essay sets out the ambition; the others examine what it would take to pursue it. Read them in order, or start with the question closest to your work. Audio editions are temporarily not included in the published site.
 
-1. **[Engineering capital](./essays/engineering-capital.md)** — What remains useful after the immediate task is finished, and when those benefits begin to reinforce one another.
-2. **[What software should remember](./essays/what-software-should-remember.md)** — Keeping the reasons for a decision available, without turning yesterday's assumptions into permanent rules.
-3. **[The value of forgotten alternatives](./essays/the-value-of-forgotten-alternatives.md)** — What failed experiments can teach the next person, and how to record their limits.
-4. **[Designing for decisions we haven't made yet](./essays/designing-for-decisions-we-havent-made-yet.md)** — The choices architecture keeps open, the commitments code cannot undo, and the cost of waiting.
-5. **[How engineers become engineers](./essays/how-engineers-become-engineers.md)** — Developing judgment when much of the implementation can be delegated.
-6. **[When software forgets the world](./essays/when-software-forgets-the-world.md)** — Finding out when a well-tested system has stopped matching the work people need to do.
-7. **[Organizations that improve with age](./essays/organizations-that-improve-with-age.md)** — How a lesson learned by one team becomes useful to another.
-8. **[Measuring the capacity for change](./essays/measuring-the-capacity-for-change.md)** — Looking for evidence of improvement across successive changes, including the costs that a productivity chart can hide.
-9. **[Engineering that compounds](./essays/engineering-that-compounds.md)** — Follow an integration change from the first awkward question to the next engineer's attempt, and try the habit on your own work.
-
-10. **[The ability to delegate](./essays/the-ability-to-delegate.md)** — Use recurring interruptions to discover which capabilities would make a particular kind of work easier to hand off.
-11. **[Architecture for parallel work](./essays/architecture-for-parallel-work.md)** — Find out which decisions can happen independently and what it costs to put the results together.
-12. **[Automating the work of engineering](./essays/automating-the-work-of-engineering.md)** — What it takes for routine work to happen without somebody starting and supervising it each time.
+1. **[What would ten times look like?](./essays/what-would-ten-times-look-like.md)** — A distant ambition for teams working with AI, and how it helps us choose what to improve next.
+2. **[Engineering capital](./essays/engineering-capital.md)** — What remains useful after the immediate task is finished, and when those benefits begin to reinforce one another.
+3. **[What software should remember](./essays/what-software-should-remember.md)** — Keeping the reasons for a decision available, without turning yesterday's assumptions into permanent rules.
+4. **[The value of forgotten alternatives](./essays/the-value-of-forgotten-alternatives.md)** — What failed experiments can teach the next person, and how to record their limits.
+5. **[Designing for decisions we haven't made yet](./essays/designing-for-decisions-we-havent-made-yet.md)** — The choices architecture keeps open, the commitments code cannot undo, and the cost of waiting.
+6. **[How engineers become engineers](./essays/how-engineers-become-engineers.md)** — Developing judgment when much of the implementation can be delegated.
+7. **[When software forgets the world](./essays/when-software-forgets-the-world.md)** — Finding out when a well-tested system has stopped matching the work people need to do.
+8. **[Organizations that improve with age](./essays/organizations-that-improve-with-age.md)** — How a lesson learned by one team becomes useful to another.
+9. **[Measuring the capacity for change](./essays/measuring-the-capacity-for-change.md)** — Looking for evidence of improvement across successive changes, including the costs that a productivity chart can hide.
+10. **[Engineering that compounds](./essays/engineering-that-compounds.md)** — Follow an integration change from the first awkward question to the next engineer's attempt, and try the habit on your own work.
+11. **[The ability to delegate](./essays/the-ability-to-delegate.md)** — Use recurring interruptions to discover which capabilities would make a particular kind of work easier to hand off.
+12. **[Architecture for parallel work](./essays/architecture-for-parallel-work.md)** — Find out which decisions can happen independently and what it costs to put the results together.
+13. **[Automating the work of engineering](./essays/automating-the-work-of-engineering.md)** — What it takes for routine work to happen without somebody starting and supervising it each time.
 
 ## Website and audio
 

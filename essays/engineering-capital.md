@@ -70,6 +70,8 @@ Writing code by hand used to bundle learning with delivery: you figured out how 
 
 Almost any pet refactoring can be sold as an investment in the future. A team gets annoyed with four reproduction scripts, invents a generic experimentation framework with its own config language, and signs up for a permanent maintenance bill to serve scripts that run four times a year. Before building a framework, watch a colleague who didn't write one of those scripts try to run it. Half the time the right investment is a lockfile and three lines in a README.
 
+The [tenfold ambition](./what-would-ten-times-look-like.md) asks us to choose investments by what holds the team back. In billing, a shared definition of a closed period may remove more repeated investigation than a faster way to prepare patches. Recent changes should tell us where to look.
+
 Just as important: an engineering group exists to create value with its capital, not to hoard it.
 
 Often the right call is to *spend* capital rather than build it: ship a rough integration to catch a real market window, leave a one-off migration script plain once its output is verified, or skip generalizing a service slated for retirement next quarter. A defensible investment names a recurring obstacle, a realistic lifetime, and a concrete reason to expect the payoff to beat the upkeep. When those aren't there, skipping the investment is good engineering.
