@@ -270,6 +270,19 @@ def html_shell(*, title: str, description: str, css_href: str, body: str, path: 
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
+  <div class="collection-bar">
+    <nav class="collection-nav" aria-label="Collections">
+      <a class="collection-home" href="https://grove.github.io/compounding-engineering/">
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" aria-hidden="true"><circle cx="16" cy="16" r="13" stroke="currentColor"/><circle cx="16" cy="16" r="8.5" stroke="currentColor"/><circle cx="16" cy="16" r="4" stroke="currentColor"/></svg>
+        <span>Compounding Engineering</span>
+      </a>
+      <ul>
+        <li><a href="https://grove.github.io/software-that-improves-with-age/" aria-label="Software that improves with age">Software</a></li>
+        <li><a href="https://grove.github.io/engineering-that-compounds/" aria-label="Engineering that compounds" aria-current="true">Engineering</a></li>
+        <li><a href="https://grove.github.io/patterns-of-compounding-engineering/" aria-label="Patterns of compounding engineering">Patterns</a></li>
+      </ul>
+    </nav>
+  </div>
   <div class="page">
 {body}
     <footer class="site-footer">
