@@ -2,11 +2,11 @@
 
 *Keeping domain knowledge in contact with its subject*
 
-Suppose an equipment-hire depot keeps a laminated clipboard next to its booking terminal. On it is a handwritten list of machines currently parked in the yard that staff must not promise to a customer yet.
+Hang a laminated clipboard beside a booking terminal in an imaginary equipment-hire depot, and you have a familiar sight in operations software: a handwritten list of machines sitting in the yard that staff must not promise to customers yet.
 
 Nothing in the booking software is broken. Its tests check that equipment flips back to *available* the second a hire closes. The service is fast, clean, and well tested. It just still assumes the world from three years ago, when customers returned gear to a staffed counter and someone looked it over before closing the hire.
 
-Once the company introduced unattended Sunday drop-offs, the software started closing hires automatically while inspection slid to Monday morning. Nobody filed a bug. Depot staff simply grabbed a clipboard, and the clipboard took over the piece of reality the software stopped knowing about.
+Once the company introduced unattended Sunday drop-offs, the software started closing hires automatically while inspection slid to Monday morning. Nobody filed a bug. Depot staff grabbed a clipboard, and the clipboard took over the piece of reality the software stopped knowing about.
 
 Code can get cleaner and better tested every quarter while losing touch with the work it exists to support. Domain knowledge isn't something you harvest once in a discovery workshop and freeze into a schema; it decays every time the world around the system shifts.
 
@@ -22,7 +22,7 @@ The right fix might be a new state in the booking system. Or it might be changin
 
 A clipboard or shadow spreadsheet should make any engineer curious. Not every manual step deserves to be automated away, but every workaround marks a seam where the software stopped fitting the job.
 
-Before touching the schema, figure out what the list actually does. Who writes on it? What puts a machine on it, and what takes it off? What breaks tomorrow if you throw it away?
+Before touching the schema, find out what the list does. Who writes on it? What puts a machine on it, and what takes it off? What breaks tomorrow if you throw it away?
 
 Watching staff work through Monday's returns quickly shows that "inspection" isn't a boolean. A pressure washer takes a two-minute visual look. A generator might wait on a missing cable or the one technician certified to test it. Staff will happily take a provisional booking on one and refuse it on the other. Replacing the clipboard with a single `inspected` checkbox before spotting that split can make everyone's week worse, trading flexible human judgment for rigid, useless precision.
 
@@ -48,14 +48,14 @@ Half the tangles in mature software come from blurring what *happens*, what the 
 
 "Overnight returns are inspected before opening" is a claim about reality; you can check it by looking. "Customers may reserve an uninspected machine" is a policy call. Finding out that staff occasionally allow it doesn't make it the rule. It surfaces a real conflict.
 
-The outside world isn't always one coherent truth waiting for better fieldwork. Depot managers want fewer angry contractors standing at the counter at 7 a.m. Online sales wants higher booking conversion and fewer unavailable listings. Finance wants higher fleet utilization and lower damage write-offs. Those three groups are pulling the same state machine in different directions. Domain modeling frequently exposes political disagreements that software can't solve on its own. At best, it forces them into the open so someone with authority actually decides who eats the cost when a promised machine turns out to be broken.
+The outside world isn't always one coherent truth waiting for better fieldwork. Depot managers want fewer angry contractors standing at the counter at 7 a.m. Online sales wants higher booking conversion and fewer unavailable listings. Finance wants higher fleet utilization and lower damage write-offs. Those three groups are pulling the same state machine in different directions, because each model shifts risk and blame onto someone else. Domain modeling often exposes political disagreements that software cannot resolve. At best, it forces them into the open so someone with authority decides who eats the cost when a promised machine turns out to be broken.
 
-Coding agents sharpen that old failure mode. Point an agent at a year of override logs or legacy unit tests to infer requirements, and yesterday's makeshift coping mechanism hardens into formal specification. Attach provenance and ownership to consequential rules, as [What software should remember](./what-software-should-remember.md) suggests: separate what was observed from what was decided, name who owns the policy, and leave unresolved disagreements visible instead of hiding them under vague status names.
+Coding agents make that failure mode easier to trigger. Point an agent at a year of override logs or legacy unit tests to infer requirements, and yesterday's makeshift coping mechanism hardens into formal specification. Attach provenance and ownership to consequential rules, as [What software should remember](./what-software-should-remember.md) suggests: separate what was observed from what was decided, name who owns the policy, and leave unresolved disagreements visible instead of hiding them under vague status names.
 
 ## Go back out to the yard
 
-Nobody can re-audit every domain assumption every quarter. Tie checks to events that actually shift the ground: launching unattended returns, opening a depot with different staffing, adding regulated equipment. Watch operational friction (rising manual overrides, frequent last-minute swaps, widening gaps between recorded returns and real handovers) as triggers to go look, not excuses to wire up ten permanent dashboards.
+Nobody can re-audit every domain assumption every quarter. Tie checks to events that shift the ground: launching unattended returns, opening a depot with different staffing, adding regulated equipment. Watch operational friction (rising manual overrides, frequent last-minute swaps, widening gaps between recorded returns and real handovers) as triggers to go look, not excuses to wire up ten permanent dashboards.
 
 And resist modeling every local quirk once you spot a missing distinction. A good model leaves plenty out. Separating *returned* from *ready* prevents broken promises to customers; encoding the exact order a veteran technician prefers for a checklist mostly adds data entry nobody wanted. Sometimes the best engineering result after a depot visit is keeping the core model small and agreeing on a plain manual escape hatch for odd cases.
 
-Whatever you ship, walk back into the depot a month later. Did the clipboard disappear because the software actually fit the work, or did staff just move the list into a private chat group? Can a new hire explain the states without hedging? Good tests keep the machine honest. Going back to the yard is how you find out if it still belongs to the world it runs in.
+Whatever you ship, walk back into the depot a month later. Did the clipboard disappear because the software fit the work, or did staff move the list into a private chat group? Can a new hire explain the states without hedging? Good tests keep the machine honest. Going back to the yard is how you find out if it still belongs to the world it runs in.

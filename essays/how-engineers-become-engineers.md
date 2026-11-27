@@ -4,7 +4,7 @@
 
 For fifty years, writing code did two jobs at once: it shipped software, and it trained the next generation of engineers. Delegating implementation splits those two jobs apart.
 
-Suppose a first-year engineer is asked to add retries to a background worker. A coding agent writes a clean patch with unit tests. The engineer reads the agent's summary, answers two review comments, and merges the PR.
+Picture a first-year engineer asked to add retries to a background worker. A coding agent writes a clean patch with unit tests. The engineer reads the agent's summary, answers two review comments, and merges the PR.
 
 The ticket is closed. What actually changed inside the engineer's head?
 
@@ -20,29 +20,29 @@ The education came from making a small bet and watching reality push back. Readi
 
 None of that was a well-designed curriculum. Plenty of juniors spent years wiring up routine CRUD endpoints without ever chasing a hard concurrency bug, while a lucky peer learned fast beside a generous mentor on a messy system. Nobody misses losing an afternoon to broken packaging or hand-typing a fifth identical HTTP client.
 
-Still, there is a floor of hands-on coding fluency you cannot skip. A beginner who has never wrestled with sockets, mutable state, or a broken stack trace lacks the basic feel to predict what a system will do, or even to notice what looks off in an agent's diff. Removing pointless friction is one thing; removing formative struggle is another. Keeping some early work unassisted (writing a small worker or parser from scratch before bringing in an agent) builds the footing that makes higher-level judgment possible.
+My working bet is that there is still a floor of hands-on coding fluency beginners shouldn't skip: wrestling with sockets, mutable state, or a broken stack trace builds the feel for what a system will do, and for what looks off in an agent's diff. That bet is a hypothesis, not settled law. Nobody yet knows exactly where the floor sits, and teams will have to find it empirically by watching where AI-first juniors stumble during unfamiliar outages or subtle state bugs. Removing pointless friction is welcome; removing formative struggle by accident is the risk. Keeping some early work unassisted, like building a small worker or parser from scratch before bringing in an agent, is a sensible hedge while we find out which struggles really matter.
 
 ## What an AI-native apprenticeship can do better
 
-It is easy to talk about AI in onboarding as pure loss. That misses half the picture. The old apprenticeship was slow, uneven, and depended heavily on luck: specifically, on which failures happened to hit production while a junior was on the team and whether a senior had time to explain them.
+It is easy to talk about AI in onboarding as pure loss. That misses half the picture. The old apprenticeship was slow, uneven, and depended heavily on luck: which failures happened to hit production while a junior was on the team, and whether a senior had time to explain them.
 
 Used deliberately, AI opens up forms of practice that the old model rarely offered:
 
 - *Compressed exposure to rare failure modes.* A newcomer does not have to wait two years for a partial network partition, a poisoned queue message, or a clock-skew bug to hit production. An agent can spin up a local fault-injection harness in minutes and let the learner break a small worker ten different ways in an afternoon.
-- *Fast, low-stakes feedback loops.* Instead of waiting half a day for a senior to point out a flawed mental model, a learner can write down their prediction, ask an agent to generate a minimal reproducer that tests it, and see immediately where reality diverged.
-- *Breadth across unfamiliar codebases.* Mapping call graphs, tracing how data crosses service boundaries, or comparing two competing designs side by side used to take a junior a week before they even understood the question. Getting that map quickly leaves more time for the hard part: deciding what the evidence actually proves.
+- *Fast, low-stakes feedback loops.* Instead of waiting half a day for a senior to point out a flawed mental model, a learner can write down their prediction, ask an agent to generate a minimal reproducer that tests it, and see right away where reality diverged.
+- *Breadth across unfamiliar codebases.* Mapping call graphs, tracing how data crosses service boundaries, or comparing two competing designs side by side used to take a junior a week before they even understood the question. Getting that map quickly leaves more time for the hard part: deciding what the evidence proves.
 
-The catch is that none of these happen by default. Left to itself, AI makes passive approval the easiest habit to fall into: accept the diff, skim the summary, move to the next ticket. An AI-native apprenticeship can beat the old accidental one, *if* a team turns cheap generation into structured practice instead of skipping practice altogether.
+Notice how this connects back to [Engineering capital](./engineering-capital.md): an executable asset like a fault-injection harness does not only catch bugs in CI. Handed to a beginner alongside a prediction exercise, it converts directly into human judgment. None of that happens by default, though. Left to itself, AI makes passive approval the path of least resistance: accept the diff, skim the summary, move to the next ticket. An AI-native apprenticeship can beat the old accidental one, *if* a team turns cheap generation into structured practice instead of skipping practice altogether.
 
 ## Practice the judgment, not the boilerplate
 
-Anders Ericsson, Ralf Krampe, and Clemens Tesch-Römer's [1993 paper on deliberate practice](https://doi.org/10.1037/0033-295X.100.3.363) separated doing a job from designing exercises aimed at sharpening a specific skill through fast, clear feedback. Psychology will not hand you a ready-made engineering syllabus, but it gives you the right unit of design: name the exact judgment you want the newcomer to acquire.
+Anders Ericsson, Ralf Krampe, and Clemens Tesch-Römer's [1993 paper on deliberate practice](https://doi.org/10.1037/0033-295X.100.3.363) separated doing a job from designing exercises aimed at a specific skill with fast, clear feedback. Psychology will not hand you a ready-made engineering syllabus, but it gives you the right unit of design: name the exact judgment you want the newcomer to build.
 
 "Learn distributed systems" is too vague. "Spot the gap between an operation taking effect and its caller learning that it took effect" is concrete enough to practice.
 
 Give the new engineer a small worker and a service that logs completed actions. Before running a test, ask them to predict what both sides believe if the network drops at three points in the handshake. Let an agent build the fault-injection harness and capture the traces. The learner's job is to explain where their prediction missed.
 
-Then move the goalposts. What if the worker also publishes to a second queue? What if the deduplication table expires after an hour? Now they have to work out which parts of their reasoning still hold. Repeating the exact same drill builds routine; changing one constraint tests understanding.
+Then move the goalposts. What if the worker also publishes to a second queue? What if the deduplication table expires after an hour? Now they have to work out which parts of their reasoning still hold. Repeating the same drill builds routine; changing one constraint tests understanding.
 
 ## Show the messy middle
 
@@ -50,7 +50,7 @@ Experienced engineers make debugging look deceptively straight-line. They glance
 
 Allan Collins, John Seely Brown, and Ann Holum's account of [cognitive apprenticeship](https://www.aft.org/ae/winter1991/collins_brown_holum) emphasizes making an expert's hidden thinking audible, then gradually pulling support back as the learner takes over. On a software team, that means narrating an investigation while you are still unsure, rather than walking through a cleaned-up postmortem after the answer is known.
 
-When the retry counter spikes, say out loud why three hypotheses fit the graph, what check separates them, and which rabbit hole you're leaving alone for now. Just as important, admit when you are stumped. If every pairing session ends with the senior unveiling an answer they knew from minute one, beginners pick up a cartoon picture of expertise. Most senior judgment is knowing how to stay oriented while still in the dark.
+When the retry counter spikes, say out loud why three hypotheses fit the graph, what check separates them, and which rabbit hole you're leaving alone for now. Even more important, admit when you are stumped. If every pairing session ends with the senior unveiling an answer they knew from minute one, beginners pick up a cartoon picture of expertise. Most senior judgment is knowing how to stay oriented while still in the dark.
 
 An agent's explanation belongs in a different category. Fluent prose explaining why a patch is safe is a claim to test, not proof that either the learner or the agent understood the code. One simple habit helps right away: ask the newcomer to write down their own mental model *before* prompting the agent. Comparing the two gives them something concrete to push against.
 
@@ -72,14 +72,14 @@ Henry Roediger and Jeffrey Karpicke's [experiments on retrieval practice](https:
 
 Exercises only take you so far. Real production brings fuzzy specs, impatient users, and consequences that surface three weeks after merge.
 
-Apprenticeship needs a ramp into real ownership: start by owning retry behavior for one noncritical worker, with a senior explicitly backing them up outside the agreed boundary. Let the learner watch the rollout, field an operator's question, and repair the first assumption that breaks live. That is completely different from dropping a junior into a tangled legacy service alone and calling panic "growth." Keep them close to users and operators, too. You can get very sharp at debugging retry loops without ever noticing that the operation should never have been automated.
+Apprenticeship needs a ramp into real ownership: start by owning retry behavior for one noncritical worker, with a senior explicitly backing them up outside the agreed boundary. Let the learner watch the rollout, field an operator's question, and repair the first assumption that breaks live. That is worlds apart from dropping a junior into a tangled legacy service alone and calling panic "growth." Keep them close to users and operators, too. You can get very good at debugging retry loops without ever noticing that the operation should never have been automated.
 
 ## Consuming your own future
 
-Behind all of this is an ugly economic reality: a company can get measurably faster this year while liquidating its future supply of senior engineers.
+Behind all of this sits a hard economic fact: a company can get measurably faster this year while liquidating its future supply of senior engineers.
 
 Mentoring is slow. A senior paired with a coding agent can ship the retry worker before lunch; walking a junior through predictions and fault injection takes two days. If leadership only watches weekly throughput, every rational team drops mentoring, stops hiring juniors, and lets senior staff plus agents clear the backlog.
 
 That looks great on a quarterly chart. It even looks sensible for one firm, until senior engineers leave, systems get stranger, and nobody is left who can diagnose a novel outage or catch when an agent's clean patch is corrupting data. Across the industry it becomes a slow tragedy of the commons: everyone wants to hire experienced engineers who can audit AI, and nobody wants to pay for the apprenticeship that produces them.
 
-Fixing that takes a management decision, not mentors burning their evenings out of goodwill. Decide which tickets double as training investments and budget for them openly. You'll know it's working when the junior starts asking questions the mentor missed, naming what evidence would change their mind, and catching risky commitments *before* merge, rather than merely approving diffs faster.
+Fixing that takes a management decision, not mentors burning their evenings out of goodwill. Decide which tickets double as training investments and budget for them openly. You'll know it's working when the junior starts asking questions the mentor missed, naming what evidence would change their mind, and catching risky commitments *before* merge, rather than approving diffs faster.
