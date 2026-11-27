@@ -2,83 +2,64 @@
 
 *What the work leaves behind*
 
-A billing service occasionally issues an invoice that disagrees with its account ledger. Someone traces the bug to a race between a late usage report and the monthly closing job, patches the race, repairs the bad invoices and closes the ticket.
+A billing service occasionally cuts an invoice that disagrees with its account ledger. Someone traces the bug to a race between a late usage report and the monthly closing job, patches the race, fixes the bad invoices, and closes the ticket.
 
-That same afternoon of debugging (to take a hypothetical but familiar case) can end in very different places. The engineer might keep a small script that triggers the race on demand. Someone might turn it into a check that runs whenever the closing job changes. Or the investigation might expose a deeper split: the invoicing code and the ledger disagree about what it means for a billing period to be closed. Settling that disagreement could simplify three modules at once.
+Take that as a composite scenario (made up, though anyone who has worked near financial code has lived some version of it). The same afternoon of debugging can end in several very different places. The engineer might keep a small script that triggers the race on demand. Someone might wire that script into CI so any change to the closing job runs against it. Or the investigation might turn up a deeper mismatch: the invoicing code and the ledger don't actually agree on what "closed billing period" means, and settling that argument collapses three tangled modules into one.
 
-All of those outcomes produce a fixed invoice. None of them leaves the team in the same position when the next billing request lands.
+Every version ships the same bug fix. Six months later, when an awkward billing request lands, the team is standing on completely different ground.
 
-The resources that improve that position are what I want to call *engineering capital*: the understanding, tools and working arrangements that make later engineering more effective. Some of it lives in code. Much of it lives in people's heads, or in the habits between teams. You rarely notice it on the day it is built; you notice it six months later, when an awkward change either takes an afternoon or stalls for three weeks.
+I want a name for whatever leaves a team on better ground for the next piece of work: *engineering capital*. Some of it lives in code, some in runnable tools and checks, some in written rationale, and a great deal of it in people's heads and the working habits between teams. You rarely feel its presence on the day you build it. You feel it half a year later, when a scary change takes an afternoon instead of derailing a sprint.
 
-This collection asks how deliberately we can build that capital, how easily we run it down without noticing, and when its returns actually compound.
+## Four shapes of capital, and how they rot
 
-## Beyond the delivered change
+Every working engineer knows the difference between a system you can move through confidently and one where every edit feels like defusing a bomb. What gets muddied is that the things creating that confidence age in completely different ways.
 
-Every practitioner knows the gap. A seasoned maintainer makes a safe change before lunch that would trap a newcomer for a week. A clean reproduction turns a vague support ticket into a problem anyone on the team can inspect. A well-placed boundary lets you swap an implementation without renegotiating half the codebase.
+Start with *human judgment*. Peter Naur gave the classic account in [Programming as Theory Building](https://doi.org/10.1016/0165-6074(85)90032-8): writing software builds a live theory in the programmers' minds, a feel for how the code maps to the world and what a proposed change will break. Source code never holds the whole theory, which is why swapping out the maintainers once a feature ships quietly hollows out the system. Human judgment is the most flexible capital a team owns, and the most fragile: it walks out the door when someone leaves, and it goes stale when they stop touching the system.
 
-Those advantages age very differently. Personal intuition walks out the door when an engineer leaves. A reproduction script outlives its author, right up until a library upgrade breaks it. A module boundary survives staff turnover, then turns into dead weight once the business stops caring about the distinction it protects.
+*Executable assets* (reproduction scripts, fault-injection harnesses, fast tests, linters) outlive their authors. You can hand them to a newcomer on day one. Their failure mode is drift: dependencies upgrade, data shapes move on, and a harness that once saved days starts burning hours just to stay green.
 
-Peter Naur gave the human side of this a durable name in [Programming as Theory Building](https://doi.org/10.1016/0165-6074(85)90032-8). Writing a program builds a theory in the programmers' minds: an ability to explain how the system maps to the world and to judge how a proposed change will behave. The source code alone never holds the whole theory, which is why treating engineers as interchangeable once a feature ships strips value out of a system.
+*Recorded rationale* (decision records, experiment notes, documented invariants) survives turnover too, and tells the next person *why* the code looks odd. It fails through staleness and misreading: the world changes while the document sits still, or a later reader mistakes an old guess for a permanent rule.
 
-Engineering capital is a wider working lens than individual theory. It also covers the surroundings that let a newcomer build that theory quickly: a clear trace, a small runnable workload, a reason written down near the code. Without them, every new maintainer starts by reconstructing the system from folklore.
+*Structural and organizational boundaries* (clean module seams, stable contracts, clear ownership between teams) spare everyone from having to understand the entire system at once. You should be able to tweak invoice formatting without becoming an expert in ledger concurrency. Their failure mode is rigidity: a boundary drawn around yesterday's product split becomes permanent ceremony once the business stops caring about that split.
 
-It covers the arrangements that spare people from having to understand everything at once, too. You should be able to adjust invoice formatting without becoming an expert in ledger concurrency. Good engineering is partly knowing certain things deeply, and partly drawing boundaries so the rest of the team does not have to.
+Putting all four under one label is useful because they substitute for and reinforce one another. Pretending they behave alike is where teams get hurt.
 
-## What counts, and what doesn't
+## Investments can still lose money
 
-If *engineering capital* means everything we happen to like, the phrase collapses into empty praise. A document, test or abstraction earns the name only if it helps future work by more than it costs to keep alive.
+If "engineering capital" just means "anything good," the phrase turns into empty praise. On the other hand, defining capital strictly as things whose payoff beats their upkeep creates a logical trap: you can no longer talk sensibly about bad capital investments or tools that used to pay off and stopped.
 
-Look back at that billing incident. Several distinct things came out of it:
+Better to keep four things separate: the *asset* you decide to keep, its *expected return*, its *realized net return* once maintenance is counted, and its *depreciation*.
 
-- The revised closing procedure isolates a tricky concurrency rule.
-- The reproduction script gives future maintainers runnable evidence they can challenge.
-- The note on late usage reports records how the business actually operates.
-- The engineer who chased the race now recognizes that class of bug faster.
-- A recovery drill leaves the team able to repair a half-finished closing run.
-- A joint review with the payments team uncovers the same assumption next door.
+Go back to the billing race. Out of one incident, a team might retain several candidate assets: a reproduction script, a short note on how late usage reports arrive, a cleaner closing-period boundary, a recovery drill for half-finished runs, or a joint check with the payments team next door. Each is a bet. Some will earn back their keep many times over. Others will sit untouched until a framework upgrade breaks them, leaving a negative net return. Calling a bad bet a failed capital investment, rather than pretending it never counted, keeps the books honest.
 
-Those pieces reinforce one another. The reproduction clarifies the business rule, the clearer rule suggests a simpler implementation, and the simpler implementation makes the reproduction cheaper to maintain. They work well as questions to ask after an incident. They would make a terrible accounting ledger if anyone tried to put dollar figures next to each line.
-
-Capital is not always an addition, either. Deleting a duplicate representation of account state makes every future change safer. Ripping out a stale test fixture saves the next newcomer an hour of chasing ghosts. Sometimes the best residue of a week's work is less machinery to understand.
-
-There is also a gap between a personal asset and a team capability. A sharp debugging trick that only one engineer knows helps the organization only while that person is on call. Turning it into something a colleague can run takes effort, though watching a colleague struggle with your script often surfaces hidden assumptions you stopped noticing years ago.
+And sometimes the best capital investment is subtraction. Deleting a duplicate copy of account state makes every later change safer. Ripping out a flaky fixture saves the next newcomer an afternoon of chasing ghosts. Leaving less machinery behind can improve future work more than anything you could add.
 
 ## Accumulation, returns and compounding
 
-A folder full of a thousand incident writeups is accumulation. A test harness that saves a day on each of ten releases earns a recurring return. Neither, on its own, is compounding.
+A Confluence space with a thousand postmortems is accumulation. A replay harness that shaves a day off every release earns a recurring return. Neither, by itself, is compounding.
 
-Compounding requires a second-order link: an earlier investment has to improve the conditions for making the *next* one. Follow the billing service one step further. A dependable reproduction makes it safe to simplify the closing job. That simpler code makes it cheap to run experiments on partial refunds. Those experiments reveal a second ambiguity in the ledger model, which the team can now fix with far less risk. Each step lowers the price of the step after it.
+Compounding needs a second-order link: an earlier investment has to make the *next* investment cheaper or more effective. In the billing example, a dependable reproduction makes it safe to simplify the closing job. That simpler code makes it cheap to prototype partial refunds. Those prototypes surface a second ambiguity in the ledger model, which the team can now resolve at a fraction of the old risk. Each step lowers the price of the next one.
 
-Notice how fragile that chain is. It breaks the moment saved time gets swept straight into unrelated feature work, or the harness proves too narrow for the next question, or a sudden product pivot renders the simplification irrelevant. Douglas Engelbart drew a similar distinction in [Toward High-Performance Organizations](https://dougengelbart.org/content/view/116/), separating ordinary work from improving how work is done, and both from improving the improvement process itself. That framing tells us where to look. Whether a real engineering team gets the loop to turn is an empirical question, not a law of nature.
+Douglas Engelbart made a closely related cut in [Toward High-Performance Organizations](https://dougengelbart.org/content/view/116/), separating ordinary work from improving how work is done, and both from improving the improvement process itself. That tells us what to look for, not that it happens automatically. The chain breaks easily: saved time gets swallowed by urgent feature work, the harness turns out to be too narrow for the next question, or a business pivot makes the whole subsystem irrelevant.
 
-And the loop can turn the other way. Negative compounding is at least as common as the positive kind. Skip verification to hit a deadline, and the next change takes longer to trust, which increases the pressure to cut the next corner too. Let understanding drain out of a team while shipping faster, and bugs take longer to diagnose, leaving even less time to clean up the mess. On a quarterly delivery chart, a team liquidating its engineering capital can look unusually productive right up until the day an unfamiliar failure lands.
+The loop also runs in reverse, and negative compounding is far easier to trigger. Skip verification to make a deadline and the next change takes longer to trust, which raises the pressure to skip the next check too. Ship faster while letting understanding drain out of the team, and incidents take longer to diagnose, eating the time you would have used to clean up the mess. On a quarterly velocity chart, a team liquidating its engineering capital looks unusually fast right up until an unfamiliar failure lands.
 
-## What changes when implementation gets cheap
+## Cheap artifacts, scarce understanding
 
-Building engineering capital used to involve a lot of grunt work: writing fixtures, mocking production dependencies, wiring up replay scripts, prototyping designs that would never ship. That mechanical friction is why sensible investments routinely lost out to the sprint backlog.
+Building engineering capital used to require a lot of tedious scaffolding: wiring up fixtures, mocking production dependencies, scripting replay runs, prototyping designs you intended to throw away. That grunt work is why sensible investments routinely lost to the sprint backlog.
 
-When AI tools lower the cost of that scaffolding, investigations that were once too expensive become realistic. Instead of keeping one hasty script from an incident, a team might preserve three clean experiments and test a competing design before committing.
+When AI tools lower the cost of generating code and scaffolding, investigations that were once too expensive become practical. Instead of walking away from an incident with one hasty script, a team can keep a clean reproduction and test two competing fixes before committing.
 
-That is the optimistic half. The other half is harder to spot.
+The catch is harder to spot because it looks like progress. Cheap generation makes it effortless to multiply *produced knowledge artifacts* (sprawling test suites that codify existing bugs, fluent explanations that sand off every caveat, generated benchmarks that mirror the team's blind spots) while *validated understanding* actually gets thinner. A repository can grow thicker with docs, tests, and abstractions every week while the people operating it understand less of what it does.
 
-Cheap generation makes it effortless to produce things that *look* like engineering capital without being any such thing: sprawling test suites that confirm the code's bugs, polished explanations that smooth away every caveat, generated workloads that mirror the team's blind spots instead of real customer traffic. An organization can suddenly accumulate produced artifacts far faster than it can validate what any of them mean.
+There is a quieter shift alongside it. Writing code by hand used to bundle learning with delivery: you figured out how billing worked because you had to implement a billing change. Hand the implementation to an agent and the feature still ships while the mental model never forms. That isn't an argument for typing boilerplate by hand. It is an argument for treating understanding as something you now have to build on purpose, for instance by asking an engineer to predict how the closing job behaves on late usage before running an experiment to check. [How engineers become engineers](./how-engineers-become-engineers.md) digs into what that looks like in practice.
 
-There is a quieter erosion alongside it. Historically, writing the implementation paid for learning as a by-product. You learned how billing worked because you had to build a billing feature. Hand the implementation to an agent, and the feature still ships while the learning evaporates. A team can trim days off a ticket while hollowing out its ability to handle the next serious outage.
+## Spending capital on purpose
 
-That is a case for making learning deliberate, not for insisting engineers type every line of boilerplate by hand. Asking a maintainer to predict what the closing job will do when usage arrives late, and then running an experiment to test the prediction, teaches far more than writing another routine endpoint. [How engineers become engineers](./how-engineers-become-engineers.md) takes up that thread in full.
+Almost any pet refactoring can be dressed up as an investment in the future. A team gets annoyed with four reproduction scripts, invents a generic experimentation framework with its own config language, and signs up for a permanent maintenance bill to support scripts that run four times a year. Before building a framework, hand an existing script to a colleague who didn't write it and watch where they get stuck. Half the time the right investment is a lockfile and three lines in a README.
 
-## When to refuse an investment
+Just as important: the point of an engineering organization isn't to maximize engineering capital. It's to create value using it.
 
-Almost any pet refactoring can be dressed up as an investment in the future. A team grows tired of its handful of reproduction scripts, builds a general-purpose experimentation framework, adds a configuration language, and ends up with a permanent maintenance bill for scripts that run four times a year.
+Sometimes the rational move is to *spend* capital rather than build it: ship a rough integration to hit a real market window, leave a throwaway migration script ugly once its output is verified, or skip generalizing a service slated for retirement next quarter. Good investments name a recurring obstacle, a realistic lifetime, and an honest guess that upkeep will stay smaller than the payoff. When none of those hold, refusing the investment is good engineering too.
 
-"It might be reusable" is a weak reason to build anything. A real investment names a recurring obstacle, a likely future task, and a rough sense of whether the upkeep will stay smaller than the payoff. Before building a framework, hand an existing script to an engineer who didn't write it and watch where they stall. Half the time, the right investment is a lockfile and three sentences in a README.
-
-Expected lifetime matters just as much. A service slated for retirement next quarter rarely pays back a deep redesign; a core library shared across ten teams for five years justifies serious care. And every form of capital depreciates. Workloads drift, runbooks go stale, and senior intuition stays tuned to a system that stopped existing two rewrites ago.
-
-## Starting small, and keeping score
-
-Pick the next messy investigation your team runs and decide, before closing the ticket, on one thing worth carrying out of it: a runnable reproduction, a cleaner boundary, or a short note on a business rule that nearly bit you. Write down what future work it is meant to help.
-
-When that work eventually shows up, check whether the artifact actually earned its keep, counting the time spent fixing it, finding it and explaining it to someone else. If the upkeep ate the gain, shrink it or throw it away.
-
-The billing team still owes its customers accurate invoices; everything else comes second. Yet once the patch is merged, the real question is what the next engineer inherits: just a line in the changelog, or a better footing for the harder change waiting six months down the road.
+The billing team still owes its customers accurate invoices; everything else is secondary. What separates a team that gets stronger from one that just gets busier is whether it pays attention to what a finished ticket leaves behind, and whether it is honest enough six months later to count the upkeep and throw out the bets that didn't pay.

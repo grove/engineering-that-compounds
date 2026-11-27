@@ -2,27 +2,27 @@
 
 *Finding out whether today's work helps tomorrow's engineers*
 
-You can measure the cost of an engineering investment to the hour. Its payoff arrives months later, inside work that has no counterfactual.
+You can measure the cost of an engineering investment down to the hour. The payoff shows up months later, inside work that has no counterfactual.
 
-Say a hypothetical product team spends a month untangling permissions from the rest of an application. They replace scattered authorization checks with a single policy boundary, add tests for role combinations nobody had checked before, and pin down half a dozen rules product had never formally agreed on. Feature delivery slows to a crawl while they do it.
+Take an illustrative case: a product team spends a month pulling authorization logic out of feature handlers and into a single policy boundary, adds tests for role combinations nobody had checked, and pins down half a dozen product rules that had lived in verbal folklore. Feature output drops to near zero for four weeks.
 
-Three months later, the team ships project-scoped permissions in three days. Everyone involved *feels* the refactor paid for itself. Proving it is harder. They never built project-scoped permissions on the old codebase. Maybe the old code wouldn't have fought back as hard as they remember. Maybe the real speedup came from finally settling the disputed product rules, not the new code boundary. Maybe the month they spent postponed a launch worth ten times what they saved.
+Three months later, the team ships project-scoped permissions in three days. Everyone involved *feels* the refactor paid for itself. Proving it is another matter. They never built project-scoped permissions on the old code. Maybe the old code wouldn't have fought back as hard as everyone remembers. Maybe the real speedup came from finally settling the disputed product rules, not the new code boundary. Maybe the month they spent delayed a launch worth ten times what they saved.
 
-None of that makes engineering investment unmeasurable. It just means a tidy success story is not evidence.
+That doesn't make capability unmeasurable. It just means a tidy success story isn't evidence.
 
 ## Measure the work that follows, not the pile of artifacts
 
-Counting artifacts is seductive because you can graph them today: number of ADRs, test count, shared modules, workshop hours. Every one of those numbers can climb while the team gets slower. A bloated test suite can turn every edit into a chore; an unmaintained ADR can lock in a dead assumption.
+Counting artifacts is tempting because you can put it on a chart this Friday: ADRs written, test count, shared modules, workshop hours. Every one of those numbers can climb while the team gets slower. A brittle test suite turns small edits into a chore; a stale ADR locks in a dead premise.
 
-Nicole Forsgren and colleagues made the broader point in the [SPACE framework](https://www.microsoft.com/en-us/research/publication/the-space-of-developer-productivity-theres-more-to-it-than-you-think/): no single activity metric captures engineering performance. Future capability is no different. Faster cycle time means little unless you read it beside the confidence behind each release and whether engineers other than the original author can work in the system.
+Nicole Forsgren and colleagues made the broader case in the [SPACE framework](https://www.microsoft.com/en-us/research/publication/the-space-of-developer-productivity-theres-more-to-it-than-you-think/): no single activity metric captures engineering performance. Capacity for change works the same way. Shorter cycle time means little unless you read it alongside release confidence and whether someone other than the original author can safely touch the code.
 
-Instead of claiming *"the permissions module is healthier,"* write down a falsifiable expectation before starting, with a scope attached. For example: *"new role rules can be added without editing feature handlers, and an engineer who didn't build the module can verify which actions a role permits within an hour."* Notice what that scope leaves out: it makes no promise about migrating legacy tenants or switching to attribute-based access control. Without a stated scope, almost any outcome can be spun as a win.
+Before starting an investment, skip vague goals like *"make permissions cleaner"* and write down a falsifiable claim with explicit edges: *"new role rules can be added without editing feature handlers, and an engineer who didn't build the module can verify what a role permits within an hour."* That claim deliberately says nothing about migrating legacy tenants or switching to attribute-based access control. Without stated edges, any outcome can be narrated as a win after the fact.
 
-## Averages hide the shift in difficulty
+## Averages hide shifts in difficulty
 
-If average delivery time stays flat after the refactor, did it fail? Maybe. Or maybe the team is now taking on knottier permission changes they used to dodge. The mirror image happens too: cycle time drops simply because a gnarly migration finished and the backlog drifted back to minor tweaks. Capability can erode while the velocity chart looks better every sprint.
+Suppose average ticket time stays flat after the refactor. Did the month get wasted? Maybe. Or maybe the team is now taking on nastier permission work it used to dodge. The reverse happens just as easily: cycle time drops because a brutal migration wrapped up and the backlog drifted back to minor tweaks. Capability can decay while the velocity chart trends smoothly upward.
 
-Raw timestamps need thin context attached to them. Not a second Jira, just a six-line note on sampled changes so nobody has to reconstruct history from memory three months later:
+Timestamps need thin context glued to them. Not a second Jira, just six lines on sampled changes so nobody has to reconstruct what happened from memory three months later:
 
 ```text
 Change: Project-scoped read-only role (#1842)
@@ -33,39 +33,48 @@ Verification: Ran role-matrix suite + added 4 cross-project denial cases
 Rework / surprises: 1 PR round (missed export endpoint bypassing policy boundary)
 ```
 
-Separating active work from waiting keeps a product bottleneck from looking like an architecture failure. Counting review and rework prevents stopping the clock the second an agent opens a pull request, which is where half the real cost of AI-assisted work sits. And where comparisons stay noisy, report the uncertainty plainly instead of inventing a "complexity score" that launders guesswork into two decimal places.
+Splitting active work from waiting stops a legal bottleneck from masquerading as an architecture problem. Including review and rework stops people from halting the clock the second an agent opens a pull request, which is where a huge share of AI-assisted work actually gets spent. And when the data stays noisy, report the noise plainly instead of inventing a "complexity score" that launders guesswork into two decimal places.
 
-## Speed without confidence is just deferred pain
+## Speed without confidence is deferred pain
 
-Two developers ship a permission change in the same afternoon. One clicks through three roles in staging and merges. The other runs a matrix check against independently agreed access rules and chases down two unexpected grants. Measuring elapsed time alone rewards the first developer for taking an invisible gamble.
+Two engineers ship a permission change in one afternoon. The first clicks through three roles in staging and merges. The second runs a matrix suite against independently agreed rules and catches two accidental grants. Measuring elapsed time alone hands the trophy to the engineer taking an invisible gamble.
 
-Before evaluating an investment, agree on what counts as sufficient verification and hold that bar steady (or note explicitly when you raise it, so stronger checks don't show up as unexplained slowdown). Watch what production *doesn't* prove, too: a quiet month after launch may just mean nobody triggered the rare role combination that breaks. Pair defect counts with hands-on checks: ask an unfamiliar engineer or on-call responder to explain an unexpected denial or add a small rule, and watch where they hesitate. Their sticking points tell you far more than a five-point satisfaction survey.
+Agree upfront on what counts as adequate verification and keep that bar visible (especially when you raise it, so tougher checks don't look like mysterious slowdowns). Remember what production *fails* to prove, too: a quiet month after launch may just mean nobody hit the rare role combination that breaks. Pair defect counts with hands-on checks: ask an unfamiliar engineer or on-call responder to explain an unexpected denial or add a small rule, and watch where they hesitate. Their sticking points tell you far more than a five-point survey.
 
-## Put the full cost on the ledger
+## Put the full bill on the ledger
 
-The permissions refactor didn't stop costing money when the month ended. The policy boundary needs upkeep. Product still has to review rule updates. Flaky matrix tests burn attention. If only one person really grasps the new engine, that bus factor is a carrying cost too.
+The permissions refactor didn't stop costing money at the end of the month. The policy engine needs upkeep. Product still has to review rule updates. Flaky matrix tests chew up attention. If only one person really understands the new module, that bus factor is a carrying cost too.
 
-AI tools add their own off-ledger expenses: reviewing plausible-looking patches, fixing generated fixtures that miss the point, inference bills, and figuring out when to scrap an agent's approach and start over. [METR's randomized study of early-2025 AI tools](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) with experienced open-source developers offers a sobering methodological warning. It is no blanket verdict on AI tools in every era, since models and workflows move quickly, yet it shows that experienced engineers can genuinely feel faster while objectively taking longer. Subjective confidence is a lousy yardstick.
+AI tools bring their own off-ledger bills: reviewing plausible-looking diffs, fixing generated fixtures that miss the point, inference spend, and deciding when to throw away an agent's branch and start fresh. [METR's randomized study of early-2025 AI tools](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) with experienced open-source developers is no permanent verdict on AI coding (models and workflows shift fast), yet it is a sharp methodological warning: seasoned engineers genuinely felt faster while objectively taking longer. Feeling productive is a terrible instrument.
 
-Record opportunity cost too, even imperfectly: write down what feature got pushed back for that month and why the trade looked right at the time. Sometimes an investment is still worth making before it breaks even, such as cutting single-person dependency before a key maintainer rotates off. Just call it a deliberate risk reduction rather than a proven productivity gain.
+Note opportunity cost too, even roughly: write down which feature slid for that month and why the trade looked sensible at the time. Sometimes an investment is worth doing before it pays back in hours, like cutting single-person dependency before a key maintainer rotates off. Just label it deliberate risk reduction instead of pretending it's a proven speed gain.
 
-## A twelve-week field check, and a better benchmark
+## A twelve-week field check, and how to actually test compounding
 
-Locally, a team can run a grounded twelve-week trial on one high-frequency class of change (skip subsystems you touch twice a year; you won't get enough data). Write down the investment, its maintenance cap, and the specific later work it should help. Collect a handful of baseline changes, including awkward ones, and log ordinary changes as they arrive rather than cherry-picking flattering examples. At week twelve, read individual change notes before computing averages; one painful migration usually explains more than a mean. Accept up front that twelve weeks of local observation has weak causal control (people are learning while the product shifts) and use it to decide whether to continue, shrink, or scrap the investment.
+On a working team, run a grounded twelve-week check on one high-frequency class of change (don't bother on subsystems touched twice a year; you'll get no signal). Write down the investment, its upkeep cap, and the specific later work it is meant to help. Log a handful of baseline changes, awkward ones included, and record ordinary tickets as they arrive instead of cherry-picking flattering ones. At week twelve, read the individual notes before computing averages; one ugly migration usually explains more than a mean. Accept upfront that twelve weeks in production has weak causal control (people learn while the product shifts) and use it to decide whether to keep, shrink, or scrap the investment.
 
-To test the compounding claim more rigorously in a research setting, a three-way split is not enough. Comparing ordinary work, AI-assisted work, and AI-assisted work with capability investment leaves you unable to tell whether the gain came from the capability investment itself or from its interaction with AI. You want a four-group design across equivalent starting repositories, equal total engineering budgets (including setup and upkeep), and a sequence of requirements changes:
+Testing the *compounding* claim rigorously in a research setting requires more care than a simple before-and-after benchmark. First, you need a four-group design across equivalent starting repositories, equal total engineering budgets (including setup and maintenance), and a *sequence* of withheld requirements changes:
 
 - *Group A:* No AI assistance, no explicit capability investment
 - *Group B:* AI assistance, no explicit capability investment
 - *Group C:* No AI assistance, explicit capability investment
 - *Group D:* AI assistance, explicit capability investment
 
-Keep later requirements withheld from everyone designing the earlier improvements so participants cannot study to the test, score resulting behavior independently, and preserve failed attempts across the whole sequence. Even a clean 2×2 benchmark won't capture real staff turnover or shifting business strategy, but it would finally separate AI speed from deliberate capability building and show whether the two actually amplify each other.
+Keep later requirements hidden while participants work on earlier rounds so nobody can study to the test, score behavior independently, and preserve failed attempts across the run.
+
+Even that 2×2 split has a subtle trap worth spelling out. Comparing totals across the four groups separates four different questions that get blurred together:
+
+- *Direct AI productivity* (`B` vs `A`): does AI speed up ordinary work?
+- *Capability return* (`C` vs `A`): does deliberate investment pay back its own cost over a sequence of changes?
+- *AI × capability interaction* (`(D - B)` vs `(C - A)`): do AI tools amplify (or get amplified by) better structure and executable checks?
+- *Compounding itself:* does the *trajectory* across rounds improve, meaning earlier investments make *later investments* cheaper or raise the payoff of Round 3 and Round 4 relative to Round 1 and Round 2, rather than delivering a single one-time step change?
+
+A positive interaction between AI and capability investment is interesting, yet by itself it does not prove compounding. Compounding lives in the slope across successive rounds. Even a clean multi-round benchmark won't capture real turnover or shifting company strategy, but it would finally test whether the claim holds up outside anecdotes.
 
 ## Make a "no" answer safe to report
 
-Every measurement scheme rots the moment people need it to defend their reputation, or get bonused on a metric they can game by changing what gets logged.
+Every measurement system rots the moment people need it to defend their reputation or hit a bonus target they can game by editing what gets logged.
 
-Treat the twelve-week review as a steering decision, not a performance verdict. Maybe the permissions boundary paid off handsomely for ordinary role tweaks and turned into friction during a tenant migration. Maybe it improved onboarding clarity without paying back its initial month. Those are genuinely valuable findings because they tell you what *not* to repeat next quarter.
+Treat the twelve-week review as a steering call, not a report card. Maybe the permissions boundary paid off nicely for routine role tweaks and turned into drag during a tenant migration. Maybe it sped up onboarding without earning back its original month. Those are useful results, because they tell you what *not* to repeat next quarter.
 
-If engineering capital is going to be a real discipline instead of a comforting metaphor, it has to be able to declare an investment a bust. Any framework that interprets every outcome as progress cannot help you decide how to spend next month.
+If engineering capital is going to be a real practice rather than a reassuring phrase, teams have to be able to declare an investment a bust. Any scorecard that reads every outcome as progress cannot help you decide where to spend next month.
