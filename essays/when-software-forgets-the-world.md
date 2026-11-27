@@ -2,106 +2,60 @@
 
 *Keeping domain knowledge in contact with its subject*
 
-Suppose a company hires out equipment. Its booking system treats an item as available when the previous hire ends. That rule worked when customers returned equipment to a staffed desk and employees inspected it before closing the hire.
+Beside the booking terminal at a depot in a hypothetical equipment-hire company sits a laminated clipboard. On it is a handwritten list of machines currently parked in the yard that staff must not promise to a customer yet.
 
-The company later introduces unattended returns. A customer can leave an item at a depot on Sunday evening, and the system closes the hire automatically. Inspection now happens on Monday. Staff keep a separate list of items they do not want to promise to another customer yet.
+Nothing in the booking software is broken. Its tests verify that equipment flips back to *available* the moment a hire closes. The service is fast, reliable and well documented. It simply still assumes the world that existed when customers returned gear to a staffed desk and an employee checked it over before closing the hire.
 
-Nothing in the booking system is malfunctioning. Its tests confirm that equipment becomes available when a hire closes. The availability service is fast and reliable. Its documentation accurately describes the rule.
+Once the company added unattended Sunday drop-offs, the system began closing hires automatically while inspection moved to Monday morning. Nobody filed a bug report. The depot staff just reached for a clipboard, and the clipboard started doing the work the software stopped representing.
 
-The staff's list is doing work the software no longer represents.
+A system can grow cleaner, faster and better tested inside while its grip on the outside world slips. Domain knowledge is not something you extract once during discovery and lock into a schema; it decays whenever the work around the software moves on.
 
-A system can become better engineered internally while its account of the world grows less useful. If we want engineering knowledge to improve with experience, we have to keep renewing the observations on which that knowledge rests.
+## The unstated premise under green tests
 
-## The assumptions beneath a correct program
+Michael Jackson made this point in [The World and the Machine](https://doi.org/10.1145/225014.225041): a program's purpose lives out in the domain, never solely inside the machine. Together with Pamela Zave in [Four Dark Corners of Requirements Engineering](https://doi.org/10.1145/237432.237434), he showed how a specification achieves its requirement only alongside assumptions about the environment. Break the environmental assumption, and a flawless implementation stops doing its job.
 
-Michael Jackson's [The World and the Machine](https://doi.org/10.1145/225014.225041) places the purpose of a software system in the world where it is used. Examining the machine alone cannot establish whether it serves that purpose. It is a useful reminder because the machine is usually the part engineers can inspect most easily.
+Here, the hidden assumption was simple: *closing a hire means someone has verified the machine is ready for the next customer.* Unattended returns severed that link without touching a single line of code.
 
-In the hire company, “the previous hire has ended” and “the equipment can be promised to someone else” were once connected by a procedure. An employee inspected the item before closing the transaction. The code depended on that procedure even though the procedure was never part of the program.
+The fix might be a new state in the booking system. Or it might be a change to the depot's Monday routine, a buffer before reservations open, or a way of marking availability as tentative. Reading pull requests will not tell you which one fits; watching the depot on Monday morning will.
 
-Pamela Zave and Jackson develop the distinction between requirements, specifications and descriptions of the environment in [Four Dark Corners of Requirements Engineering](https://doi.org/10.1145/237432.237434). A system's behavior supports the desired outcome only in conjunction with assumptions about its environment. If those assumptions fail, a correct implementation can cease to meet the requirement.
+## Read the workarounds before replacing them
 
-We can express the hire system's assumption quite plainly: closing a hire means that someone has established the item's readiness for its next use. Once unattended returns remove that step, the implication no longer holds.
+A clipboard or a shadow spreadsheet should always make an engineer curious. Not every manual step is a defect waiting to be automated away, but every workaround marks a seam where the software stopped matching the work.
 
-The remedy might be a new state in the application. It might also be a change to the return procedure, an adjustment to when the company accepts reservations or a better way of handling uncertain availability. Choosing among them requires knowing how the depots operate. A code review will not provide that knowledge.
+Before touching the schema, find out what the list actually does. Who writes on it? What triggers an entry? What breaks tomorrow if it disappears?
 
-## Workarounds are evidence
+Watching staff handle Monday's returns quickly reveals that "inspection" is not one boolean. A pressure washer needs a two-minute visual check. A generator might wait for a missing cable or the one technician certified to test it. Staff may happily take a provisional booking for one and refuse it for the other. Turning the clipboard into a single `inspected` checkbox before noticing those distinctions can make everyone's day worse, replacing flexible human judgment with false precision.
 
-The separate list should attract an engineer's attention, but not because every spreadsheet or handwritten note is a defect to automate away.
+## Software also bends the world it models
 
-It may represent a sensible division of work. Staff might use it for unusual judgments that do not justify a permanent feature. It might be a temporary response to a local problem. It might also reveal that the central system's categories no longer fit the work.
+Domain drift is not only something that happens *to* software from the outside. Software actively changes the behavior of the people around it.
 
-The first useful question is what the list allows people to do. Who adds an item? What information do they use? What would happen if the list disappeared tomorrow?
+Once depot staff realize the booking system will cheerfully promise an uninspected generator to an online customer, they start handling tricky hires by phone and typing them into the system after the fact. The database now records only the tidy cases. A dashboard showing that 98% of bookings follow the intended workflow is completely accurate, and completely blind to the friction it created.
 
-Watching a member of staff handle a returned item may reveal that “inspection” covers several different activities. Some items need a quick check. Others wait for a missing accessory or for an employee with particular experience. The company may allow a provisional reservation for some items while refusing it for others.
+Customers adapt too. Introduce strict online availability rules and repeat contractors learn to over-book "just in case" and cancel late, shifting the utilization pattern the pricing engine was tuned for. Whenever a system enforces categories or incentives, people route around its sharp edges. Those detours are part of the domain now, even if they never appear in telemetry.
 
-Replacing the list with a single “inspected” checkbox before understanding those distinctions could make matters worse. Staff would still need judgment, but the new system might imply a certainty they do not have.
+## Fieldwork with a boundary
 
-There is also knowledge in the cases people avoid entering. If staff know the booking system will make an unsuitable promise, they may arrange a hire by phone and record it afterwards. Usage data then excludes the very cases the engineers most need to examine. A dashboard showing that almost all recorded bookings follow the intended process could be perfectly accurate and deeply misleading.
+Spending a morning at one depot beats guessing from headquarters, though one visit has its own blind spots. Senior staff describe how work is *supposed* to run; new hires improvise differently. A slow Tuesday hides the chaos of a Monday after a holiday weekend. And watching people changes what they do.
 
-These possibilities are reasons to investigate a workaround. They are not reasons to assume its users are right about every aspect of the solution.
+Compare stories against real artifacts: trace ten hires from booking to return, pull up three disputed bookings, and ask staff why the record disagrees with what happened. When two depots run the same step differently, pay attention. You may have found a real local constraint or an unresolved company policy.
 
-## What observation can establish
+Keep the question narrow enough to act on. "Understand all depot operations" turns into an endless safari. "Find out what evidence staff check before releasing gear returned after hours" finishes in two days. Once that question is clear, fast prototyping shines again: have an agent spin up two small workflows (say, tentative reservations awaiting confirmation versus a buffer pool) and walk depot staff through real awkward bookings from last week. Follow that with a bounded trial at one depot before rolling anything out company-wide.
 
-A visit to one depot will improve the team's understanding, but it will not produce a complete account of the business.
+## Facts are not policies
 
-An experienced employee may describe how the work is supposed to happen. A new employee may follow a different procedure. A quiet Tuesday may reveal little about a Monday morning after a busy weekend. The engineer's presence can also change what people do or what they choose to explain.
+Half the mess in mature systems comes from mixing up what *happens* with what the business *wants*.
 
-The team needs to compare accounts with examples. It can follow several hires from reservation through return, examine a few disputed bookings and ask staff to explain discrepancies between the records and what happened. Where two depots disagree, that disagreement is itself useful. It may reveal a legitimate local difference or a policy nobody has settled.
+"Overnight returns are inspected before opening" is a claim about reality. It may be true at one depot and false at another, and you can check it by looking. "Customers may reserve an uninspected item" is a policy choice. Discovering that staff sometimes allow it does not make it the right rule; it tells you there is a tradeoff to settle openly, including who eats the cost when the machine turns out to be damaged.
 
-The scope should stay modest enough that someone can act on the findings. “Understand all equipment operations” is an invitation to an endless study. “Find out what evidence staff use before offering equipment returned outside staffed hours” gives the investigation a boundary.
+This trap gets worse when coding agents mine historical records or codebases to infer requirements. If an agent reads a year of workaround data and turns repeated exceptions into formal specs, yesterday's makeshift fix silently acquires the force of law. Old unit tests do the same thing, faithfully preserving a compromise made when the company had one depot and no self-service drop-off.
 
-Once that question is clearer, implementation becomes useful again. An agent can help build two small prototypes: one where reservations wait for confirmation and another where staff allocate a pool of equipment with an allowance for uncertain returns. Staff can try them against real examples, including the awkward ones.
+Attach status and ownership to consequential rules, just as [What software should remember](./what-software-should-remember.md) recommends: note what was observed, what was decided, and who has the authority to overturn it. Keep unresolved disagreements visible instead of papering over them with vague wording.
 
-A prototype can expose confusion in a proposed workflow. It cannot establish that the new workflow will work across the company simply because the interface is easy to use. That requires a bounded trial in the actual operation, with a way to recover when the proposal proves incomplete.
+## Renew the model when the business moves
 
-## Distinguish facts from decisions
+Nobody can re-audit every domain assumption every quarter. Tie review to events that actually disturb the ground: launching unattended returns, opening a depot with different staffing, adding a regulated class of machinery. Watch operational friction too, like rising manual overrides, frequent last-minute equipment swaps, or growing gaps between recorded returns and actual handovers. Treat those as triggers to go look, not excuses to build ten permanent dashboards.
 
-Some assumptions describe what happens. Others describe what the organization wants to permit. They need different treatment.
+And resist the urge, once you spot a missing distinction, to model every local quirk in a sprawling state machine. A good model leaves plenty out. Separating *returned* from *ready* prevents broken promises to customers; tracking the exact checklist order an experienced technician uses rarely pays for the data entry it imposes. Sometimes the best engineering outcome after a depot visit is leaving the core booking model small and agreeing on a simple manual path for rare exceptions.
 
-“Items returned overnight are inspected before the depot opens” is an empirical claim. It can be checked, and it may be true at one depot and false at another.
-
-“Customers may reserve an item before it has been inspected” is a policy choice. Observing that employees sometimes do it does not establish that the organization should permit it. It tells us there is a practice worth examining, including who benefits and who bears the consequences when the item is unavailable.
-
-This distinction matters when agents help maintain requirements. An agent analyzing historical records may infer a rule from repeated behavior. If that behavior was a workaround, an exception or a mistake, turning it into a specification can give it an authority it never had.
-
-The same problem occurs when engineers treat an old test as proof of intended policy. The test may faithfully encode a compromise made when the service had one depot and a different operating model.
-
-For consequential rules, the record should say what was observed, what was decided and who has the standing to reconsider the decision. This adds a practical requirement to [What software should remember](./what-software-should-remember.md): preserving a claim without preserving its status can make future reasoning worse.
-
-Disagreement should remain visible until it is resolved. A sentence that makes two conflicting procedures sound compatible will help nobody when the next ambiguous hire arrives.
-
-## Renew the knowledge where change occurs
-
-We cannot continuously revisit every fact on which a system depends. Most would tell us nothing new, and the investigation itself would disrupt the people doing the work.
-
-The company can instead identify events likely to invalidate its important assumptions. Unattended returns are one. Opening a depot with different staffing is another. A new class of equipment may require a different inspection procedure. Each change gives the team a reason to examine the relevant parts of the model.
-
-Operational evidence can provide additional prompts. A growing gap between recorded returns and readiness, repeated manual overrides or customers being offered substitutions may indicate a mismatch. These signals tell us where to look; they do not explain the cause on their own.
-
-Nor should every signal become another permanent dashboard. If a short investigation resolves an uncertainty, a temporary report may be enough. The continuing cost of maintaining a measure belongs in the decision to keep it.
-
-When a claim matters enough to retain, attach it to an observation and a condition for review. A note that the current availability rule was checked against three depots during a staffed return process is more useful than a timeless assertion that “returned equipment is available.” It also makes the limits of the evidence hard to miss.
-
-Changes to the business should be able to trigger changes to engineering knowledge even when no one has requested a software feature yet. Otherwise, the organization will hear about the mismatch only after staff have absorbed it into their own work.
-
-## A useful model leaves things out
-
-There is a temptation, after discovering an omitted distinction, to represent everything explicitly. The hire system acquires a state for each local procedure, every employee exception and all the ways an item can wait for attention.
-
-That can be as unhelpful as the original simplification. The world contains more detail than a useful application should preserve. Some distinctions do not affect the decisions the software supports. Others change so frequently that a rigid representation would impose work without improving the outcome.
-
-The team should ask what a new distinction enables. Separating “returned” from “ready” may prevent promises the company cannot meet. Recording the exact sequence in which an employee checks a straightforward item may contribute very little. A field for a meaningful unresolved condition may serve better than an elaborate state machine for every possible cause.
-
-The decision also has to account for who maintains the information. If employees must perform extra data entry, the benefit should reach their work or the customers they serve. A more complete database is not sufficient justification by itself.
-
-And sometimes the original model should survive. After investigation, the company may decide that its rare exceptions are best handled by people, while the booking system continues to cover the common case. The improvement is then a clearer boundary and an agreed procedure for exceptions, rather than another feature.
-
-## Return to the depot
-
-The team might ultimately introduce a separate readiness decision and a small queue for items awaiting it. It might revise how provisional bookings work. Whichever change it chooses, someone should return to the depot after it has been in use for a while.
-
-Has the separate list disappeared because it is unnecessary, or because staff moved it somewhere else? Can employees explain the new states consistently? Have customers gained a more dependable service? Those questions concern the purpose of the work and deserve a place beside the deployment checks.
-
-Over time, the system can accumulate better knowledge of the operation it supports. That knowledge will include distinctions worth preserving and previous distinctions that have outlived their usefulness. Its quality depends on the team's willingness to revise both.
-
-The booking service will still need tests, clear boundaries and reliable deployments. It will also need engineers who spend some of their time watching how the equipment is actually returned.
+Whatever you ship, go back to the depot a month later. Did the clipboard vanish because the software solved the problem, or did staff just move it into a private chat group? Can a new hire explain the new states without hedging? Good tests and small modules keep the machine honest; walking back out onto the yard is what keeps it connected to the work it exists to serve.

@@ -2,100 +2,85 @@
 
 *What it costs to keep a choice open*
 
-Consider a team building a document service. It has to decide how to attach comments to text. For the first release, a comment records the character positions at which its selection begins and ends. The implementation is small, and an agent can produce another one using a different representation in an afternoon.
+One of the quieter mistakes in the current enthusiasm for AI-assisted development is assuming that because code is cheap to rewrite, architectural decisions matter less. That confuses replacing an implementation with undoing a commitment.
 
-Six months later, customers have written a million comments. They have also edited their documents, exported them and built integrations around the comment identifiers. The team now wants comments to survive more substantial changes to the text.
+In a hypothetical document editor, a team has to decide how to attach comments to text. For the first release, each comment stores the start and end character offsets of the selected passage. The code is tiny; an agent could write a completely different anchoring engine before dinner.
 
-Replacing the implementation is still straightforward. Recovering what an old comment referred to may be impossible if the service never retained the relevant text or document version. The cheap part of the decision has become cheaper. The expensive part was elsewhere all along.
+Six months later, customers have written a million comments, edited their documents, exported them, and built integrations around the comment IDs. Now the team wants comments to survive heavy edits to the text.
 
-When we talk about the freedom to change software, we should be clear about which freedom we mean. Being able to rewrite a component tells us little about the commitments already made through it.
+Swapping out the matching code is still easy. Recovering what an old comment pointed to is impossible if the service never stored the quoted text or the document version it came from. The cheap part of the decision got cheaper. The expensive part was never the code.
 
-## Where a decision takes hold
+## Where commitments stick
 
-Some decisions remain largely inside the codebase. A search routine uses one indexing strategy rather than another. Provided its behavior and resource use remain acceptable, the maintainers can replace it without asking anyone else's permission.
+Some choices stay safely inside the codebase. Swap one internal search index for another and, as long as latency and memory hold up, nobody outside the team needs to know.
 
-Other decisions establish expectations outside that boundary. A customer stores our identifiers. Another service reads our export format. An operator develops a procedure around the order in which events arrive. Once that happens, changing the software involves changing someone else's work as well.
+Other choices leak past your boundary and harden into other people's work. A customer stores your comment IDs in a spreadsheet. A downstream pipeline parses your export schema. Support engineers build a runbook around the order in which webhooks fire. Once external work depends on a shape, changing it is no longer a software edit; it is a negotiation.
 
-Persistent data creates a similar obligation. A representation chosen for today's convenience can discard information needed for tomorrow's interpretation. A migration can reorganize the information we have. It cannot reliably recover distinctions we chose never to record.
+Stored data locks you in just as tightly. A schema chosen for week-one convenience discards details you cannot conjure back later. Migrations rearrange information you kept; they cannot invent distinctions you threw away.
 
-The document team therefore has several decisions to make, each with a different cost of reversal. It can choose a simple matching algorithm now and replace it later. It needs more care over the meaning of a comment identifier, the evidence retained about the original selection and what the public interface promises when that selection can no longer be found.
-
-Calling the entire feature reversible because its code is easy to regenerate would conceal the decisions that deserve the most attention.
+That splits the document service's decision into pieces with completely different reversal costs. The matching algorithm can be crude on day one and replaced on day ninety. The meaning of a comment ID, the context saved alongside a selection, and what the API returns when an anchor can no longer be found all deserve real thought upfront. Calling the whole feature "easy to change" because the code is easy to regenerate hides the exact parts that are not.
 
 ## Boundaries around uncertainty
 
-David Parnas's [1972 paper on decomposing systems into modules](https://doi.org/10.1145/361598.361623) proposed hiding design decisions that are difficult or likely to change. A useful boundary limits how much of a system needs to know about a particular choice. It does not remove the choice or make every possible replacement equally easy.
+David Parnas's [1972 paper on modular decomposition](https://doi.org/10.1145/361598.361623) argued for hiding design decisions that are hard or likely to shift. A good boundary limits how much of the system cares about a choice, though it can only protect what its contract allows.
 
-For the document service, a boundary around locating a comment's selection could let the team try different matching strategies without changing the surrounding application. But that boundary is only useful if its contract allows the outcomes the team may encounter. An interface that always returns an exact position has already ruled out uncertainty, even if its implementation sits in a separate package.
+Putting comment matching behind an interface lets the team swap algorithms freely, until the interface itself promises the wrong thing. If the contract always returns a single exact character range, it has already ruled out ambiguity, no matter how nicely the implementation is encapsulated.
 
-Suppose a paragraph appears twice after an edit. A matching algorithm may find two plausible locations. The product needs a way to represent that ambiguity. It could leave the comment attached to an older version, ask the reader to choose or show it separately from the current text. Each response has consequences for the people using the service.
+After a heavy edit, a quoted paragraph might appear twice, or disappear altogether. The product has to decide what happens then: keep the comment pinned to an older revision, ask the reader to re-attach it, or display it in a separate "orphaned" thread. No cleverer matching algorithm settles that product question, and no generic wrapper rescues an interface that pretended ambiguity could not happen.
 
-A more elaborate algorithm cannot settle that product question. Nor can a generic interface repair a contract that has promised the wrong thing.
+Keeping a choice open does not mean predicting every future implementation. It means recognizing where the uncertainty sits. You can be unsure how you will relocate anchors next year while being fairly sure that some anchors will fail to match. That is enough to design an honest boundary.
 
-Preserving choices therefore requires some understanding of where uncertainty lies. We might be uncertain about how to find an anchor efficiently while being quite certain that the service must preserve comments when it cannot find one. That is enough knowledge to establish a useful boundary without designing every future matching strategy.
+## Pricing an option
 
-## The price of an option
+Carliss Baldwin and Kim Clark treat modular replaceability as a financial option in [The Option Value of Modularity in Design](https://scholarsarchive.byu.edu/facpub/8944/): its worth depends on how much better a future replacement could be, how cheaply you can test alternatives, and what it costs to maintain the architecture that makes swapping possible.
 
-Carliss Baldwin and Kim Clark describe this economic aspect in [The Option Value of Modularity in Design](https://scholarsarchive.byu.edu/facpub/8944/). Their analysis treats opportunities to replace parts of a modular design as real options. The value depends on factors including the potential for improvement, the cost of experiments and the cost of establishing the architecture that makes independent changes possible.
+That last term is the one engineers love to ignore. Compare three ways the document team might store comment anchors on day one:
 
-This is a helpful way to think about architecture, provided we remember that options cost something to maintain.
+```text
+Option A: Character offsets only
+  Keeps open: Nothing once text is heavily edited.
+  Carrying cost: Minimal storage, simplest schema.
+  Risk: Permanent loss of intent for existing comments.
 
-The document team could retain each original text selection, some surrounding context and a reference to its document version. That may preserve ways of interpreting comments later. It also consumes storage and complicates deletion and retention behavior. Keeping every historical document forever would preserve still more choices, at a much greater cost.
+Option B: Offsets + quoted passage + short surrounding context + doc version
+  Keeps open: Better fuzzy matching, orphan display, future re-anchoring.
+  Carrying cost: Extra storage; deletion and privacy sweeps must scrub quotes too.
+  Risk: Modest; easy to drop unused fields once one scheme settles.
 
-The relevant question is whether the retained information supports a plausible future need whose cost would otherwise be substantial. We cannot answer that by counting how many hypothetical designs an architecture could accommodate.
+Option C: Full immutable revision history of every edited document
+  Keeps open: Exact historical replay and diff-based re-anchoring.
+  Carrying cost: High storage, retention policy complexity, legal exposure.
+  Risk: Heavy ongoing obligation built for a requirement not yet proven.
+```
 
-There are also cases where cheap implementation reduces the value of building an abstraction in advance. If a small internal component has no persistent state and no outside consumers, replacing it when the need arises may cost less than maintaining a flexible framework from the outset. AI could strengthen that argument by reducing the effort of the eventual replacement.
+Looking at them side by side makes the tradeoff plain. Option B buys most of the future freedom at a fraction of Option C's carrying cost. The point is not that Option B always wins, but that you should price the carrying cost against a concrete future need instead of bragging about how many hypothetical designs an architecture supports.
 
-The same change in economics can therefore favor more investment at a public boundary and less investment inside it. We should expect to spend our effort unevenly.
+Cheap implementation actually pulls *both* ways here. Inside a stateless internal module with no external callers, writing a flexible framework upfront makes *less* sense when rewriting a simple version later is cheap. At a public API or persistent data boundary, the exact same shift makes early care *more* important, because generated code can ship bad commitments faster than before. Effort belongs unevenly at the edges where commitments stick.
 
-## Buying information before making a promise
+## Buying information instead of keeping every door open
 
-Sometimes the best way to preserve a choice is to learn enough to stop keeping it open.
+Sometimes the smartest way to handle an open choice is to buy enough evidence to close it.
 
-Before publishing the comment interface, the team can collect examples of edits its users actually make. It can compare position tracking with matching based on retained text. It can inspect the cases in which each approach loses the selection or attaches a comment to the wrong passage.
+Before freezing the comment API, the team can pull a sample of real document edits and test plain offsets against quoted-text matching. An agent can script the comparison across a thousand documents in an hour. Humans still have to check whether the corpus reflects real customer edits rather than tidy typo fixes, and whether the failure cases actually bother users. If readers mostly care about preserving the conversation thread, showing the original quoted passage next to an orphaned comment may matter far more than a heroic relocation algorithm.
 
-An agent can help construct these experiments and run them across a collection of documents. The team still has to judge whether the examples represent real editing practices and whether the behavior is acceptable. A test corpus full of small spelling corrections will make a weak anchoring scheme look unusually dependable.
+Stop experimenting once the remaining uncertainty no longer justifies delaying the ship date, or once you have an acceptable fallback for the ambiguous cases. Then record the boundary alongside the decision, following the habit from [What software should remember](./what-software-should-remember.md): *"offsets plus quoted text cover the editing patterns seen so far; revisit if customers adopt heavy multi-section reorganization."*
 
-The experiment should help the team make a particular decision. If the uncertainty concerns how often ambiguous matches arise, measuring throughput alone is an attractive distraction. If users care chiefly about retaining the discussion, the team may discover that preserving the old passage is more valuable than sophisticated automatic relocation.
+## Reversibility you haven't tested is a wish
 
-There is a stopping point. More experiments will usually reveal more edge cases, but a product cannot wait until its designers have eliminated every uncertainty. A useful investigation ends when the remaining uncertainty no longer justifies delaying the commitment, or when the team has established how it will handle the unresolved cases.
+A rollback plan is just another unverified assumption until you run it.
 
-It helps to record what new evidence would change the decision. The note discussed in [What software should remember](./what-software-should-remember.md) can say that the simple matching strategy is adequate for the observed editing patterns, and that widespread document restructuring would warrant another look. The decision then has a reason and a boundary.
+Suppose the document service migrates to a richer comment schema. The new release deploys and begins writing new records. The next morning a bug surfaces, the team rolls back to yesterday's binary, and the old binary crashes on every comment created overnight. The team kept the old artifact while breaking its ability to go back to it.
 
-## Reversibility has to be exercised
+Sandeep Pokkunuri's writeup on [rollback safety at Amazon](https://aws.amazon.com/builders-library/ensuring-rollback-safety-during-deployments/) points straight at this gap: testing version N and version N+1 separately proves nothing about moving backward from N+1 to N. A real rehearsal writes new-format comments, edits documents, and then runs the *previous* release against that live state. If it breaks, split the change: deploy readers that understand the new format first, and only start writing it once rollback is safe.
 
-A plan to reverse a change deserves the same scrutiny as the change itself.
+Rehearsing reversibility also forces you to pick an expiration date. Keeping an escape hatch open for a week during rollout is prudence; supporting two storage models for five years is self-inflicted pain.
 
-Suppose the document service introduces a new representation for comments. It deploys the new code successfully and begins writing new records. A problem appears the next morning. The old application starts when redeployed, but cannot interpret those records. The team had preserved its old executable without preserving its ability to return to the old behavior.
+## When refusing to choose becomes the trap
 
-Sandeep Pokkunuri's account of [rollback safety at Amazon](https://aws.amazon.com/builders-library/ensuring-rollback-safety-during-deployments/) addresses this problem directly. Safe deployment requires attention to compatibility between readers and writers across versions, including during transitions. Testing each version in isolation does not establish that moving between them is safe.
+Teams burned once by a rigid schema often overcorrect until every decision stays provisional forever. The document service ends up with three anchor formats, two API versions and four relocation flags, each preserved to avoid committing too soon. Every engineer (and every agent) now has to reason through their cross-product, and documents behave differently depending on the month they were created.
 
-For our document service, a rehearsal could create comments using the new representation, make edits and then run the previous application against the resulting state. If the old application cannot cope, the team needs a different transition plan. It might introduce support for reading the format before allowing any component to write it, or keep a compatible representation during a bounded migration period.
+An option that once had value can become an obligation.
 
-The rehearsal gives a claimed option an observable meaning. We can return to a specified earlier state under specified conditions. It may also reveal the point beyond which returning is no longer practical.
+Early commitment is not the enemy of good design. A stable public contract lets neighboring teams build without constant coordination; a single data representation keeps tooling simple. Keeping a door open only earns its keep when real information is still on the way. Once the evidence lands, make the call and close the spare exits.
 
-That point should be deliberate. Once a migration has completed and the new representation has proved satisfactory, keeping both indefinitely can become a source of errors. Maintaining an escape route for a week and supporting two storage models for five years are quite different investments.
-
-## The cost of refusing to choose
-
-An organization can become so attached to flexibility that every decision remains provisional.
-
-The document service might retain three anchor formats, two public interfaces and several modes of relocation, each introduced to avoid committing too soon. Every engineer and agent then has to understand their interactions. Customers discover that a feature behaves differently depending on when a document was created. Tests grow around combinations nobody intentionally designed.
-
-Those costs are present even if none of the alternatives is ever used again. An option that once had value can become an obligation.
-
-Keeping a choice open should therefore come with a reason to revisit it. Perhaps the team is waiting for a particular customer workflow to be tested, or for a migration rehearsal to establish an acceptable recovery path. Once that evidence arrives, it should either make the commitment or identify a new, concrete reason for waiting.
-
-Sometimes an early commitment is exactly what makes progress possible. A stable public contract lets other teams build without negotiating every detail. A shared data representation makes comparisons and tooling easier. Preserving our freedom at the expense of everyone else's predictability is not automatically good engineering.
-
-The practical aim is to place commitments where they buy coordination and leave room for change where useful information is still likely to arrive.
-
-## What remains possible
-
-The document service will eventually make choices its maintainers regret. No architecture can prevent that. It can, however, make the consequences of those choices easier to understand before they spread.
-
-When reviewing a consequential design, I would ask what it writes into lasting data, what other people will come to depend on and what evidence would persuade us to replace it. I would then ask whether we have actually tried the replacement or reversal we claim will be easy.
-
-These questions often lead to modest changes: retaining a piece of information, narrowing a promise, rehearsing a migration or deleting an unnecessary extension point. They rarely produce an architecture that anticipates everything.
-
-Years later, the value becomes visible when a new requirement arrives. The team has enough evidence to reinterpret its old data, enough freedom to replace an uncertain algorithm and a sufficiently stable contract that customers can continue their work. Someone made those later decisions possible by being careful about a few earlier ones.
+When reviewing any consequential design, four questions cut through most of the fog: what does this write into lasting data, who outside the team will come to depend on it, what evidence would make us replace it, and have we actually rehearsed the reversal we claim is easy? Answering them rarely produces a grand architecture that anticipates everything. It produces a few modest safeguards (a retained quote, a narrower promise, a deleted extension point) that keep next year's hard decisions from becoming impossible ones.

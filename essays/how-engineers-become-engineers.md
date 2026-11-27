@@ -2,98 +2,78 @@
 
 *An apprenticeship with less implementation*
 
-Consider an engineer in the first months of a new job, asked to add retries to a background worker. An agent produces a reasonable patch, including tests. The engineer follows the explanation, responds to a few review comments and gets it merged.
+For half a century, writing code did two jobs at once: it shipped software and it trained the next generation of engineers. Delegating implementation pries those two jobs apart.
 
-The task is complete. What has the engineer learned?
+In a hypothetical first-year assignment, a new engineer is asked to add retries to a background worker. A coding agent writes a clean patch with tests. The engineer reads the agent's summary, addresses two review comments and merges the pull request.
 
-Perhaps quite a lot. They may have investigated what happens if the worker completes an operation and loses the connection before receiving an acknowledgment. They may now understand why retrying an operation can repeat its effect, and where the system prevents that repetition.
+The ticket is done. What actually happened inside the engineer's head?
 
-Or they may have learned how to recognize an explanation that sounds satisfactory. The repository looks much the same in either case.
+Maybe a great deal. Maybe they traced what happens when a worker completes an external call and drops its connection before the acknowledgment arrives, and now see why naive retries duplicate side effects. Or maybe they just got better at recognizing a confident-sounding explanation. From the outside, the git history looks identical.
 
-The earlier essay [Implementation and understanding](https://grove.github.io/software-that-improves-with-age/essays/implementation-and-understanding.html) considered the understanding established engineers can lose when they delegate implementation. There is a longer question underneath it: how will someone acquire the judgment that makes delegation effective in the first place?
+[Implementation and understanding](https://grove.github.io/software-that-improves-with-age/essays/implementation-and-understanding.html) looked at the grasp experienced engineers lose when they stop writing code. Beneath that sits a harder problem: how does anyone build the judgment needed to supervise delegated work in the first place?
 
-## What an apprenticeship used to include
+## What the old apprenticeship accidentally gave us
 
-Writing software gives an engineer repeated contact with the consequences of their own decisions. An apparently simple change reaches an unexpected dependency. A test that seemed sufficient misses a failure. An elegant abstraction becomes awkward under the next requirement.
+Writing code by hand forced repeated, intimate contact with being wrong. A two-line change tripped an unexpected dependency. A test suite stayed green while a subtle race slipped through. A tidy abstraction cracked under the very next requirement.
 
-The educational value lies partly in having made a prediction before finding out what happens. Someone else's explanation of the difficulty is easier to accept than our own failed attempt, but it may leave a less precise understanding of where the difficulty came from.
+The education came from making a bet, however small, and watching reality correct it. Reading somebody else's summary of why retries are tricky is effortless; watching your own worker double-charge a test account leaves a much deeper mark.
 
-This was never a reliable curriculum. An engineer could spend years implementing routine features and rarely investigate a serious concurrency problem. Another could learn a great deal through a demanding project with generous colleagues. Much depended on which work happened to be available and who had time to explain it.
+None of this was a well-designed curriculum. Plenty of engineers spent years wiring up routine CRUD endpoints without ever chasing a hard concurrency bug, while a lucky colleague learned fast beside a generous mentor on a thorny system. Nobody should be nostalgic for losing an afternoon to broken packaging or writing the same boilerplate client for the fifth time.
 
-We should be reluctant to preserve all the inconvenience of that arrangement. A packaging problem can consume an afternoon without helping someone understand the system they are learning. Equally, removing every occasion on which a beginner must reason through an unfamiliar mechanism can leave them dependent on explanations they cannot assess.
+Still, stripping away every moment where a beginner has to reason through an unfamiliar mechanism leaves them dependent on explanations they cannot evaluate. The question is not whether juniors should be banned from using AI. It is which parts of a task build judgment and which parts are just typing.
 
-The useful question is which parts of an assignment require the learner's attention, and which parts can be delegated without losing its educational purpose.
+## Practice the judgment, not the boilerplate
 
-## Choose the judgment to practice
+Anders Ericsson, Ralf Krampe and Clemens Tesch-Römer's [1993 work on deliberate practice](https://doi.org/10.1037/0033-295X.100.3.363) drew a clear line between simply doing a job and structuring tasks specifically to improve a skill through fast, informative feedback. That psychology research won't hand you a ready-made engineering syllabus, but it points at the right design unit: name the specific judgment you want the learner to build.
 
-In their [1993 account of deliberate practice](https://doi.org/10.1037/0033-295X.100.3.363), Anders Ericsson, Ralf Krampe and Clemens Tesch-Römer distinguished activities designed to improve performance from ordinary participation in a domain. They emphasized appropriately chosen tasks and informative feedback. Their work is not evidence that a particular training scheme will produce expert software engineers; it gives us a useful distinction when designing one.
+"Learn distributed systems" is too broad. "Spot the gap between an operation taking effect and its caller learning that it took effect" is concrete enough to practice.
 
-For the retry assignment, the learning goal might be to recognize the gap between an operation taking effect and its caller knowing that it took effect. That is specific enough to investigate. “Learn distributed systems” is not.
+Give the new engineer a small worker and a service that logs completed actions. Before running a single test, ask them to predict what both sides believe if the network drops at three different points in the handshake. Let an agent build the fault-injection harness and gather the traces. The learner's job is to explain where their prediction missed.
 
-A mentor can give the engineer a small worker and a service that records completed operations. Before running anything, the engineer predicts what each side will know if the connection disappears at different points. An agent can help prepare the failure injection and collect the results. The engineer has to explain where the prediction failed.
+Then shift the scenario. What if the worker also publishes an event to a second queue? What if the deduplication table expires after an hour? Now they have to figure out which part of their earlier reasoning still holds. Drilling the same exercise twice builds familiarity; moving the ground tests whether they actually understood it.
 
-The exercise should then change. Perhaps the operation now sends a message to another service. Perhaps the record used to detect duplicates expires. The engineer needs to work out which part of the previous argument still applies. Repeating the identical case until its answer is familiar would tell us much less.
+## Show the messy middle
 
-The exercise earns its place if the engineer can reason more effectively about later work, including cases the mentor did not rehearse. A satisfying session followed by the same confusion a month later would be a reason to change how we teach it.
+Experienced engineers make debugging look deceptively linear. They glance at three dashboards, ignore five plausible leads, check one counter and point at the bug. The newcomer sees the command that worked and misses the judgment that ruled everything else out.
 
-## Let the mentor's uncertainty be visible
+Allan Collins, John Seely Brown and Ann Holum's account of [cognitive apprenticeship](https://www.aft.org/ae/winter1991/collins_brown_holum) emphasizes making an expert's hidden thinking audible and gradually pulling back support as the learner takes over. On an engineering team, that means narrating an investigation while you are still genuinely unsure, not just walking through a polished postmortem afterward.
 
-An experienced engineer can make investigation look deceptively direct. They ignore several plausible explanations, inspect one counter and locate the problem. The beginner sees the command that worked without seeing why it was worth trying.
+When the retry count spikes, say out loud why three explanations fit the graph, what measurement separates them, and which tempting rabbit hole you are ignoring for now. Just as important, admit when you are stumped. If every pairing session ends with the senior engineer unveiling an answer they knew from minute one, beginners absorb a distorted view of expertise. Most senior judgment is knowing how to make progress while still in the dark.
 
-The idea of [cognitive apprenticeship, described by Allan Collins, John Seely Brown and Ann Holum](https://www.aft.org/ae/winter1991/collins_brown_holum), is useful here. Their account brings normally hidden thinking into the teaching process, with guidance gradually withdrawn as the learner takes responsibility. Applying that educational approach to an engineering team means making room for an experienced colleague's explanation while the work is still unresolved.
+An agent's explanation belongs in a different category. Fluent prose explaining why a patch is safe is a claim to test, not proof that the learner (or the agent) understood the system. One habit that pays off immediately: ask the learner to write down their own mental model *before* prompting the agent. Comparing the two gives them something concrete to push against.
 
-A mentor investigating the worker might explain why a rising retry count suggests several possibilities, what observation would separate them and which tempting investigation they are postponing. That gives the learner access to choices that a finished incident report tends to smooth away.
+## Withdraw the scaffolding on purpose
 
-The mentor should also say when they do not know. If every exercise ends with the senior engineer revealing the answer they possessed all along, the beginner learns an unrealistic picture of expertise. Much engineering judgment consists of finding a way to proceed when nobody has an answer yet.
+Early on, a mentor picks the failure points to inject and helps read the output. A few weeks later, the learner chooses where to break the system and defends the choice. On a later task, they decide whether retries belong in the design at all. Eventually they walk the next hire through the difference between a safe retry and a repeated business action.
 
-An agent's explanation can help, but it needs a different status. A fluent account of why a patch works is a claim to examine. It is not a record of the learner's reasoning, and it may not accurately describe how the result was obtained. Asking a learner to repeat it proves little.
+AI stays in the room throughout that progression, generating test fixtures, mapping unfamiliar call graphs and mocking up competing designs. What shifts is who frames the question and who signs off on what the evidence proves.
 
-One useful habit is to have the learner explain their current model before asking the agent for an explanation. The comparison then has something to work against.
+A blanket rule like "no AI for the first six months" misses the point. Hand-coding a tiny queue can expose lifetime and backpressure bugs that a framework hides; hand-coding another standard HTTP client teaches almost nothing. Match the friction to the skill. If the goal is comparing how three retry policies fail under load, having an agent build all three variants lets the learner spend their time on the analysis that actually matters.
 
-## Assistance that changes over time
+## You cannot look up what you don't know to ask
 
-At the beginning, a learner may need a working example, a suggested hypothesis and help interpreting the result. With more experience, the same help can remove the very work they need to practice.
+When an explanation is always one prompt away, memory starts to feel optional. It isn't.
 
-The retry exercise might begin with a mentor choosing the failure points. Later, the engineer chooses them and explains why. On another assignment, they decide whether retries are appropriate at all. Eventually they help someone else distinguish a safe retry from a repeated business action.
+What you already carry in your head determines what looks suspicious. An engineer who has internalized ambiguous acknowledgments spots the same trap hiding inside a payment webhook or a cron scheduler. Someone who merely read and approved an agent's retry patch never notices there is a question to ask.
 
-An agent can remain useful throughout that progression. It can generate test data, locate relevant code, suggest competing explanations or write the mechanical parts of an experiment. What changes is who chooses the question and who is responsible for deciding what the evidence establishes.
+Henry Roediger and Jeffrey Karpicke's [experiments on retrieval practice](https://doi.org/10.1111/j.1467-9280.2006.01693.x) (done on prose retention rather than engineering, so treat them as a clue rather than a recipe) showed that actively recalling material cements it far better than rereading it. The engineering equivalent is light and informal: a few days after the retry work, ask the learner to sketch the failure sequence on a whiteboard without opening the PR; in design reviews, have everyone predict how a change will behave before opening the code. Wrong predictions cost nothing when the room treats them as data instead of a quiz.
 
-There is no reason to insist on a universal rule such as “beginners must code without AI for six months.” Some manual work is valuable because it exposes a mechanism clearly. Some is repetitive transcription. A learner implementing a tiny queue by hand may gain something that would be hidden by a large framework; implementing another routine HTTP client may add very little.
+## Real stakes, bounded blast radius
 
-The choice should follow the skill being developed. If the aim is to understand ownership and lifetime, working directly with those details is reasonable. If the aim is to compare failure behavior across designs, having an agent prepare several implementations can create a better exercise than spending the available time finishing one.
+Exercises only take you so far. Real production work comes with fuzzy requirements, impatient stakeholders and consequences that show up three weeks after merge.
 
-## Remembering is part of reasoning
+Apprenticeship needs a ramp into real ownership: start by owning retry behavior for one noncritical worker, with a senior engineer explicitly on call for anything outside the agreed boundary. Let the learner watch the rollout, answer an operator's question, and repair the first assumption that breaks in production. That is worlds apart from tossing a junior into a tangled legacy service alone and calling panic "growth."
 
-It is tempting to assume that ready access to explanations makes retained knowledge less important. We can always ask again.
+Keep them close to users and operators, too. You can become very good at debugging retry loops without ever noticing that the operation should never have been automated in the first place.
 
-In practice, deciding what to ask depends on what we already know. An engineer who has encountered an ambiguous acknowledgment may recognize the same problem hidden inside a payment callback or a job scheduler. An engineer who has only followed a particular patch may not know that there is a question to investigate.
+## Consuming your own future
 
-Henry Roediger and Jeffrey Karpicke's [experiments on test-enhanced learning](https://doi.org/10.1111/j.1467-9280.2006.01693.x) found benefits to delayed retention when students retrieved material rather than only studying it again. The tasks concerned prose passages, not engineering judgment. They offer a reason to include recall in a learning routine, without claiming that recalling a protocol amounts to mastering its use.
+Here is the uncomfortable economics underneath all of this: an organization can become measurably more productive this year while liquidating its future supply of expertise.
 
-A few days after the retry exercise, the learner can reconstruct the failure sequence without the report open. A few weeks later, they can investigate a different system with a related problem. Where their account breaks down tells the mentor what needs another pass.
+Mentoring is slow. A senior engineer pairing with an AI agent can ship the retry worker before lunch; mentoring a newcomer through predictions and fault injection takes two days. If leadership measures only weekly throughput, every rational team cuts the mentoring, stops hiring juniors, and lets senior staff plus agents carry the backlog.
 
-These activities need not become examinations. A team can use them in ordinary design discussions: ask each person to sketch what they expect before opening the implementation, then compare. A wrong prediction is useful evidence when admitting it carries no penalty.
+That looks brilliant on a quarterly chart. It even looks rational for one company, right up until senior engineers turn over, systems grow weirder, and the firm discovers there is nobody left who can diagnose a novel outage or tell when an agent's confident patch is subtly corrupting data. At the industry level it is a slow-motion tragedy of the commons: everyone wants to hire experienced engineers who can audit AI, and nobody wants to pay for the apprenticeship that creates them.
 
-## Give learners something real to own
+Fixing that takes an explicit management choice, not heroics from mentors squeezing teaching into their evenings. Decide which tickets double as training investments and budget for them openly. You will know the investment is working when the learner starts asking questions the mentor missed, naming what evidence would change their mind, and flagging risky commitments *before* merging.
 
-Exercises have limits. They usually come with a bounded problem, a sympathetic mentor and an expectation that a solution exists. Production work contains uncertain requirements, interruptions and consequences that continue after the patch is merged.
-
-An apprenticeship needs a path into that responsibility. The learner might begin by owning the retry behavior of one noncritical worker, with an experienced engineer available for decisions that exceed the agreed scope. They follow it through rollout, examine its behavior and respond when an assumption proves wrong.
-
-Ownership should grow as their judgment becomes more dependable. That is different from leaving a junior engineer alone with a difficult service and calling the resulting stress a learning opportunity. Support needs to be available at the moments when the learner cannot yet judge the risk unaided.
-
-The work also has to include contact with users and operators. Someone can become skilled at diagnosing a retry loop while missing that the operation should never have been automatic. Engineering expertise includes recognizing when a technical difficulty is evidence of a poorly understood requirement.
-
-Agents may make it easier to give learners bounded work with real consequences. They may also make it easier for experienced staff to do everything themselves. The latter can look efficient for a long time, right up to the point when the organization needs more experienced staff.
-
-## Who pays for the next generation?
-
-Mentoring consumes time. A senior engineer explaining an investigation could have finished it faster alone. A beginner making predictions and checking them will sometimes deliver less this week than a beginner accepting generated solutions.
-
-If a team measures only immediate output, the learning will tend to disappear. The remedy requires an explicit organizational choice about which assignments are also investments in people. It cannot depend on mentors quietly adding the work to their evenings.
-
-There are useful signs that the investment is working. The learner begins to ask questions the mentor missed. They can explain what would change their mind. They recognize when an earlier lesson does not apply. They seek help before an uncertain decision becomes a costly commitment.
-
-None of those signs requires them to reproduce their mentor's career or write the same amount of code. They do require repeated opportunities to make judgments, encounter consequences and revise their understanding.
-
-The retry patch may take an agent only minutes. The apprenticeship surrounding it deserves more time than that. Years later, when the engineer is responsible for a system whose failure modes nobody fully understands, the organization will be relying on what they learned while the patch was being made.
+The retry patch might take an agent three minutes. Building the engineer who can rescue that system three years from now takes deliberate time. If nobody pays for it today, the bill still comes due later, with interest.

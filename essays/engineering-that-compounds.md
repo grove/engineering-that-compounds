@@ -2,82 +2,64 @@
 
 *What we choose to carry into the next piece of work*
 
-Consider a team maintaining a service that imports large files from customers. Every few weeks, an unusual file gets stuck. An engineer downloads a sanitized copy, reconstructs the relevant settings, runs the importer locally and eventually finds the cause. The patch is usually small. Getting into a position to write it takes much longer.
+The earlier collection, [Software that improves with age](https://grove.github.io/software-that-improves-with-age/), asked a question about codebases: how do we tend a system so it gets easier to understand, operate and change as the years pass?
 
-After one particularly awkward investigation, the team keeps the reproduction environment. A second engineer makes it possible to replay an import without contacting external services. Later, somebody adds a check that accounts for every accepted and rejected record, so a run that finishes without crashing can still be examined for missing data.
+This collection stepped one level up, from the software to the institution around it. How does an engineering organization get better at creating those conditions in the first place?
 
-These changes have an immediate benefit: the next incident is easier to investigate. There is also a possibility of a further return. The replay environment could make an unfamiliar design affordable to test. The record checks could give the team enough confidence to simplify the importer. An engineer learning the system could use the same tools to challenge an explanation instead of accepting it on trust.
+Put plainly, the proposition running through all nine essays is that the enduring output of engineering is not just the system we ship, but our capacity to understand, verify and change it. When implementation grows cheaper, deliberately tending that capacity stops being a nice extra and becomes the main game.
 
-That further return is the proposition running through this collection. Engineering can leave us with means of doing better work, and some of those means can improve how we acquire the next ones. Whether this happens often enough to justify the expense is a question we should investigate.
+That sounds neat on paper. In practice, compounding is rare because the default forces inside an engineering organization push the other way.
 
-## A return has to reach the next decision
+## The abundance of fake capital
 
-The distinction between accumulating assets and compounding their benefits is easy to lose.
+Writing code, generating tests, summarizing postmortems and spinning up prototypes used to be slow enough that sheer effort acted as a crude filter. AI removes that friction and introduces a distinctive epistemic hazard.
 
-A replay environment that saves an afternoon on every incident is useful even if its benefit never grows. It has produced a recurring return. Calling that return compounding adds little unless we can describe what happens to the saved effort or newly available capability.
+Across these essays, the same failure mode kept reappearing in different clothes:
 
-Suppose the team uses the replay environment to compare two ways of handling malformed records. The comparison reveals that several recovery branches exist to preserve a behavior customers no longer need. With product agreement and suitable checks, those branches can be removed. The simpler importer is easier to model, which makes it cheaper to build an experiment for a different class of failure. A later investigation now starts with both better tools and less unnecessary machinery.
+- Summaries that flatten provenance, turning a partner's casual email and a month of clean logs into an unqualified "invariant" ([What software should remember](./what-software-should-remember.md)).
+- Agents reading old branches and promoting *"attempted and abandoned"* into *"proven impossible"*, hardening institutional prejudice ([The value of forgotten alternatives](./the-value-of-forgotten-alternatives.md)).
+- Junior engineers merging fluent patches without ever building the mental models needed to spot when the next patch is wrong ([How engineers become engineers](./how-engineers-become-engineers.md)).
+- Automated analysis mining a year of staff workarounds and codifying yesterday's coping mechanisms as formal requirements ([When software forgets the world](./when-software-forgets-the-world.md)).
 
-That is a plausible mechanism for compounding: one investment improves the conditions under which another useful investment is made. It is more specific than a rising count of tests or an expanding documentation directory.
+When generation is cheap, *produced knowledge artifacts* multiply effortlessly while *validated understanding* gets scarcer. A repository can look richer every week (more docs, more tests, more abstractions) while the team's real grip on its system slips away.
 
-The mechanism can fail at each step. The saved afternoon may go entirely to another urgent feature. Product experts may be unavailable. The replay tool may simulate the wrong behavior. The proposed simplification may move complexity into customer support. There is no automatic conversion from an efficient investigation into greater engineering capability.
+## Assets only pay off in combination
 
-We should be able to point to the decision made possible by an earlier investment, and then to evidence that the decision helped. Without that connection, compounding is a hopeful description of activity.
+A single investment rarely compounds on its own. Engineering capability works more like a chain than a pile.
 
-## Reinvestment competes with real needs
+A fast replay harness is worth little if nobody on the team understands the domain well enough to tell whether its output matches customer reality. Deep domain insight is wasted if the architecture locks out cheap experiments or if the team lacks authority to act on what it found. Clear decision records help only when an engineer (or an agent) hits them at the exact moment a choice is being reopened.
 
-James March's [Exploration and Exploitation in Organizational Learning](https://pubsonline.informs.org/doi/abs/10.1287/orsc.2.1.71) examines how organizations divide effort between developing new possibilities and making use of what they already know. His models show why adaptive processes can favor near-term effectiveness while undermining longer-term adaptation. They do not supply a budget percentage for engineering teams, but they identify the tension behind it.
+When a team wants to invest, the tempting move is to polish whatever it already does well: write more tests when tests are already easy, add more docs when writing is painless. The real return almost always sits at the missing link. Look at the last piece of work that dragged on far longer than it should have, and ask what single gap caused the stall. Was it an unreproducible failure? An unsettled product policy? A boundary that leaked into three other services? A skill held by only one person? Repair that gap before building anything grander.
 
-For the import service, shipping the next requested format is a legitimate use of time saved by the replay environment. Customers may need it now. An investment programme that treats every immediate request as a distraction will soon lose the support of the people it is supposed to serve.
+## Experience turned executable, and when it curdles
 
-The team needs an explicit decision about how much effort to spend improving its future work. A small recurring allowance can make experiments possible without requiring every one to win an argument against the entire product backlog. The allowance should still be reviewed. Otherwise, a sensible protection against short-term pressure becomes an entitlement to build machinery nobody needs.
+There are real, durable proofs that engineering experience can be turned into lasting capability. SQLite's [testing architecture](https://www.sqlite.org/testing.html) (independent harnesses, systematic fault injection, malformed-input fuzzing) is a textbook example of decades of hard-won operational knowledge preserved in working machinery. A small product team does not need SQLite's scale to borrow the principle: turn one recurring customer failure into a solid regression check with its underlying property written down beside it.
 
-The right scale depends on the expected life of the system, the frequency of relevant changes and the consequences of mistakes. A service with years of likely operation and recurring import failures offers a different case from a script that will be discarded after one migration. The script may deserve careful verification while needing almost no durable support infrastructure.
+Just keep the counterexample in view, because this machinery rots faster than people admit.
 
-There is also a timing problem. An organization close to running out of money may be unable to wait for a sound investment to repay itself. Calling the expenditure engineering capital does not make that constraint disappear. The language is useful only if it helps make the tradeoff clearer.
+Suppose a team maintaining a customer file importer builds a local replay harness after a nasty outage. For a year, it pays off handsomely: incidents drop from days to hours, and the team uses the harness to test a simpler parser and delete half a dozen obsolete recovery branches. That is genuine compounding, one investment making the next simplification cheaper.
 
-## Some assets work better together
+Three years later, the replay harness has grown adapters for two retired services, fixtures frozen around a customer format from 2023, and its own flaky CI pipeline. New hires spend more time keeping the simulator happy than reading the production importer. What started as capital turned into an obligation. Calling it an asset out of loyalty to the engineers who built it does not stop it from slowing everyone down.
 
-The record checker is valuable because the team has agreed what a completed import means. The replay environment is valuable because engineers can interpret its output. A short explanation of an old workaround is valuable because someone has a safe way to test whether its justification still holds.
+Every retained tool needs a real current user and a reason to trust its output. Replace heavy harnesses with simpler checks when the system gets cleaner, and retire old fixtures once the behavior they guarded is gone. Compounding is a local stretch of good luck and good discipline inside a domain, never a guaranteed exponential curve.
 
-These relationships matter more than a comprehensive inventory of capital. A team can possess excellent tools and still lack authority to act on their findings. It can understand its domain deeply while lacking any inexpensive way to test a change. Investing in what is already strong may deliver less than repairing the missing connection.
+## Reinvestment always fights the roadmap
 
-In the import example, generating more test files might be easy. The scarce resource could be a product expert who can decide whether rejecting a malformed row is acceptable. Until that decision is made, additional tests may simply preserve conflicting guesses more thoroughly.
+James March's [Exploration and Exploitation in Organizational Learning](https://pubsonline.informs.org/doi/abs/10.1287/orsc.2.1.71) captures the permanent tension underneath all of this: adaptive organizations naturally tilt toward exploiting what already works because the payoff is immediate and visible, while exploration and capability building look expensive right now.
 
-AI assistance could make some supporting work cheaper: constructing a replay fixture, tracing an unfamiliar path or drafting an experiment. That would change which investigations are affordable. It would not determine what counts as a correct import, and it would not remove the cost of checking an agent's proposed answer.
+Shipping the next customer feature is not a distraction; it pays the salaries. An engineering culture that treats product deadlines as an annoyance will lose the business's trust in a quarter. Equally, a team that never protects time to turn today's pain into tomorrow's leverage slides straight into the capability trap, working harder each month to produce less while looking busy on every delivery chart.
 
-The practical starting point is to look at where a recent piece of engineering became unnecessarily difficult. Ask what would have changed that experience, and whether the same improvement would help work that is likely to recur. A small instrument attached to a real decision has a better chance of being used than a general platform built in anticipation of every future need.
+A small, explicit recurring allowance beats heroic rewrites and secret refactoring. Size it to the system's expected life and rate of change: a throwaway migration script deserves careful verification and zero durable infrastructure; a core service you will operate for five years deserves real upkeep. And review the allowance openly, or a sensible buffer against short-term pressure turns into a slush fund for pet frameworks.
 
-## Experience can become executable
+## A working rhythm for one quarter
 
-There are established examples of projects preserving substantial engineering knowledge in their verification machinery. SQLite's account of [how it is tested](https://www.sqlite.org/testing.html) describes independently maintained harnesses, fault testing and checks for malformed inputs, among other techniques. It is a concrete example of experience preserved in working tools, although its costs and benefits cannot be assumed to carry over to a smaller project.
+If you want to test whether any of this holds on your own team, skip the grand transformation and run one tight loop over twelve weeks:
 
-The import team can apply the underlying idea at a smaller scale. A difficult customer file becomes a maintained regression case with an explanation of the relevant property. The team may also preserve the experiment that exposed a mistaken theory, so future investigators know which explanation was ruled out and under what conditions.
+1. *Name one recurring drag.* Pick a class of work your team expects to repeat several times this quarter: tricky imports, permission tweaks, schema rollouts, incident reproductions.
+2. *Build the smallest shareable asset, with a claim and an expiry trigger.* Write down what later decision it is meant to help, cap the upkeep budget, and name what change would make it obsolete.
+3. *Hand it to someone who didn't build it.* Watch them use it on real work. Record the setup confusion and false starts alongside the time saved, and use it as an occasion to teach rather than a black-box verdict.
+4. *Count the full bill and make a call.* At the end of the quarter, weigh the saved effort and better decisions against maintenance and review overhead, using the discipline from [Measuring the capacity for change](./measuring-the-capacity-for-change.md). If it helped, ask what single next improvement it unlocked. If it didn't, shrink it or delete it.
 
-Some knowledge should remain outside executable checks. A test can establish that a file produces a particular result; it cannot by itself explain why a customer needs that result. People also acquire judgment through deciding what to investigate and interpreting unexpected outcomes. Automating the mechanical steps while leaving new engineers only the task of accepting a verdict would consume part of the capability the team hopes to build.
+Nothing in that loop requires a platform team, a new methodology, or faith that AI will make engineering effortless. It requires treating engineering work as having two outputs: the change that ships to customers today, and the footing it leaves for whoever opens the repository next.
 
-This is why [developing engineers](./how-engineers-become-engineers.md) belongs in the same discussion as improving tools. The replay environment can be an instrument for learning if engineers use it to make predictions and inspect discrepancies. Its educational value depends on how work is organized around it.
-
-## The machinery can turn against us
-
-After several years, the replay environment may have become a second implementation of the importer. It may contain elaborate adapters for services that were retired long ago. Its fixtures may encode customer practices that have changed. New engineers may spend more time satisfying the tool than understanding the production system.
-
-The team has accumulated an obligation. Continuing to call it an asset does not improve it.
-
-Every retained instrument needs a plausible user and a reason to trust its current output. If a simpler check now answers the same question, replace it. If the relevant behavior has disappeared, retire the check with enough history to explain the decision. Preserving everything makes earlier investments compete with later work for attention.
-
-There are limits even when the machinery remains useful. The easiest recurring problems may already have been removed. Further improvement may require expensive work for a small benefit. A new business direction can make years of domain expertise less relevant. An organization can become so practiced at its current approach that it struggles to recognize a better one.
-
-Compounding should therefore describe an observed relationship over a period and within a domain. It should not imply indefinite exponential growth. The service can become easier to change in useful ways while the organization faces entirely new difficulties elsewhere.
-
-## Choose one next investment
-
-For a team interested in trying this, I would start with an investigation it already expects to do again. Preserve one useful result in a form another engineer can use. State the later decision it should help, set a limit on maintenance effort and arrange a review after that decision arrives.
-
-In the import service, that might mean keeping the replay environment for the next format change. Ask someone who did not build it to use it. Record the setup work and confusion as well as the time it saves. If it helps, decide what small improvement would make the next investigation more informative. If it does not, repair or discard it before expanding the scheme.
-
-The evaluation will be imperfect. As [Measuring the capacity for change](./measuring-the-capacity-for-change.md) argues, the alternative history is unavailable and later tasks differ. We can still ask whether an investment was used, what decision it changed and what it cost to keep useful.
-
-The original collection asked whether a software system could benefit from its age. This one extends that question to the people and arrangements through which the system is understood and changed. Both depend on decisions made during ordinary work: what to investigate, what to retain, who gets to learn from it and when to let it go.
-
-When the next troublesome file arrives, the new engineer should be able to do something the team could not do before. Perhaps she can reproduce the failure in minutes, establish that no records were lost, or test a repair without asking the original author to reconstruct the system from memory. That is a return worth recognizing. Whether it helps her leave an even better starting point for the next engineer is the claim we still have to earn.
+When the next awkward failure lands six months from now, a newcomer should be able to reproduce it in minutes, see why the old guardrails exist, challenge an assumption that stopped matching the world, and leave the system a little easier to reason about than they found it. That is what engineering that compounds looks like in real life: quiet, falsifiable, and earned one decision at a time.

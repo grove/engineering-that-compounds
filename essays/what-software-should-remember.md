@@ -2,88 +2,105 @@
 
 *Keeping reasons available, and open to revision*
 
-Consider an export job with a twenty-minute delay. The code explains how the delay works. Its tests make sure the job waits. A comment says the delay is necessary because a partner sometimes revises files after uploading them.
+```text
+# Wait 20 minutes before exporting; partner sometimes revises files after upload.
+EXPORT_DELAY_MINUTES = 20
+```
 
-Suppose the partner now provides an explicit signal that an upload is complete. Can the delay go?
+Every mature codebase has a line like this: a constant, a sleep, or a defensive branch paired with a one-sentence comment that looks reasonable enough to leave alone. In a hypothetical export service holding that delay, the code explains *how* it waits and the tests confirm *that* it waits.
 
-The answer depends on things the code does not tell us. Did the partner guarantee that signal, or did somebody merely observe it? Were revisions the only reason for waiting? Does another process rely on the gap? Was twenty minutes measured, negotiated or chosen because it seemed generous?
+Then the partner adds an explicit `upload_complete` webhook. Can the twenty-minute delay go?
 
-A capable agent can trace the implementation and find its callers. It cannot reconstruct evidence that was never recorded. It may produce a persuasive explanation of the delay while getting its original purpose wrong.
+Reading the code will not tell you. Did the partner actually guarantee no edits after that webhook, or did someone merely notice it in a test run? Were late file revisions the only reason for waiting, or does an accounting job downstream lean on the gap? Was twenty minutes measured from real upload logs, written into a contract, or plucked out of thin air because it felt generous?
 
-This is the problem I want engineering memory to address. A future maintainer needs enough of the past to judge what can change now.
+A good coding agent can trace every caller of `EXPORT_DELAY_MINUTES` in seconds. What it cannot recover is evidence that was never written down. Worse, if asked why the delay exists, it will happily synthesize a fluent explanation that sounds authoritative and gets the real reason wrong.
 
-## Reasons that survive the decision
+That is the job of engineering memory: leaving a future maintainer enough of the past to decide what can safely change today.
 
-Michael Nygard's [proposal for architecture decision records](https://www.cognitect.com/blog/2011/11/15/documenting-architecture-decisions) offers a practical starting point. A short record preserves the context, decision, status and consequences. When a decision changes, its predecessor remains available but is marked as superseded. A reader can distinguish an old choice from the one currently in force.
+## Reasons that outlive the choice
 
-That distinction is easily lost in ordinary documentation. A page describing the export job might have been correct when written. Five edits later, it may combine the original explanation with current implementation details and an untested suggestion. Nothing looks obviously false, but the reader cannot tell which statements still have evidence behind them.
+Michael Nygard's [architecture decision records](https://www.cognitect.com/blog/2011/11/15/documenting-architecture-decisions) remain one of the cleanest tools for this: a short note capturing context, decision, status and consequences. When circumstances change, you supersede the old record rather than silently editing history, so a reader can tell what is still in force from what used to be true.
 
-The useful record for the delay would be short. It would explain the failure being avoided, identify the partner behavior on which the decision depended, and link to whatever established that behavior. It would say whether other remedies were considered. It would also say what would justify revisiting the decision: a reliable completion signal, a changed export protocol, or evidence that the wait no longer prevents the problem.
+Ordinary wiki pages fail in the opposite way. A page about the export job starts out accurate. Five edits later, it blends the original rationale with current implementation details and an untested guess from a Slack thread. Nothing looks obviously broken, yet nobody can tell which sentences still have evidence behind them.
 
-Reconsideration conditions matter because they connect memory to future work. Without them, a decision record can become a polite instruction to leave things alone. With them, a maintainer has a reason to investigate a changed circumstance.
+A decision record for the twenty-minute delay does not need to be long. What it needs is the basis for the claim and the conditions that should make someone reopen it:
 
-We cannot anticipate every circumstance that might make a decision obsolete. Even an incomplete account of its dependencies is useful. “This assumes uploads can change after they first become visible” tells us more than “required for reliability.”
+```text
+Decision: Wait 20 minutes after upload visibility before exporting.
+Status: Active (adopted 2024-03; linked from export/scheduler.py)
+
+Why:
+- Observed: In 2024-02 logs (incident #412), 14 of 3,200 partner uploads
+  were overwritten within 11 minutes of first appearing in the bucket.
+- Partner statement: Integration lead confirmed via email (2024-02-19)
+  that their uploader writes a placeholder before streaming the full file.
+- Choice: 20 minutes was chosen with margin; no SLA requires faster export.
+
+Not established:
+- Whether any downstream consumer relies on the 20-minute gap.
+
+Revisit when:
+- The partner introduces an atomic upload or explicit completion signal.
+- Export latency becomes a customer commitment (< 20 minutes).
+- Overwrites appear after 20 minutes in production logs.
+```
+
+That last section does the real work. Without reconsideration triggers, a decision record turns into a polite monument telling future engineers not to touch anything. With them, the new webhook immediately tells a maintainer that the original assumption has broken and deserves a fresh look.
+
+You will never anticipate every future shift, and you do not have to. Even a plain sentence ("assumes uploads can be overwritten after they first appear") gives the next person far more traction than "required for reliability."
 
 ## An observation is not a promise
 
-Imagine finding three statements in the export documentation. The partner says a completed upload will never be revised. A month's logs contain no revisions after completion. The current implementation ignores any revisions it receives.
+Look at three statements that might turn up in notes about the export pipeline:
 
-These statements concern the same behavior, but they support different conclusions. The first describes an external promise whose precise scope we should check. The second describes an observation within a limited period. The third describes our own choice. Combining them into “completed uploads never change” discards distinctions a future engineer may need.
+- The partner's API contract promises a completed upload will never be revised.
+- Last month's logs show zero revisions after completion.
+- Our importer ignores any revision arriving after the first read.
 
-An agent asked to summarize the documentation could make exactly that compression. So could a busy human. A smooth explanation is often easier to read than a pile of qualified claims, which makes the loss difficult to notice.
+All three describe the same surface behavior, yet they license completely different decisions. The first is an external obligation whose scope you can verify. The second is a limited sample. The third is our own design choice. Collapsing them into *"completed uploads never change"* destroys the exact distinction a future engineer needs when deciding whether to drop the delay.
 
-The [W3C's work on provenance](https://www.w3.org/TR/prov-overview/) provides a useful vocabulary here. It concerns the entities, activities and people involved in producing information, so that readers can assess where a claim came from. A small engineering project need not adopt the full machinery. It can retain the underlying discipline: link a conclusion to the evidence and the process that produced it.
+Busy humans perform that compression all the time. LLMs perform it automatically; smoothing messy, qualified notes into clean prose is what they are tuned to do. The cleaner the summary reads, the harder it becomes to spot what was dropped.
 
-For an experiment, that may mean a commit, a workload and the environment in which it ran. For a business rule, it may mean the person responsible for the process and the document that describes it. For an inference, it means saying that it is an inference and identifying what remains uncertain.
+The [W3C provenance model](https://www.w3.org/TR/prov-overview/) puts a formal vocabulary on this by tracking the entities, activities and agents behind a claim. You do not need the XML or RDF machinery on an application team; you only need the habit of keeping a conclusion tied to how it was produced. For a benchmark, point to the commit, workload and hardware. For a business rule, name the owner and policy document. For an inference, label it as an inference.
 
-None of this makes a claim true. It makes the claim inspectable. A confident statement without an origin is harder to challenge than an imperfect observation whose limits are visible.
+Provenance does not make a claim true. It makes the claim inspectable, and a rough observation with visible limits is far safer to work with than a confident assertion with no visible origin.
 
-## Put knowledge where a question arises
+## Keep memory near the question
 
-A well-written explanation has little value if nobody encounters it. Keeping every decision in a central repository makes storage orderly, but does not ensure that an engineer working on the export job will know which record matters.
+A thoughtful decision record buried in a separate portal might as well not exist. Engineers look for reasons at the point where they are about to change something.
 
-The connection should work in both directions. The delay can point to its decision record. The record can identify the code and checks through which the decision is enforced. A test of the partner protocol can link to the assumption it examines. When the test fails, the maintainer can discover why the behavior mattered before deciding how to repair it.
+Wire the link in both directions. The constant `EXPORT_DELAY_MINUTES` points to the decision record; the record names the scheduler and the tests that enforce it. When a protocol test fails, it links straight to the assumption it checks, so the maintainer learns *why* the behavior mattered before deciding whether to fix the code or update the test.
 
-This is more useful than copying the entire explanation into every file. Copies drift independently. A small number of well-placed references can preserve the path to the reasoning while leaving one place to update it.
+Short cross-references beat copying explanations into five files, because copies drift on their own schedules.
 
-Some knowledge belongs in executable form. If repeated processing of the same completed upload must produce the same result, a test can exercise that requirement across repeated deliveries and worker restarts. The test is easier to trust when its expected result comes from the contract we intend to provide, rather than from the implementation it tests.
+Put whatever can be checked mechanically into executable tests, such as verifying that duplicate deliveries of a completed upload remain idempotent across worker restarts. Just make sure the test checks the contract we intend to honor rather than mirroring whatever the current implementation happens to do.
 
-Other knowledge resists that treatment. A test cannot decide whether the partner's promise is commercially credible. Nor can it tell us whether delaying every export is an acceptable inconvenience to customers. Turning a judgment into a constant does not remove the judgment. It makes the reason for choosing the constant worth keeping.
+Plenty of crucial knowledge will still stay outside code. No test suite can tell you whether a partner's commercial promise is credible, or whether a twenty-minute delay annoys customers. Turning a judgment into a constant does not eliminate the judgment; it only hides it unless you keep the reasoning nearby. The same discipline applies to [abandoned experiments](./the-value-of-forgotten-alternatives.md): keep the path from the question to the evidence that settled it.
 
-The [value of an abandoned experiment](./the-value-of-forgotten-alternatives.md) follows the same rule. Preserve the path from a question to the evidence that changed our answer. Keeping all the experimental code is optional; keeping a useful way to inspect the conclusion may be essential.
+## Memory goes stale, and silent rewrites make it worse
 
-## Memory needs maintenance
+Automated checks can verify the easy parts of memory: that a linked file still exists, a reproduction still runs, or a documented schema still matches production.
 
-It would be convenient if we could attach an expiry date to every claim and have an agent renew it automatically. Some checks are suitable for that. A command can confirm that a linked file still exists, a reproduction still runs, or a stated schema still matches the deployed version.
+The harder claims do not become current just because a calendar reminder fired and someone clicked "reviewed." An agent comparing the decision record against the code can verify that both still match while completely missing that the partner changed its upload process three months ago.
 
-The harder claims do not become current merely because somebody has recently read them. A record can have a fresh review date and an obsolete premise. An agent that compares the record with the code may certify both even though the real change happened in the partner's operating procedure.
+The right time to revisit a record is when something relevant shifts: a completion signal arrives, a new downstream team starts reading the files, or a customer asks for five-minute latency.
 
-Review is most useful when something relevant changes. The export protocol gains a completion signal. A different team starts consuming the same files. A customer needs results within five minutes. Each event gives us a concrete reason to reopen the delay decision and check its dependencies.
+When fresh evidence contradicts an old record, leave the friction visible. Rewriting the earlier explanation to match today's understanding makes the docs look tidier while erasing the trail that something unexpected happened. Mark the older record superseded, link the incident or change that challenged it, and keep the current summary brief.
 
-There will still be disagreements. One record may say revisions are impossible; an incident may contain an example of one. A maintenance process should surface that conflict. Quietly rewriting the old explanation to match the latest account makes the repository easier to read while destroying the clue that something needs investigation.
+This is also where automated memory maintenance hits a wall. An agent can flag that a claim looks contradicted or stale. Deciding whether an external partner guarantee still holds usually requires a human with authority, and sometimes a phone call outside engineering.
 
-For consequential knowledge, keep the earlier claim, mark its status and point to the evidence that challenged it. The current explanation can remain concise. Its history should be available to anyone who needs to understand the change.
+## The discipline of forgetting
 
-This is also a limit on automated memory updates. An agent can propose that a claim is contradicted or likely obsolete. Deciding whether an external guarantee still applies may require someone with authority over the relationship, and sometimes a conversation outside the engineering team.
+Logging every prompt, scratch command and half-baked hypothesis does not create institutional memory. It creates sediment. Future maintainers drown in the story of how someone happened to spend Tuesday afternoon when all they needed was the question, the decisive evidence, the conclusion and its boundary.
 
-## The cost of remembering everything
+Raw production traces and huge datasets are often too sensitive or expensive to keep anyway. Reduce them to a minimal synthetic reproduction, provided someone verifies that the reduction didn't strip out the exact quirk causing the bug.
 
-Recording every prompt, tentative explanation and failed command would preserve plenty of history. It would also bury the few things a future maintainer needs under the details of how somebody happened to work.
+Separate history from active guidance. Archived decisions belong out of the default search path, clearly flagged as superseded, for both humans and coding agents reading the repo. Deleting duplicate explanations, replacing unsupported rules with explicit open questions, and retiring dead records are all forms of maintenance.
 
-Most intermediate material deserves a short life. The useful residue of an investigation is usually much smaller: the question, the evidence that mattered, the conclusion and its limits. If a particular failed command revealed an important environmental dependency, keep that fact. There is rarely a need to keep every unsuccessful invocation around it.
+## A simple test
 
-Some evidence is expensive or inappropriate to retain in its original form. Production traces may contain customer information. An investigation may depend on a large dataset that cannot be kept indefinitely. A small synthetic reproduction can preserve the relevant behavior, provided its author checks that the reduction has not removed the feature responsible for the result.
+You do not need a knowledge platform to find out whether your system remembers the right things. Hand the export job to an engineer who has never touched it and ask one question: *can we remove the twenty-minute delay?*
 
-We also need to distinguish historical preservation from current guidance. An obsolete decision can remain in an archive without appearing in every answer about how to change the export job. Search and retrieval should show its status. Agents consuming repository knowledge need that context as much as people do.
+Watch where they go. If they find the original failure, see the difference between the partner's email and a formal guarantee, and spot what needs checking before the webhook can replace the timer, the memory is doing its job. If they can only read back what the code currently does, or worse, leave the delay untouched because three wiki pages repeat the same unverified claim, the memory is getting in the way.
 
-Forgetting can be a useful act of maintenance. A duplicated explanation can be deleted. An unsupported rule can be replaced with an explicit question. A record that no longer affects any current decision may need only a brief historical note. These choices reduce the chance that old material will be mistaken for a present obligation.
-
-## A test of the memory
-
-A practical review requires no elaborate knowledge platform. Give the export job to an engineer who did not build it and ask whether the twenty-minute delay can be removed. Watch what they need to discover.
-
-If they can identify the original problem, find the relevant promise and run a check that bears on it, the project has preserved something useful. If they can only explain the current code, the important gap remains. If they accept the delay because three documents repeat the same unsupported claim, the memory is actively misleading them.
-
-The engineer does not have to agree with the original decision. They should be able to understand why it was reasonable, identify what has changed, and make a new decision without reconstructing the entire investigation.
-
-That is what I would like an old system to remember. Enough to help its next maintainer ask a better question, and enough uncertainty to let them change the answer.
+Good memory does not tell the next maintainer what to conclude. It gives them enough ground to ask a better question, and enough honesty about past uncertainty to change the answer.
