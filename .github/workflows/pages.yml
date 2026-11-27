@@ -22,7 +22,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Build site
-        run: python3 site/build.py
+        run: python3 site/build.py --check-text
       - name: Save reviewable site
         if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
