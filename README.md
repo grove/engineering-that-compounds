@@ -10,6 +10,8 @@ The word *compounds* makes a claim that needs testing. More documentation, tests
 
 For something to try on your next ticket, start with [Engineering that compounds](./essays/engineering-that-compounds.md). It follows a small integration change through planning, review, retaining a useful lesson and handing the work to someone who was not there. The companion [Patterns of compounding engineering](https://grove.github.io/patterns-of-compounding-engineering/) supplies the field guide: concrete techniques, runnable examples and ways to check whether the effort helped.
 
+Want to test the argument? The [second-capability pilot](./research/second-capability.md) is a proposed comparison of the cost and quality of building a new verification capability after deliberately retaining a reusable scenario or following ordinary development practice. It includes a stopping rule and a reporting template; no study results are claimed.
+
 ## Reading order
 
 Eleven essays in four parts. Read them in order, or start with the question closest to your work. Audio editions are temporarily not included in the published site.
