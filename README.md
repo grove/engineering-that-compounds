@@ -6,7 +6,7 @@ Two teams can deliver the same feature and finish with quite different prospects
 
 This collection follows [Software that improves with age](https://grove.github.io/software-that-improves-with-age/). It looks beyond the condition of a codebase to the knowledge, judgment and habits that make engineering possible. If AI reduces the cost of some implementation work, where should we spend the time and attention it frees? And how would we tell whether that investment had helped?
 
-Our distant aim is to become ten times as effective as a software team with AI, within sustainable working hours and with at least the same care for the people using the software. [What would ten times look like?](./essays/what-would-ten-times-look-like.md) uses that ambition to ask where useful work gets stuck and which investment might help. Tenfold improvement remains a hypothesis; the next change gives us something concrete to investigate.
+Our distant aim is to become ten times as effective as a software team with AI, within sustainable working hours and with at least the same care for the people using the software. [What would ten times look like?](./essays/what-would-ten-times-look-like.md) uses the Theory of Constraints to ask what limits worthwhile outcomes, how to make better use of existing capacity, and which investment might help next. Tenfold improvement remains a hypothesis; the next change gives us something concrete to investigate.
 
 The word *compounds* makes a claim that needs testing. More documentation, tests or automation can just as easily create more upkeep. These essays ask when earlier work makes later work more effective, what gets lost along the way, and when an investment should be abandoned.
 
