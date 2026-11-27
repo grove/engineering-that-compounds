@@ -2,7 +2,7 @@
 
 *Keeping domain knowledge in contact with its subject*
 
-Picture an equipment-hire depot (a made-up setting, though anyone who has built operations software has seen its twin). Next to the booking terminal sits a laminated clipboard. On it is a handwritten list of machines currently parked in the yard that staff must not promise to a customer yet.
+Suppose an equipment-hire depot keeps a laminated clipboard next to its booking terminal. On it is a handwritten list of machines currently parked in the yard that staff must not promise to a customer yet.
 
 Nothing in the booking software is broken. Its tests check that equipment flips back to *available* the second a hire closes. The service is fast, clean, and well tested. It just still assumes the world from three years ago, when customers returned gear to a staffed counter and someone looked it over before closing the hire.
 
@@ -12,7 +12,7 @@ Code can get cleaner and better tested every quarter while losing touch with the
 
 ## The unstated premise under green tests
 
-Michael Jackson made this point cleanly in [The World and the Machine](https://doi.org/10.1145/225014.225041): a program's purpose lives out in the domain, never solely inside the machine. Together with Pamela Zave in [Four Dark Corners of Requirements Engineering](https://doi.org/10.1145/237432.237434), he showed that a specification only satisfies its requirement when its assumptions about the environment hold. Break the environmental assumption, and a bug-free implementation quietly fails.
+Michael Jackson made this point cleanly in [The World and the Machine](https://doi.org/10.1145/225014.225041): a program's purpose lives out in the domain, never solely inside the machine. Together with Pamela Zave in [Four Dark Corners of Requirements Engineering](https://doi.org/10.1145/237432.237434), he showed that a specification only satisfies its requirement when its assumptions about the environment hold. Break the environmental assumption, and a bug-free implementation fails without throwing an error.
 
 Here, the hidden assumption was simple: *closing a hire means someone verified the machine is ready for the next customer.* Unattended drop-offs snapped that link without touching a line of code.
 
@@ -24,13 +24,13 @@ A clipboard or shadow spreadsheet should make any engineer curious. Not every ma
 
 Before touching the schema, figure out what the list actually does. Who writes on it? What puts a machine on it, and what takes it off? What breaks tomorrow if you throw it away?
 
-Watching staff work through Monday's returns quickly shows that "inspection" isn't a boolean. A pressure washer takes a two-minute visual look. A generator might wait on a missing cable or the one technician certified to test it. Staff will happily take a provisional booking on one and refuse it on the other. Replacing the clipboard with a single `inspected` checkbox before spotting that split can make everyone's week worse, trading flexible human judgment for tidy, useless precision.
+Watching staff work through Monday's returns quickly shows that "inspection" isn't a boolean. A pressure washer takes a two-minute visual look. A generator might wait on a missing cable or the one technician certified to test it. Staff will happily take a provisional booking on one and refuse it on the other. Replacing the clipboard with a single `inspected` checkbox before spotting that split can make everyone's week worse, trading flexible human judgment for rigid, useless precision.
 
 ## Software bends the world it models
 
 Domain drift doesn't just happen *to* software from outside. Software reshapes the behavior of the people around it.
 
-Once depot staff realize the booking app will cheerfully promise an uninspected generator to an online customer, they start taking tricky hires by phone and keying them in after the fact. Now the database only sees the clean cases. A dashboard reporting that 98% of bookings follow the intended flow is mathematically accurate and completely blind to the mess it caused.
+Once depot staff realize the booking app will promise an uninspected generator to an online customer, they start taking tricky hires by phone and keying them in after the fact. Now the database only sees the clean cases. A dashboard reporting that 98% of bookings follow the intended flow is mathematically accurate and completely blind to the mess it caused.
 
 Customers adapt too. Tighten online availability rules and regular contractors start over-booking "just in case" and canceling late, warping the utilization curve the pricing engine was tuned on. Whenever software enforces categories or incentives, people route around its sharp edges. Those detours become part of the real domain, even when telemetry never sees them.
 
@@ -40,7 +40,7 @@ One morning at a depot beats guessing from headquarters, though a single visit h
 
 Cross-check stories against real records: follow ten hires from booking to return, pull three disputed bookings, and ask staff why the database disagrees with what happened in the yard. When two depots handle the same step differently, pay attention. You've usually found either a real local constraint or a company policy nobody settled.
 
-Keep the question tight enough to finish. "Understand depot operations" turns into a month-long safari. "Find out what staff check before releasing gear returned after hours" takes two days. Once the question is clear, fast prototyping earns its keep: have an agent mock up two small workflows (say, tentative reservations awaiting confirmation versus a holding buffer) and walk depot staff through real awkward bookings from last week, then trial the winner at one depot before rolling it out everywhere.
+Keep the question tight enough to finish. "Understand depot operations" turns into a month-long safari. "Find out what staff check before releasing gear returned after hours" takes two days. Once the question is clear, fast prototyping helps: have an agent mock up two small workflows (say, tentative reservations awaiting confirmation versus a holding buffer) and walk depot staff through real awkward bookings from last week, then trial the winner at one depot before rolling it out everywhere.
 
 ## Facts, policies, and competing interests
 
@@ -50,7 +50,7 @@ Half the tangles in mature software come from blurring what *happens*, what the 
 
 The outside world isn't always one coherent truth waiting for better fieldwork. Depot managers want fewer angry contractors standing at the counter at 7 a.m. Online sales wants higher booking conversion and fewer unavailable listings. Finance wants higher fleet utilization and lower damage write-offs. Those three groups are pulling the same state machine in different directions. Domain modeling frequently exposes political disagreements that software can't solve on its own. At best, it forces them into the open so someone with authority actually decides who eats the cost when a promised machine turns out to be broken.
 
-Coding agents make the old failure mode sharper. Point an agent at a year of override logs or legacy unit tests to infer requirements, and yesterday's makeshift coping mechanism quietly hardens into formal specification. Attach provenance and ownership to consequential rules, as [What software should remember](./what-software-should-remember.md) suggests: separate what was observed from what was decided, name who owns the policy, and leave unresolved disagreements visible instead of hiding them under vague status names.
+Coding agents sharpen that old failure mode. Point an agent at a year of override logs or legacy unit tests to infer requirements, and yesterday's makeshift coping mechanism hardens into formal specification. Attach provenance and ownership to consequential rules, as [What software should remember](./what-software-should-remember.md) suggests: separate what was observed from what was decided, name who owns the policy, and leave unresolved disagreements visible instead of hiding them under vague status names.
 
 ## Go back out to the yard
 
