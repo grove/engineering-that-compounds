@@ -30,19 +30,27 @@ Forcing every team onto the orders team's exact migration script ruins the exerc
 
 Count the effort of finding a receiving team too. Did the agent find a team that needed the lesson, or send ten irrelevant matches for someone to dismiss? Keep the rejected matches and adaptation costs visible when deciding whether to repeat the search. [Compounding learning](./compounding-learning.md) treats this way of finding and testing lessons as an investment with its own upkeep. A useful migration check does not automatically justify the machinery used to distribute it.
 
+## Prepare the receiving team
+
+Suppose billing can run the check but cannot explain its output. Orders sees a successful handoff; billing sees another tool that needs a specialist whenever it turns red. Give a billing engineer time to change the example, predict the lock behavior and investigate an unfamiliar result. The missing investment may be an afternoon of joint work, a smaller example or access to the right database metrics.
+
+Cohen and Levinthal's [work on absorptive capacity](https://doi.org/10.2307/2393553) explains why prior knowledge matters when an organization encounters something new. Recognizing its value, understanding it and putting it to use are themselves capabilities. A recipient with the relevant background can learn more from the same demonstration.
+
+Ask what the receiving team must know and be allowed to do before it can benefit. Count the time to its first independent use, including help from the originating team. Then check a later use. An easy installation followed by permanent dependence is an unfinished transfer.
+
 ## Collective understanding without individual mastery
 
 The earlier essays test understanding on a single service: can someone who didn't write it still reason about it? That test breaks down across a fifty-service platform, because nobody (not the chief architect and not the founders) holds a live mental model of the entire estate.
 
-Organizations cannot solve that by asking everyone to read more docs. Trustworthy collective understanding has to be distributed: bounded local ownership where a small team truly knows its own slice, executable contract checks guarding the seams between teams, and named owners for cross-cutting assumptions that code cannot test on its own. Coding agents change the mix by mapping cross-repo dependencies faster than humans ever could, yet someone still has to hold authority over each seam and answer when an assumption between two services fails.
+Organizations cannot solve that by asking everyone to read more docs. Trustworthy collective understanding has to be distributed: bounded local ownership where a small team knows its own slice, executable contract checks guarding the seams between teams, and named owners for cross-cutting assumptions that code cannot test on its own. Coding agents can help trace dependencies across repositories. Someone still has to check the resulting map and answer when an assumption between two services fails.
 
-This is also why reorganizations and layoffs destroy engineering capital so abruptly. When ownership seams get redrawn overnight or a veteran group gets disbanded, every repository, test suite, and postmortem stays on disk while the distributed ownership that kept those seams legible vanishes in a week.
+This helps explain what can be lost during a reorganization. The repositories, tests and postmortems may survive while the people who knew how the services fit together are reassigned or leave. A transfer plan needs to account for those working relationships as well as ownership of the files.
 
 ## The capability trap
 
 Even teams that know how to share lessons routinely fail to do it.
 
-Nelson Repenning and John Sterman's work on [capability traps](https://doi.org/10.2307/3094806) (drawn from field studies in manufacturing and product development, though the dynamic hits software teams with equal force) explains why. When deadlines tighten, pushing harder on immediate output pays off *this week*, while fixing tooling or spreading a lesson pays off *later* and slows delivery right now. Under pressure, teams borrow from improvement to hit the release. Capability dips, fires multiply, delivery slows further, and pressure to skip improvement grows stronger.
+Nelson Repenning and John Sterman's work on [capability traps](https://doi.org/10.2307/3094806), drawn from manufacturing and product development, offers an explanation worth testing in software teams. When deadlines tighten, pushing harder on immediate output pays off *this week*, while fixing tooling or spreading a lesson pays off *later* and slows delivery right now. Under pressure, teams borrow from improvement to hit the release. Capability can deteriorate, leaving more rework and less time to improve.
 
 Managers routinely misread the symptoms. Seeing missed dates and repeat outages, they assume people aren't pushing hard enough instead of noticing that the organization starved its own capacity to work cleanly. That misdiagnosis locks the trap shut: more urgency, less room to share lessons, steeper slide.
 
@@ -82,7 +90,19 @@ Sometimes that is the right call. It is also the day you sign a maintenance leas
 
 Twilio Segment's [account of retiring its per-destination microservices](https://www.twilio.com/en-us/blog/developers/best-practices/goodbye-microservices) shows how quickly well-meant shared architecture can invert. Early on, splitting event-forwarding destinations into separate services and repositories solved head-of-line blocking, and shared libraries made adding new destinations quick. Once the fleet grew past 140 services, updating those shared libraries meant testing and deploying dozens of repos at once. Under time pressure, engineers updated only the service in front of them. Library versions drifted apart across the fleet, operational load scaled linearly with every new destination, and three full-time engineers spent most of their time keeping services alive and answering load-spike pages. In the end, the team collapsed those 140+ services and 120 dependencies back into a single service and monorepo.
 
-Moving expertise into shared infrastructure never makes upkeep disappear; it concentrates it and creates a coordination bottleneck. Before building a gatekeeper service, see how far a lighter asset goes: a small runnable check teams can copy, three direct questions in a PR template, or a ten-minute live demo of how lock queues stall. Build the shared service only after watching three real teams diverge, and only if the payoff still clears the bar once support and upgrades are counted.
+Moving expertise into shared infrastructure concentrates its upkeep and can create a coordination bottleneck. Before building a gatekeeper service, see how far a lighter asset goes: a small runnable check teams can copy, three direct questions in a PR template, or a ten-minute live demo of how lock queues stall. Look for recurring needs across real services before committing to a shared one, and count support and upgrades in the decision.
+
+The distinction between enabling teams and platforms in [Team Topologies](https://teamtopologies.com/key-concepts-content/team-interaction-modeling-with-team-topologies) helps here. An enabling team works with another team to develop a missing capability; a platform provides a capability as a service. In this example, learning to reason about locks might need temporary help. Running a maintained migration environment might justify a platform. A check peculiar to one ledger can stay local.
+
+Decide which arrangement the consumer needs. An enabling engagement should leave billing able to handle the next migration. A platform should let billing complete supported work without arranging a meeting with its maintainers. Adoption counts miss both tests. Watch the work people can finish and the help they still need.
+
+## Keep the ability to change course
+
+The shared migration system may eventually be excellent at a database the organization is leaving. Improving it further can then delay the more useful work: learning how to move safely to the replacement.
+
+Teece, Pisano and Shuen's [dynamic capabilities framework](https://sms.onlinelibrary.wiley.com/doi/abs/10.1002/%28SICI%291097-0266%28199708%2918%3A7%3C509%3A%3AAID-SMJ882%3E3.0.CO%3B2-Z) asks how firms develop and reconfigure capabilities as conditions change. For the migration team, the practical question is which parts of its investment travel: representative workloads, reviewed business invariants, rollback experience and people who know how to design a useful rehearsal. Database-specific checks may need replacing.
+
+Preserve enough time and understanding to investigate that change. Try a bounded rehearsal when a key expert or usual tool is unavailable. Find out which decisions the team can still make and which require help. Spare capacity and overlapping expertise have a cost; name the unexpected work they are intended to support. [Learning from things that go right](./learning-from-things-that-go-right.md) examines how successful adaptations reveal what is worth preserving.
 
 ## Keep the dissent alive
 

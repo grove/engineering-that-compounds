@@ -20,6 +20,8 @@ The distant ambition therefore needs a more modest, concrete question nearby: wh
 
 AI might help investigate an unfamiliar path, prepare competing implementations or build a missing diagnostic tool. Whether that help makes the result cheaper depends on the work needed to direct it, check it and keep the resulting software useful. That is something to find out on an actual change.
 
+Progress can also mean a different kind of work becomes feasible. A team that can now investigate replacing its billing provider has expanded its capability even if its feature count stays unchanged. Keep the comparison honest: name the budget, time, quality and risk conditions. [What becomes possible?](./what-becomes-possible.md) develops this idea of a capability frontier and gives a way to revisit work previously ruled out as too difficult.
+
 ## Follow the constraint through the work
 
 The [Theory of Constraints](https://www.goldrattresearchlabs.com/introduction-to-toc/), developed by Eliyahu Goldratt, gives us a way to choose what to improve. A constraint is the condition that limits a system's ability to achieve its goal. It is not necessarily the slowest task, the busiest person or the part engineers find most irritating. It only makes sense relative to a result we want and the system responsible for it.
@@ -49,6 +51,8 @@ There is no prescribed order here. Another team might already have excellent tes
 Nor does every interruption need removing. An engineer encountering the billing system for the first time needs to understand why a repeated event is possible and predict what the handler will do. That investigation develops judgment the team will need during a failure. The [ability to delegate](./the-ability-to-delegate.md) includes knowing which work benefits from supervision.
 
 After several improvements, the team may be able to prepare and verify billing changes readily, yet still be unsure which changes customers need. The next useful investment could be a conversation with support or a way to examine disputed invoices. The constraint has moved beyond the code. The tenfold ambition should give us permission to follow it there.
+
+It should also give us a reason to question the work itself. The fastest way to process a weekly reconciliation may be less useful than discovering why it is still necessary. [Getting better at the wrong thing](./getting-better-at-the-wrong-thing.md) examines how to balance improving familiar work, exploring alternatives and preserving capabilities needed when circumstances change. The current constraint guides an investment; it should not determine every future question.
 
 ## Make one improvement help build another
 

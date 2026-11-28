@@ -42,6 +42,16 @@ Cross-check stories against real records: follow ten hires from booking to retur
 
 Keep the question tight enough to finish. "Understand depot operations" turns into a month-long safari. "Find out what staff check before releasing gear returned after hours" takes two days. Once the question is clear, fast prototyping helps: have an agent mock up two small workflows (say, tentative reservations awaiting confirmation versus a holding buffer) and walk depot staff through real awkward bookings from last week, then trial the winner at one depot before rolling it out everywhere.
 
+## Keep cases that remain useful
+
+After the depot visit, retain a few reviewed cases: an after-hours return with a missing cable, a provisional booking that staff could honor, and a promised machine that was not ready. For each, record what happened, where the account came from, what remains uncertain and which decision it informed. Remove customer details the next use does not need. Keep the business rule beside the case, with the person who can change it.
+
+The same cases can help a designer compare reservation flows, an engineer test the difference between *returned* and *ready*, and a support colleague explain a disputed booking. They also give an AI assistant something concrete to work from. Use the [Reusable domain scenarios](https://grove.github.io/patterns-of-compounding-engineering/patterns/reusable-domain-scenarios.html) pattern to try this on one consequential rule.
+
+Teresa Torres's [continuous discovery approach](https://www.producttalk.org/adopting-continuous-product-discovery/) keeps the team building the product in regular contact with customers while it pursues a specific outcome. Saved cases should make those conversations more useful. Ask whether last month's awkward return still represents the work, and what it leaves out.
+
+An agent can suggest variations worth investigating. Its invented customer, complaint or booking remains a hypothesis. Label generated examples separately from observed cases, and check consequential assumptions with real people and records. Otherwise, a collection that began with fieldwork can quietly become evidence for its own inventions.
+
 ## Facts, policies, and competing interests
 
 Half the tangles in mature software come from blurring what *happens*, what the business *wants*, and who *wins* when two groups disagree.

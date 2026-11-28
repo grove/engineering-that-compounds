@@ -2,11 +2,11 @@
 
 *What the work leaves behind*
 
-Two famous software projects illustrate why "good engineering investment" and "compounding" are not the same thing.
+Two software projects illustrate why a useful engineering investment and a compounding effect are different claims.
 
-SQLite's [testing architecture](https://www.sqlite.org/testing.html) pairs roughly 156 thousand lines of core C with hundreds of times as much test code, four independent harnesses, fault injection for out-of-memory and I/O errors, assembly-level mutation checks, and 100% MC/DC branch coverage in TH3. The SQLite authors are candid about what that bought them: a wave of features and speedups over recent years would have been too risky without that safety net. They are just as candid that 100% MC/DC is laborious and probably uneconomical for an ordinary application. Mostly, SQLite shows an extraordinary *recurring return*, a standing defense that pays off on every release of a library meant to live for decades.
+SQLite's [testing architecture](https://www.sqlite.org/testing.html) includes independent harnesses, fault injection and coverage checks. Its authors describe how those tests support changes that would otherwise be too risky. That is evidence of a recurring benefit from a substantial verification investment. It does not, by itself, establish that successive verification capabilities became cheaper to develop.
 
-FoundationDB's [deterministic simulation](https://apple.github.io/foundationdb/testing.html) gets closer to genuine *compounding*. By building deterministic simulation straight into their C++ coroutine runtime (`Flow`), the team could run an entire multi-node cluster (disk stalls, full drives, dropped packets, rebooting machines, adversarial network delays) inside one process, faster than real time and reproducible from a single seed. That bet did more than catch version-1 bugs. It lowered the cost of building *later* verification machinery: the same workload definitions carried directly into their live-cluster performance suite (`Circus`), and deterministic seeds made harder fault-injection and recovery tools feasible in the first place. As the team put it, they likely could not have built FoundationDB without it.
+FoundationDB's [testing documentation](https://apple.github.io/foundationdb/testing.html) describes a deterministic simulation integrated with its `Flow` runtime. The team can reproduce failures across a simulated cluster, and workload specifications also run in its live performance-testing environment, `Circus`. That shared infrastructure is a plausible place to investigate compounding: did it make later verification capabilities easier to develop? The documentation shows reuse and explains why the team values the simulator. It does not provide a comparative measure of that later development cost.
 
 Most teams do not work on SQLite or FoundationDB, of course. The same fork shows up in ordinary product code every week.
 
@@ -16,11 +16,19 @@ That single afternoon of debugging can leave the team in very different places. 
 
 Every version ships the same fix. Six months later, when an awkward billing request arrives, those teams are standing on completely different ground.
 
-I call whatever leaves a team on firmer ground for future work *engineering capital*. The phrase is deliberately broader than *technical debt*. Technical debt looks backward at the drag and liabilities you owe past shortcuts. Engineering capital also looks forward at the capabilities and options today's work creates, whether they live in runnable tools, written rationale, module seams, or the judgment in people's heads. You rarely notice it on the day you build it. You notice it half a year later, when a scary change takes an afternoon instead of derailing a sprint.
+I call the resources a team develops or maintains for future engineering work *engineering capital*. They include runnable tools, recorded reasoning, module boundaries and the judgment in people's heads. The phrase gives us a way to discuss investments as well as the liabilities usually described as technical debt. An investment may be useful, premature or mistaken; its value becomes clearer when later work needs it and somebody has to pay for its upkeep.
+
+## Capital supports a capability
+
+Capital is what the team can draw on. A capability is something it can reliably accomplish under stated conditions. The reproduction script is capital. Being able to investigate a closing-period failure without its original author is a capability.
+
+That ability needs more than the script. Someone must understand its result, have access to the right environment and be able to resolve a disputed expectation. A team can possess all the right files and still be unable to act. Describe an investment in terms of the work it should make possible, then ask someone to try it.
+
+Capabilities can also be inputs to later capabilities. Investigating a closing-period failure might teach the team how to build a recovery rehearsal. The [foundations](https://grove.github.io/compounding-engineering/foundations.html) put this connection at the centre of the framework: create value while developing, combining and renewing the abilities future work will need.
 
 ## Four shapes of capital, who owns them, and how they wear out
 
-Most engineers can tell within an hour whether a codebase lets you move with confidence or feels like defusing a bomb. What gets muddied is that the assets behind that confidence have different owners, different shelf lives, and different ways of breaking.
+The assets behind that ability have different owners, different useful lives and different ways of breaking.
 
 Start with *human judgment*. Peter Naur gave the classic account in [Programming as Theory Building](https://doi.org/10.1016/0165-6074(85)90032-8): building software forms a live theory in the programmers' minds, a feel for how the code maps to the world and what a proposed change will disturb. Source code never holds the whole theory, which is why rotating out maintainers after launch hollows out a system over time. Judgment is the most adaptable asset a team has, and the least owned by the company: it belongs to the engineer, walks out the door when they leave, and fades when they stop touching the system.
 
@@ -30,7 +38,7 @@ Start with *human judgment*. Peter Naur gave the classic account in [Programming
 
 *Structural and organizational boundaries* (clean module seams, stable contracts, clear team ownership) matter because real systems outgrow any single person's head. Nobody holds Naur's full theory for a fifty-service platform; good boundaries let you change invoice formatting without becoming an expert in ledger concurrency. Their failure mode is rigidity and cost-shifting: a seam drawn around yesterday's product split turns into ceremony once the business shifts, and a boundary that makes life easy for one group often dumps coordination work onto its neighbors.
 
-These four shapes do not just fail through slow neglect. They can also be destroyed overnight. A reorganization, a round of layoffs, or an abrupt platform migration often leaves every repository and wiki page untouched while wiping out the tacit understanding and team seams that made them usable. Treating all four as interchangeable, as if a wiki page could replace judgment or a test suite could repair a broken team boundary, misses what got lost.
+These four shapes can also be damaged abruptly. A reorganization or platform migration may leave every repository and wiki page untouched while separating the people whose shared understanding made them usable. Treating the forms as interchangeable, as if a wiki page could replace judgment or a test suite could repair a broken team boundary, misses what got lost.
 
 ## Investments can still lose money
 
@@ -46,13 +54,13 @@ Sometimes the best investment is subtraction. Deleting a duplicate copy of accou
 
 A Confluence space with a thousand postmortems is accumulation. A replay harness that shaves a day off every release earns a recurring return. Neither, on its own, is compounding.
 
-Compounding needs a second-order link: an earlier investment has to make the *next* investment cheaper or more effective, or two assets have to pay off more together than either could alone. Often that happens when one shape of capital converts into another.
+Compounding needs a link across investments: an earlier capability makes a subsequent capability cheaper or more effective to develop. Keep that distinct from *complementarity*, where having one capability increases the value of investing in another. A scenario builder may make independent invariants more useful, and vice versa. That combination could help build a recovery check, but we have to observe the later development to establish the connection. Composition can enable compounding; it does not establish it by itself.
 
 Follow the billing example through a conversion chain. Debugging the race sharpens an engineer's judgment. Turning that judgment into a deterministic reproduction script converts private intuition into an executable asset. Because the script catches concurrency mistakes in seconds, the team can safely carve out a cleaner closing-period boundary, turning an executable asset into a structural one. That cleaner boundary makes it cheap to prototype partial refunds, which exposes a second ambiguity in the ledger model. Six months later, running a new hire through that same script converts executable capital back into human judgment.
 
 Learning is the work behind those conversions. An agent might connect several difficult reviews, propose competing explanations and help build a check that separates them. The resulting investment still belongs to one of the forms above. [Compounding learning](./compounding-learning.md) asks whether AI can improve that investigation, and whether the method itself helps us develop a later capability. A convincing explanation is only the start of that test.
 
-Douglas Engelbart made a related cut in [Toward High-Performance Organizations](https://dougengelbart.org/content/view/116/), separating ordinary work from improving how work is done, and both from improving the improvement process itself. That tells you what to look for, not that the loop runs by itself. In practice, the chain snaps easily. Time saved on the first harness gets eaten by urgent feature work before the second step ever happens. The script turns out to be too narrow for the next question. Upkeep grows faster than reuse, or the business retires the subsystem before the return arrives. And who pays for an investment is rarely who collects the payoff, a tension [Organizations that improve with age](./organizations-that-improve-with-age.md) takes up directly.
+Douglas Engelbart made a related distinction in [Toward High-Performance Organizations](https://dougengelbart.org/content/view/116/), separating ordinary work from improving how work is done, and both from improving the improvement process itself. [Improving our ability to improve](./improving-our-ability-to-improve.md) follows that third kind of work. The chain can break: urgent feature work absorbs the capacity before the next investment happens; the script is too narrow for the new question; upkeep exceeds the benefit; or the business retires the subsystem. Who pays may also differ from who benefits, a tension [Organizations that improve with age](./organizations-that-improve-with-age.md) takes up directly.
 
 An investment whose upkeep exceeds its benefit has a negative return. Negative compounding needs a reinforcing loop: skip verification to hit a deadline and the next change becomes harder to trust, which raises the pressure to skip the next check too. Ship faster while understanding drains out of the team, and incidents take longer to diagnose, eating the time you would have spent fixing the mess. On a quarterly velocity chart, a team liquidating its engineering capital can look fast right up until an unfamiliar failure lands.
 

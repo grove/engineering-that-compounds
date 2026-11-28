@@ -28,10 +28,11 @@ SITE_URL = "https://grove.github.io/engineering-that-compounds/"
 ORIGINAL_URL = "https://grove.github.io/software-that-improves-with-age/"
 PARTS = {
     "what-would-ten-times-look-like": ("ambition", "The ambition"),
-    "engineering-capital": ("0", "What we accumulate"),
-    "designing-for-decisions-we-havent-made-yet": ("1", "How capabilities develop"),
-    "organizations-that-improve-with-age": ("2", "Engineering as an institution"),
-    "the-ability-to-delegate": ("3", "Engineering the work"),
+    "engineering-capital": ("0", "How capabilities grow"),
+    "designing-for-decisions-we-havent-made-yet": ("1", "Understanding and decisions"),
+    "getting-better-at-the-wrong-thing": ("learning", "Learning and adaptation"),
+    "organizations-that-improve-with-age": ("2", "Across an organization"),
+    "engineering-that-compounds": ("3", "In everyday work"),
 }
 LEGACY_ANCHORS = {
     "measuring-the-capacity-for-change": {

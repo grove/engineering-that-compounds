@@ -62,6 +62,18 @@ If adaptation erases the benefit, or ordinary practice produces equally useful c
 
 The pilot tests one connection between two capabilities. It does not demonstrate sustained compounding, production reliability or AI amplification. Testing whether the effect carries into a third capability needs another unforeseen task; testing AI interaction needs the separate comparison described in the [measurement essay](../essays/measuring-the-capacity-for-change.md).
 
+## Follow the capability beyond the pilot
+
+**Status: possible follow-up questions, outside the proposed pilot above.** Choose one before designing another comparison. Adding tasks after seeing a favorable result would make it too easy to select a flattering continuation.
+
+- **Composition:** Does the retained scenario help build a different capability when combined with another independently available resource? Specify the contribution expected from each, and count integration work. A larger return from reusing the same check is a different result.
+- **Transfer:** Can a new participant use the capability without its author? Give comparison groups equivalent background and access. Count training, setup, support and later independent use; distinguish a poor handoff from a poor underlying capability.
+- **Renewal:** When a stated assumption changes, can the participant identify and update the affected checks and guidance? Prepare the changed contract and acceptance cases in advance. Record obsolete behavior retained as well as useful behavior lost during the update.
+
+A field study could then follow successive investments through ordinary work for a specified period. Record the chain of actual use: what helped build what, what had to be adapted, what was abandoned and who paid for upkeep. Keep changes in staffing, task mix, models and acceptance standards visible. Several successful links would strengthen the case for compounding in that setting; elapsed time and a growing asset inventory would not.
+
+The [measurement essay](../essays/measuring-the-capacity-for-change.md#what-external-research-can-tell-us) distinguishes demonstrations, observed returns, comparisons and longitudinal evidence. Keep those labels attached to the findings so a teaching example cannot gradually become a claimed field result.
+
 ## A separate comparison of AI-assisted investigation
 
 **Status: proposed extension, not part of the pilot above. No runs or results are reported.** [Compounding learning](../essays/compounding-learning.md) raises a different question: does AI help a team choose and test a useful engineering improvement? A good retained asset does not establish that the process used to discover it was worthwhile.

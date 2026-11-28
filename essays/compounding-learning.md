@@ -28,15 +28,29 @@ Suppose the billing engineers can explain duplicate delivery clearly. Watching s
 
 Now there is a specific hypothesis: a small way to construct the relevant state would make duplicate-delivery checks easier to add before review. An agent can propose the helper and a few cases. Before accepting them, the team agrees on the expected behavior independently of the generated implementation. Delivering the same event ID twice should apply its effect once; delivering two distinct, valid payments should apply both. A check that rejects every second payment is wrong even if it catches the original bug.
 
+Write down what would distinguish the explanations. If setup is the obstacle, an engineer who understands the rule should complete the check more easily with the helper. If the rule itself is unclear, easier setup will leave the disagreement intact. This follows the discipline of [Plan-Do-Study-Act](https://deming.org/explore/pdsa/): make a prediction, compare it with observations and revise the explanation. A passing test alone cannot settle why the original work was difficult.
+
 Try the helper on a bounded change with an engineer who did not build it. Watch what they need to discover, what they misunderstand and where they ask for help. Include the time spent inspecting generated tests and correcting false alarms. The first attempt may show that the helper merely moves a complicated setup into an undocumented function.
 
 If people disagree about whether two events represent the same payment, stop the tooling experiment long enough to settle that rule. Generating more tests would freeze the disagreement into code. If the fixture turns out to be easy already, investigate another explanation or leave the workflow alone. Ruling out an unnecessary improvement can save more work than implementing it.
 
 Whether AI saves time in this hypothetical depends on the work the model removes and the work needed to check it.
 
+## Question the rule behind the work
+
+The billing team may uncover a different problem: every payment change needs a senior engineer's approval, even when the agreed checks pass. Preparing better approval notes could shorten the wait. First ask what the approval protects.
+
+Perhaps it was introduced when ledger writes could bypass validation. If that path has since been removed, the rule may need a narrower scope. If reviewers still catch ambiguous refund policies, the approval serves a purpose that more automated tests will not remove. Bring that evidence to the person responsible for the rule and agree on a bounded change or keep it.
+
+Argyris's [double-loop learning](https://store.hbr.org/product/double-loop-learning-in-organizations/77502) includes questioning the policies and objectives that govern a correction. The useful habit is to ask what would justify changing the requirement as well as how to meet it. [Getting better at the wrong thing](./getting-better-at-the-wrong-thing.md) follows that question further.
+
+Look at the changes that went smoothly too. Perhaps another engineer noticed the ambiguity early and called a product specialist before writing code. Find out what they noticed and how they knew whom to ask. The lack of a review delay does not tell you that no effort was required. A [successful work investigation](https://grove.github.io/patterns-of-compounding-engineering/patterns/successful-work-investigation.html) helps recover that otherwise invisible work.
+
 ## Keep what the next person needs
 
 If the helper proves useful, keep it where the payment tests already live. Put the example beside it, with the assumption that event IDs remain stable across redelivery. Link the short explanation to the investigation that established the rule. Name who will revisit it if the provider changes that contract.
+
+When the contract changes, revisit the lesson and its consumers together. Mark the old assumption as superseded, update the check and find the guidance that still recommends it. An agent retrieving an obsolete rule can undo the benefit of having made it easy to find. Consequential rules need an owner and a reason to review them; a date alone should never silently disable a safety control.
 
 The rejected explanations may deserve a sentence too. Knowing that engineers understood the rule but struggled to construct the state could prevent the next retrospective from prescribing another training session. Keep enough evidence to check that conclusion and resume an unfinished question; discard intermediate summaries once they add nothing.
 

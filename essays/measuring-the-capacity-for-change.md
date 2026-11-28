@@ -37,6 +37,10 @@ Rework / surprises: 1 PR round (missed export endpoint bypassing policy boundary
 
 Splitting active work from waiting stops a legal bottleneck from masquerading as an architecture problem. Including review and rework stops people from halting the clock the second an agent opens a pull request. And when the data stays noisy, report the noise plainly instead of inventing a "complexity score" that launders guesswork into two decimal places.
 
+Keep a short record of valuable work the team previously declined. Perhaps a customer needed permissions across several subsidiaries, and the old implementation made that too risky. Revisit the decision after the refactor with a concrete acceptance standard and budget. Completing that work would be evidence of a broader capability, even if average ticket time stayed flat. [What becomes possible?](./what-becomes-possible.md) develops this measure of progress.
+
+Preservation needs evidence too. If the investment is meant to reduce dependence on one specialist or AI service, try a safe rehearsal without it. Record what the team can explain, verify and recover, along with the help it needs. Successful rehearsal supports a claim under those conditions; it cannot establish readiness for every surprise.
+
 ## Speed without confidence is deferred pain
 
 Two engineers ship a permission change in one afternoon. The first clicks through three roles in staging and merges. The second runs a matrix suite against independently agreed rules and catches two accidental grants. Measuring elapsed time alone hands the trophy to the engineer taking an invisible gamble.
@@ -115,6 +119,29 @@ Even a widening gap in Round 3 or Round 4 still does not prove *compounding* by 
 To investigate compounding itself, focus on the economics of *subsequent investments*. Give comparable participants the same starting system and initial task. One group deliberately retains a reusable reproduction capability; the other uses its ordinary development practice under the same budget. Later, introduce a new verification problem and measure the effort and quality of building the capability that answers it. Count the original investment and its upkeep too: a cheaper second step need not repay an expensive first one.
 
 The [second-capability pilot](../research/second-capability.md) turns this into a proposed protocol with independent acceptance checks, repeated assignments and a maintenance round. It has not been run. It is a smaller starting point than the four-group study, and does not test the AI interaction claim. The [evolving billing lab](https://grove.github.io/patterns-of-compounding-engineering/examples/evolving-billing/) illustrates the mechanism; its published rounds cannot also serve as unseen research tasks.
+
+## What external research can tell us
+
+[DORA's 2025 report](https://dora.dev/research/2025/dora-report/) describes AI as amplifying existing organizational strengths and weaknesses. Its companion [AI Capabilities Model](https://dora.dev/ai/capabilities-model/report/) identifies seven capabilities associated with stronger benefits from AI adoption. The [published survey constructs](https://dora.dev/ai/capabilities-model/questions/) are:
+
+- Clear and communicated AI stance.
+- Healthy data ecosystems.
+- AI-accessible internal data.
+- Strong version control practices.
+- Working in small batches.
+- User-centric focus.
+- Quality internal platform.
+
+These give teams useful places to look. Small batches relate to feedback; usable internal data to finding evidence; platforms to independent work. Those connections are our interpretation. DORA's findings do not validate this framework's compounding mechanism or its tenfold ambition. In particular, an association between practices and outcomes does not establish that adopting a particular practice will produce the same result in this team.
+
+When publishing evidence, say what kind it is:
+
+- A **demonstration** shows that a mechanism can work in a constructed example.
+- An **observed return** records what happened in later work, with costs and relevant changes in context.
+- A **comparison** investigates an effect against an explicit alternative, with its confounds stated.
+- A **longitudinal study** follows successive investments, their use and their upkeep through changing work.
+
+Time alone does not make a study causal, and a laboratory comparison does not establish production value. For a claim about sustained compounding, we need to see several connections between successive investments and enough later work to discover their carrying costs. Publish failed transfers and retired capabilities alongside the useful ones.
 
 ## What would make us change our minds?
 
