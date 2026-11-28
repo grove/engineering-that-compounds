@@ -52,6 +52,8 @@ Nor does every interruption need removing. An engineer encountering the billing 
 
 After several improvements, the team may be able to prepare and verify billing changes readily, yet still be unsure which changes customers need. The next useful investment could be a conversation with support or a way to examine disputed invoices. The constraint has moved beyond the code. The tenfold ambition should give us permission to follow it there.
 
+[Where could 10× come from?](./where-could-10x-come-from.md) explores six ways to change the economics of engineering, including how a different organization of the work can make further transformations possible.
+
 It should also give us a reason to question the work itself. The fastest way to process a weekly reconciliation may be less useful than discovering why it is still necessary. [Getting better at the wrong thing](./getting-better-at-the-wrong-thing.md) examines how to balance improving familiar work, exploring alternatives and preserving capabilities needed when circumstances change. The current constraint guides an investment; it should not determine every future question.
 
 ## Make one improvement help build another
