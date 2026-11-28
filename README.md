@@ -10,13 +10,15 @@ Our distant aim is to become ten times as effective as a software team with AI, 
 
 The word *compounds* makes a claim that needs testing. More documentation, tests or automation can just as easily create more upkeep. These essays ask when earlier work makes later work more effective, what gets lost along the way, and when an investment should be abandoned.
 
+[Compounding learning](./essays/compounding-learning.md) asks how AI can help with that investigation: find a recurring difficulty, test explanations for it, and check whether the resulting change helps later work. The method used to learn deserves the same scrutiny as the tool it produces.
+
 For something to try on your next ticket, start with [Engineering that compounds](./essays/engineering-that-compounds.md). It follows a small integration change through planning, review, retaining a useful lesson and handing the work to someone who was not there. The companion [Patterns of compounding engineering](https://grove.github.io/patterns-of-compounding-engineering/) supplies the field guide: concrete techniques, runnable examples and ways to check whether the effort helped.
 
 Want to test the argument? The [second-capability pilot](./research/second-capability.md) is a proposed comparison of the cost and quality of building a new verification capability after deliberately retaining a reusable scenario or following ordinary development practice. It includes a stopping rule and a reporting template; no study results are claimed.
 
 ## Reading order
 
-Thirteen essays in five parts. The opening essay sets out the ambition; the others examine what it would take to pursue it. Read them in order, or start with the question closest to your work. Audio editions are temporarily not included in the published site.
+Fourteen essays in five parts. The opening essay sets out the ambition; the others examine what it would take to pursue it. Read them in order, or start with the question closest to your work. Audio editions are temporarily not included in the published site.
 
 1. **[What would ten times look like?](./essays/what-would-ten-times-look-like.md)** — A distant ambition for teams working with AI, and how it helps us choose what to improve next.
 2. **[Engineering capital](./essays/engineering-capital.md)** — What remains useful after the immediate task is finished, and when those benefits begin to reinforce one another.
@@ -26,11 +28,12 @@ Thirteen essays in five parts. The opening essay sets out the ambition; the othe
 6. **[How engineers become engineers](./essays/how-engineers-become-engineers.md)** — Developing judgment when much of the implementation can be delegated.
 7. **[When software forgets the world](./essays/when-software-forgets-the-world.md)** — Finding out when a well-tested system has stopped matching the work people need to do.
 8. **[Organizations that improve with age](./essays/organizations-that-improve-with-age.md)** — How a lesson learned by one team becomes useful to another.
-9. **[Measuring the capacity for change](./essays/measuring-the-capacity-for-change.md)** — Looking for evidence of improvement across successive changes, including the costs that a productivity chart can hide.
-10. **[Engineering that compounds](./essays/engineering-that-compounds.md)** — Follow an integration change from the first awkward question to the next engineer's attempt, and try the habit on your own work.
-11. **[The ability to delegate](./essays/the-ability-to-delegate.md)** — Use recurring interruptions to discover which capabilities would make a particular kind of work easier to hand off.
-12. **[Architecture for parallel work](./essays/architecture-for-parallel-work.md)** — Find out which decisions can happen independently and what it costs to put the results together.
-13. **[Automating the work of engineering](./essays/automating-the-work-of-engineering.md)** — What it takes for routine work to happen without somebody starting and supervising it each time.
+9. **[Compounding learning](./essays/compounding-learning.md)** — Use AI to investigate recurring difficulties, test what they mean and find out whether the way you learn improves.
+10. **[Measuring the capacity for change](./essays/measuring-the-capacity-for-change.md)** — Looking for evidence of improvement across successive changes, including the costs that a productivity chart can hide.
+11. **[Engineering that compounds](./essays/engineering-that-compounds.md)** — Follow an integration change from the first awkward question to the next engineer's attempt, and try the habit on your own work.
+12. **[The ability to delegate](./essays/the-ability-to-delegate.md)** — Use recurring interruptions to discover which capabilities would make a particular kind of work easier to hand off.
+13. **[Architecture for parallel work](./essays/architecture-for-parallel-work.md)** — Find out which decisions can happen independently and what it costs to put the results together.
+14. **[Automating the work of engineering](./essays/automating-the-work-of-engineering.md)** — What it takes for routine work to happen without somebody starting and supervising it each time.
 
 ## Website and audio
 

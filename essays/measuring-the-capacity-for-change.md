@@ -69,6 +69,16 @@ For a defined class of comparable outcomes, record total human time from discove
 
 If an existing automation supplies the fixtures, environment or verification for a second workflow, record what was reused and what had to be adapted. A reduction in supervision is valuable; evidence that the second capability costs less to build is a different claim. See [Automating the work of engineering](./automating-the-work-of-engineering.md) for the distinction in a dependency-maintenance example.
 
+## Check the learning method too
+
+An AI-assisted investigation can recommend a useful check while costing more attention than the team's usual way of finding the problem. Measure the investigation and the resulting capability separately. [Compounding learning](./compounding-learning.md) follows this distinction through a billing team's recurring review difficulty.
+
+Choose a question and a small set of relevant work before asking an agent to find patterns. Record the time spent collecting sources, checking matches, testing explanations and handling suggestions that lead nowhere. Include compute costs, interruptions and missed problems found through an independent sample. A shorter list of better suggestions can be more useful than an agent that produces a lesson after every merge.
+
+Then examine later work. Did the proposed change remove the recurring difficulty at the same acceptance standard? Did a different engineer understand when to apply it? If a retained investigation method helped develop a later diagnostic or experiment, record that separate connection and its adaptation cost. More captured lessons, faster summaries and wider distribution establish none of those outcomes by themselves.
+
+One team comparing before and after can decide whether the method is worth keeping, but cannot isolate AI's contribution from practice or changing work. The [separate proposed comparison](../research/second-capability.md#a-separate-comparison-of-ai-assisted-investigation) holds the starting evidence and downstream acceptance tasks constant. It is distinct from the second-capability pilot and has not been run.
+
 ## A twelve-week field check
 
 On a working team, run a grounded twelve-week check on one high-frequency class of change (skip subsystems touched twice a year; you won't get a signal). Write down the investment, its upkeep cap, the specific later work it is meant to help, and the outcome and limiting condition it is intended to change. Log a handful of baseline changes, awkward ones included, and record ordinary tickets as they arrive instead of cherry-picking flattering ones. At week twelve, read the individual notes before computing averages; one painful migration usually explains more than a mean. Accept upfront that twelve weeks in production has weak causal control (people learn while the product shifts) and use it to decide whether to keep, shrink, or scrap the investment.
