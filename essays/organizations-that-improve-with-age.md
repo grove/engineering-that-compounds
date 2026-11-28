@@ -28,6 +28,8 @@ Several outcomes count as success: confirming their migration linter already blo
 
 Forcing every team onto the orders team's exact migration script ruins the exercise. Compliance replaces local judgment and hides real differences until the next outage. Coding agents can handle the scanning (searching repositories for risky DDL patterns and drafting candidate checks) so long as local engineers still decide whether a match represents a real hazard in their service. A lesson has crossed team lines when another group makes a better call, not when a hundred people click "mark as read."
 
+Count the effort of finding a receiving team too. Did the agent find a team that needed the lesson, or send ten irrelevant matches for someone to dismiss? Keep the rejected matches and adaptation costs visible when deciding whether to repeat the search. [Compounding learning](./compounding-learning.md) treats this way of finding and testing lessons as an investment with its own upkeep. A useful migration check does not automatically justify the machinery used to distribute it.
+
 ## Collective understanding without individual mastery
 
 The earlier essays test understanding on a single service: can someone who didn't write it still reason about it? That test breaks down across a fifty-service platform, because nobody (not the chief architect and not the founders) holds a live mental model of the entire estate.

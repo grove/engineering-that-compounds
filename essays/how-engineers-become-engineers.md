@@ -44,6 +44,8 @@ Give the new engineer a small worker and a service that logs completed actions. 
 
 Then move the goalposts. What if the worker also publishes to a second queue? What if the deduplication table expires after an hour? Now they have to work out which parts of their reasoning still hold. Repeating the same drill builds routine; changing one constraint tests understanding.
 
+A recent incident or difficult review can supply the next exercise. Keep the original evidence, let an agent prepare a variation, and have a mentor check that its expected result follows from the intended contract. Later, ask the learner to investigate a different case and choose a check without that guidance. [Compounding learning](./compounding-learning.md) connects this use of experience to the team's other investments; producing more exercises does not establish that anyone's judgment improved.
+
 ## Show the messy middle
 
 Experienced engineers make debugging look deceptively straight-line. They glance at three dashboards, ignore five tempting leads, check one counter, and point at the bug. The newcomer sees the command that worked and misses all the judgment that ruled out everything else.
