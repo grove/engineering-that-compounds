@@ -6,7 +6,7 @@ Two teams can deliver the same feature and finish with quite different prospects
 
 This collection follows [Software that improves with age](https://grove.github.io/software-that-improves-with-age/). It asks how an organization becomes better at understanding problems, solving them and developing the capabilities the next problem will need. AI can help investigate, teach, compare and verify as well as implement. Whether that help improves the whole job depends on the knowledge, judgment and working arrangements around it.
 
-Our distant aim is to become ten times as effective with AI, within sustainable hours and with the same care for the people using the software. [What would ten times look like?](./essays/what-would-ten-times-look-like.md) makes the ambition practical: find what limits worthwhile work and choose one investment. [Where could 10× come from?](./essays/where-could-10x-come-from.md) explores six mechanisms for transforming the work. [What becomes possible?](./essays/what-becomes-possible.md) asks which valuable work might come within reach. These essays do not promise a measured multiplier.
+Our ambition is to become ten times as effective with AI, within sustainable hours and with the same care for the people using the software. [What would ten times look like?](./essays/what-would-ten-times-look-like.md) makes the ambition practical: find what limits worthwhile work and choose one investment. [Where could 10× come from?](./essays/where-could-10x-come-from.md) explores six mechanisms for transforming the work. [What becomes possible?](./essays/what-becomes-possible.md) asks which valuable work might come within reach. These essays do not promise a measured multiplier.
 
 The word *compounds* makes a claim that needs testing. A useful test can pay off repeatedly. A further claim is that it makes a new verification capability easier to develop. The [foundations](https://grove.github.io/compounding-engineering/foundations.html) explain that distinction and the theory behind it. The essays also examine where investment fails: when knowledge goes stale, improvements reinforce the wrong goal, or automation erodes the understanding needed to respond to a surprise.
 
@@ -14,9 +14,11 @@ For something to try on your next ticket, start with [Engineering that compounds
 
 Want to test the argument? The [second-capability pilot](./research/second-capability.md) is a proposed comparison of the cost and quality of building a new verification capability after deliberately retaining a reusable scenario or following ordinary development practice. It includes a stopping rule and a reporting template; no study results are claimed.
 
+The new operating-model essays, [Engineering by exception](./essays/engineering-by-exception.md) and [When the farm studies the factory](./essays/when-the-farm-studies-the-factory.md), examine where human attention goes when routine work can proceed independently. The [open questions](./research/open-questions.md) propose ways to test these ideas. For a route across all four publications, start with [Paths towards 10×](https://grove.github.io/compounding-engineering/paths/).
+
 ## Reading order
 
-Twenty essays in six parts. Read in order, or choose the question closest to your work. Each essay can stand on its own; the foundations and field guide offer shorter routes into practice. Audio editions are temporarily not included in the published site.
+Read in order, or choose the question closest to your work. Each essay can stand on its own; the foundations and field guide offer shorter routes into practice. Audio editions are temporarily not included in the published site.
 
 1. **[What would ten times look like?](./essays/what-would-ten-times-look-like.md)** — A distant ambition for teams working with AI, and how it helps us choose what to improve next.
 2. **[Where could 10× come from?](./essays/where-could-10x-come-from.md)** — Six mechanisms that could change the economics of engineering, and how they might reinforce one another.
@@ -38,6 +40,9 @@ Twenty essays in six parts. Read in order, or choose the question closest to you
 18. **[The ability to delegate](./essays/the-ability-to-delegate.md)** — Use recurring interruptions to discover which capabilities would make a particular kind of work easier to hand off.
 19. **[Architecture for parallel work](./essays/architecture-for-parallel-work.md)** — Find out which decisions can happen independently and what it costs to put the results together.
 20. **[Automating the work of engineering](./essays/automating-the-work-of-engineering.md)** — What it takes for routine work to happen without somebody starting and supervising it each time.
+
+21. **[Engineering by exception](./essays/engineering-by-exception.md)** — Decide which interventions should disappear, which need better machinery and which remain useful human decisions.
+22. **[When the farm studies the factory](./essays/when-the-farm-studies-the-factory.md)** — Follow an investigation that can improve delivery or cancel unnecessary work, then test what its method contributes to the next investigation.
 
 ## Website and audio
 

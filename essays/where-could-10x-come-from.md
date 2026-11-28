@@ -84,7 +84,7 @@ Later, the team investigates a new opportunity: assigning jobs to combinations o
 
 The interesting possibility is that the first transformation has made a second capability easier to develop. That is a stronger claim than saying the earlier checks run repeatedly or the earlier factory continues to save effort.
 
-Learning can support simplification. Simplification can support autonomy and parallelism. A factory can make it cheaper to implement the improvements a farm discovers; a farm can investigate why the factory still needs intervention. A better product boundary can eliminate work and release attention for learning about a previously impractical opportunity.
+Learning can support simplification. Simplification can support autonomy and parallelism. A factory can make it cheaper to implement the improvements a farm discovers; a farm can investigate why the factory still needs intervention. [When the farm studies the factory](./when-the-farm-studies-the-factory.md) examines how that investigation changes delivery and how it can conclude that work should stop. A better product boundary can eliminate work and release attention for learning about a previously impractical opportunity.
 
 The connections can also work against us. A factory may embed an obsolete rule and make it harder to change. Greater parallelism may increase coordination costs. A broadly shared tool can become a constraint on every team that uses it. We should look for the connections that actually help rather than assume that successful investments always reinforce one another.
 
@@ -124,8 +124,8 @@ Choose a useful outcome you cannot currently deliver at the scale you would like
 
 For each design, name what could disappear, what could run within delegated authority, what could happen independently and what would need to become simpler. Ask which uncertainty the team most needs to resolve, and which existing understanding or capability could help. Check whether the proposed change relieves the actual constraint on delivering value.
 
-Choose one experiment that could change your mind. It might be a conversation with a customer, a comparison of independent designs, a trial of an isolated delivery workflow or a way of observing whether an apparently necessary handoff is doing useful work. The [transformation experiments guide](https://grove.github.io/compounding-engineering/adoption/experiments.html) offers ways to frame the investment and follow its consequences.
+Choose one experiment that could change your mind. It might be a conversation with a customer, a comparison of independent designs, a trial of an isolated delivery workflow or a way of observing whether an apparently necessary handoff is doing useful work. [Paths towards 10×](https://grove.github.io/compounding-engineering/paths/) compares several possible sequences. Its [customer integration case](https://grove.github.io/compounding-engineering/paths/customer-integrations.html) follows one through a rejected design and a later capability. The [transformation experiments guide](https://grove.github.io/compounding-engineering/adoption/experiments.html) helps frame the first attempt.
 
 When it finishes, ask two questions. Did it improve the outcome at a worthwhile total cost? And has it changed what we can profitably investigate or attempt next? Give those questions separate answers, including failures and uncertainty.
 
-We may discover that tenfold effectiveness is not achievable in a particular setting, or that the useful transformation has little to do with the work we first intended to automate. That would be worth learning. We do not need to know the entire route today, but we do need to make choices that help us discover it.
+The [open questions](../research/open-questions.md) identify uncertainties that could change these routes. A useful first investigation should leave us better able to choose the second, including when the answer is to abandon the approach.

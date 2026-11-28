@@ -33,6 +33,7 @@ PARTS = {
     "getting-better-at-the-wrong-thing": ("learning", "Learning and adaptation"),
     "organizations-that-improve-with-age": ("2", "Across an organization"),
     "engineering-that-compounds": ("3", "In everyday work"),
+    "engineering-by-exception": ("operating-models", "Different ways to organize engineering"),
 }
 LEGACY_ANCHORS = {
     "measuring-the-capacity-for-change": {
